@@ -1,0 +1,31 @@
+task: sentence-transformers:qa
+#base_model: sentence-transformers/all-MiniLM-L6-v2
+base_model: paraphrase-multilingual-MiniLM-L12-v2
+project_name: model-faq-sentence-autotrain
+output_dir: ./models #not working
+log: tensorboard
+backend: local
+#backend: spaces-cpu-basic
+
+data:
+  path: ./data_autotrain
+  train_split: train
+  valid_split: null
+  column_mapping:
+    sentence1_column: query
+    sentence2_column: answer
+
+params:
+  max_seq_length: 512
+  epochs: 6
+  batch_size: 2
+  lr: 2e-5
+  optimizer: adamw_torch
+  scheduler: linear
+  gradient_accumulation: 1
+  mixed_precision: bf16
+
+hub:
+  username: ${HF_USERNAME}
+  token: ${HF_TOKEN}
+  push_to_hub: true
