@@ -12,4 +12,14 @@
 {"query": "Can I make changes to my order after placing it?", "answer": "Changes can be made within 24 hours of placing the order by contacting customer support."}
 {"query": "How do I apply a discount code?", "answer": "You can apply a discount code at checkout by entering it in the 'Discount Code' field."}
 {"query": "What is the warranty on your products?", "answer": "We offer a one-year warranty on most products against manufacturing defects."}
-{"query": "How do I delete my account?", "answer": "To delete your account, please contact customer support for assistance."} 
+{"query": "How do I delete my account?", "answer": "To delete your account, please contact customer support for assistance."}
+{"query": "How do I subscribe to the newsletter?", "answer": "To subscribe, enter your email at the bottom of our homepage."}
+{"query": "What payment methods do you accept?", "answer": "We accept Visa, Mastercard, PayPal, and Apple Pay."}
+{"query": "How do I change my email address?", "answer": "Go to 'Account Settings' and select 'Change Email'."}
+{"query": "Is my personal information secure?", "answer": "Yes, we use encryption to protect all your personal data."}
+{"query": "Can I reorder a previous purchase?", "answer": "Yes, go to 'Order History' and click 'Reorder'."}
+{"query": "Do you have a mobile app?", "answer": "Yes, our mobile app is available on iOS and Android."}
+{"query": "How do I unsubscribe from emails?", "answer": "Click the 'Unsubscribe' link at the bottom of any email."}
+{"query": "Can I send a gift directly to someone?", "answer": "Yes, choose 'Gift' option during checkout and enter recipient's details."}
+{"query": "What should I do if I receive a damaged item?", "answer": "Contact support immediately with a photo of the item."}
+{"query": "Do you offer gift cards?", "answer": "Yes, you can purchase digital gift cards from our website."}

@@ -12,4 +12,14 @@
 {"query": "Puis-je apporter des modifications à ma commande après l'avoir passée ?", "answer": "Des modifications peuvent être apportées dans les 24 heures suivant la commande en contactant le support client."}
 {"query": "Comment appliquer un code de réduction ?", "answer": "Vous pouvez appliquer un code de réduction lors du paiement en le saisissant dans le champ 'Code de réduction'."}
 {"query": "Quelle est la garantie sur vos produits ?", "answer": "Nous offrons une garantie d'un an sur la plupart des produits contre les défauts de fabrication."}
-{"query": "Comment supprimer mon compte ?", "answer": "Pour supprimer votre compte, veuillez contacter le support client pour obtenir de l'aide."} 
+{"query": "Comment supprimer mon compte ?", "answer": "Pour supprimer votre compte, veuillez contacter le support client pour obtenir de l'aide."}
+{"query": "Comment m'abonner à la newsletter ?", "answer": "Pour vous abonner, entrez votre email en bas de notre page d'accueil."}
+{"query": "Quels moyens de paiement acceptez-vous ?", "answer": "Nous acceptons Visa, Mastercard, PayPal et Apple Pay."}
+{"query": "Comment changer mon adresse email ?", "answer": "Allez dans 'Paramètres du compte' et sélectionnez 'Changer d'email'."}
+{"query": "Mes informations personnelles sont-elles sécurisées ?", "answer": "Oui, nous utilisons le chiffrement pour protéger vos données."}
+{"query": "Puis-je recommander un achat précédent ?", "answer": "Oui, allez dans 'Historique des commandes' et cliquez sur 'Commander à nouveau'."}
+{"query": "Avez-vous une application mobile ?", "answer": "Oui, notre application est disponible sur iOS et Android."}
+{"query": "Comment me désabonner des emails ?", "answer": "Cliquez sur le lien 'Se désabonner' en bas de n'importe quel email."}
+{"query": "Puis-je envoyer un cadeau directement à quelqu'un ?", "answer": "Oui, choisissez l'option 'Cadeau' lors du paiement et entrez les informations du destinataire."}
+{"query": "Que faire si je reçois un article endommagé ?", "answer": "Contactez le support immédiatement avec une photo de l'article."}
+{"query": "Proposez-vous des cartes cadeaux ?", "answer": "Oui, vous pouvez acheter des cartes cadeaux numériques sur notre site."}

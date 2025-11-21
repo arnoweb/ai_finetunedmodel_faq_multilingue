@@ -1,6 +1,7 @@
 task: sentence-transformers:qa
 #base_model: sentence-transformers/all-MiniLM-L6-v2
-base_model: paraphrase-multilingual-MiniLM-L12-v2
+#base_model: paraphrase-multilingual-MiniLM-L12-v2
+base_model: sentence-transformers/paraphrase-multilingual-mpnet-base-v2
 project_name: model-faq-sentence-autotrain
 output_dir: ./models #not working
 log: tensorboard
@@ -10,15 +11,15 @@ backend: local
 data:
   path: ./data_autotrain
   train_split: train
-  valid_split: null
+  valid_split: validation
   column_mapping:
     sentence1_column: query
     sentence2_column: answer
 
 params:
   max_seq_length: 512
-  epochs: 6
-  batch_size: 2
+  epochs: 2
+  batch_size: 16
   lr: 2e-5
   optimizer: adamw_torch
   scheduler: linear

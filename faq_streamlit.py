@@ -3,7 +3,7 @@ import json
 from sentence_transformers import SentenceTransformer, util
 import requests
 
-model_path = "model-faq-sentence-autotrain"
+model_path = "arnoweb/model-faq-sentence-autotrain"
 
 # File paths for each language
 faq_data_paths = {
@@ -54,7 +54,7 @@ def build_rag_prompt(user_question, retrieved_faqs, retrieved_questions, languag
     return f"{intro}{docs}{question}{instruction}"
 
 
-def query_local_llm(prompt, model="deepseek-r1-distill-qwen-7b"):
+def query_local_llm(prompt, model="qwen/qwen3-vl-4b"):
     headers = {"Content-Type": "application/json"}
     payload = {
         "model": model,
@@ -67,7 +67,7 @@ def query_local_llm(prompt, model="deepseek-r1-distill-qwen-7b"):
     response = requests.post("http://localhost:1234/v1/chat/completions", headers=headers, json=payload)
     return response.json()["choices"][0]["message"]["content"]
 
-st.title("FAQ Top-3 Answer Finder")
+st.title("FAQ RAG Search & Top-3 Finder")
 
 # Language switcher
 language = st.radio("Select language / Choisissez la langue:", ["English", "Français"])
