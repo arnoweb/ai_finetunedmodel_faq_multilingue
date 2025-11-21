@@ -1,7 +1,15 @@
 import streamlit as st
 import json
 from sentence_transformers import SentenceTransformer, util
+import os
 import requests
+from dotenv import load_dotenv
+
+load_dotenv()
+
+HF_API_KEY = os.getenv("HF_API_KEY")
+HF_API_URL = "https://router.huggingface.co/v1/chat/completions"
+HF_MODEL_DEFAULT = "meta-llama/Llama-3.1-8B-Instruct"
 
 model_path = "arnoweb/model-faq-sentence-autotrain"
 
@@ -67,6 +75,35 @@ def query_local_llm(prompt, model="qwen/qwen3-vl-4b"):
     response = requests.post("http://localhost:1234/v1/chat/completions", headers=headers, json=payload)
     return response.json()["choices"][0]["message"]["content"]
 
+def query_remote_llm(prompt, model: str = HF_MODEL_DEFAULT, temperature: float = 0.2, max_tokens: int = 512):
+    if not HF_API_KEY:
+        raise RuntimeError("HF_API_KEY is not set in the environment.")
+
+    headers = {
+        "Authorization": f"Bearer {HF_API_KEY}",
+        "Content-Type": "application/json"
+    }
+    payload = {
+        "model": model,
+        "messages": [{"role": "user", "content": prompt}],
+        "temperature": temperature,
+        "max_tokens": max_tokens,
+    }
+
+    response = requests.post(HF_API_URL, headers=headers, json=payload)
+    try:
+        response.raise_for_status()
+    except requests.HTTPError as exc:
+        raise RuntimeError(f"Hugging Face API error: {response.text}") from exc
+
+    data = response.json()
+    try:
+        return data["choices"][0]["message"]["content"]
+    except (KeyError, IndexError) as exc:
+        raise RuntimeError(f"Unexpected response format from Hugging Face: {data}") from exc
+
+
+
 st.title("FAQ RAG Search & Top-3 Finder")
 
 # Language switcher
@@ -106,7 +143,12 @@ if user_query:
         # RAG section
         if st.button("Générer une réponse avec le LLM" if language == "Français" else "Generate answer with LLM"):
             prompt = build_rag_prompt(user_query, retrieved_faqs, retrieved_questions, language=language)
-            with st.spinner("Appel au LLM local..."):
-                llm_response = query_local_llm(prompt)
-            st.markdown("### Réponse générée :" if language == "Français" else "### Generated answer:")
-            st.write(llm_response)
+            with st.spinner("Call of the LLM..."):
+                try:
+                    llm_response = query_remote_llm(prompt)
+                except Exception as exc:
+                    st.error(f"LLM call failed: {exc}")
+                    llm_response = None
+            if llm_response:
+                st.markdown("### Réponse générée :" if language == "Français" else "### Generated answer:")
+                st.write(llm_response)
