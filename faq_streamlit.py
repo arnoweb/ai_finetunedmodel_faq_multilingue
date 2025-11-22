@@ -182,8 +182,16 @@ if user_query:
                     st.error(f"LLM call failed: {exc}")
                     llm_response = None
             if llm_response:
-                st.markdown("### Réponse générée :" if language == "Français" else "### Generated answer:")
-                st.write(llm_response)
+                low_conf = llm_response.strip().lower()
+                if ("i don't know" in low_conf) or ("je ne sais pas" in low_conf):
+                    st.warning(
+                        "Aucune réponse trouvée. Réessayez en reformulant votre question."
+                        if language == "Français"
+                        else "No answer found. Try rephrasing your question."
+                    )
+                else:
+                    st.markdown("### Réponse générée :" if language == "Français" else "### Generated answer:")
+                    st.write(llm_response)
 
 st.markdown(
     'Made by <a href="https://www.linkedin.com/in/bretonarnaud/" target="_blank">Arnaud BRETON</a>',
