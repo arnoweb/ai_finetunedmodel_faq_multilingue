@@ -2,11 +2,15 @@
 
 # FAQ Retrieval Apps (Base vs Fine-tuned)
 
-![App screenshot](docs/assets/app_basevsfinetuned.png)
-
 Two Streamlit apps to serve and compare an FAQ semantic search workflow:
 - `faq_streamlit.py`: main RAG-style app (top-3 retrieval + optional LLM answer).
+=> https://arnoweb-rag-llm-faq-finetuned-huggingface.streamlit.app/
 - `faq_compare_streamlit.py`: side-by-side comparison of a base multilingual encoder vs your fine-tuned AutoTrain model.
+=> https://arnoweb-rag-faq-compare-basevsfinetuned-huggingface.streamlit.app/
+
+
+
+![App screenshot](docs/assets/app_basevsfinetuned.png)
 
 Models used
 - Base: `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`
