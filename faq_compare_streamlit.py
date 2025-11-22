@@ -16,6 +16,18 @@ MODEL_PATHS = {
     "Fine-tuned (AutoTrain)": "arnoweb/model-faq-sentence-autotrain",
 }
 
+st.markdown(
+    """
+    <style>
+    .result-tight p { margin: 0 0 4px 0; line-height: 1.25; }
+    .result-tight .sim { color: #6b7280; font-size: 0.85rem; margin: 0; }
+    .result-tight hr { margin: 2px 0; }
+    hr { margin: 2px 0; }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
 
 @st.cache_resource(show_spinner=False)
 def load_model(path: str) -> SentenceTransformer:
@@ -120,14 +132,26 @@ if user_query:
                     else "Pas de correspondance sûre (score sous le seuil)."
                 )
             for rank, idx in enumerate(top_indices, start=1):
-                st.markdown(f"**Rank {rank}**")
-                st.markdown(f"**Q:** {faq_questions[idx]}")
-                st.markdown(f"**A:** {faq_answers[idx]}")
-                st.markdown(f"Similarity: {similarities[idx].item():.2f}")
-                st.markdown("---")
+                st.markdown(
+                    f"""
+                    <div class="result-tight">
+                        <p><strong>{'Rank' if language == 'English' else 'Rang'} {rank}:</strong> {faq_questions[idx]}</p>
+                        <p>{faq_answers[idx]}</p>
+                        <p class="sim">Similarity: {similarities[idx].item():.2f}</p>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+                if rank < top_k:
+                    st.markdown("<hr>", unsafe_allow_html=True)
 else:
     st.info(
         "Search the FAQ (e.g., “refund shipping”, “change password”) to compare rankings."
         if language == "English"
         else "Cherchez dans la FAQ (ex. « frais de retour », « changer le mot de passe ») pour comparer les résultats."
     )
+
+st.markdown(
+    'Made by <a href="https://www.linkedin.com/in/bretonarnaud/" target="_blank">Arnaud BRETON</a>',
+    unsafe_allow_html=True,
+)

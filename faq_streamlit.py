@@ -7,6 +7,18 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+st.markdown(
+    """
+    <style>
+    .result-tight p { margin: 0 0 4px 0; line-height: 1.25; }
+    .result-tight .sim { color: #6b7280; font-size: 0.85rem; margin: 0; }
+    .result-tight hr { margin: 2px 0; }
+    hr { margin: 2px 0; }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
 HF_API_KEY = os.getenv("HF_API_KEY")
 HF_API_URL = "https://router.huggingface.co/v1/chat/completions"
 HF_MODEL_DEFAULT = "meta-llama/Llama-3.1-8B-Instruct"
@@ -46,7 +58,7 @@ def build_rag_prompt(user_question, retrieved_faqs, retrieved_questions, languag
         ])
         question = f"\n\nQuestion utilisateur : {user_question}\n"
         instruction = (
-            "En t'appuyant strictement sur les documents ci-dessus, rédige une réponse claire et concise à la question de l'utilisateur. "
+            "En t'appuyant strictement sur les documents ci-dessus, rédige une réponse claire et détaillée (3 à 5 phrases) à la question de l'utilisateur. "
             "Si l'information n'est pas présente dans les documents, réponds simplement : 'Je ne sais pas.' Ne fais pas d'hypothèses et n'invente pas de réponses."
         )
     else:
@@ -56,7 +68,7 @@ def build_rag_prompt(user_question, retrieved_faqs, retrieved_questions, languag
         ])
         question = f"\n\nUser question: {user_question}\n"
         instruction = (
-            "Based strictly on the above documents, write a clear and concise answer to the user's question. "
+            "Based strictly on the above documents, write a clear, moderately detailed answer (3–5 sentences) to the user's question. "
             "If the information is not present in the documents, simply answer: 'I don't know.' Do not make assumptions or invent answers."
         )
     return f"{intro}{docs}{question}{instruction}"
@@ -75,7 +87,7 @@ def query_local_llm(prompt, model="qwen/qwen3-vl-4b"):
     response = requests.post("http://localhost:1234/v1/chat/completions", headers=headers, json=payload)
     return response.json()["choices"][0]["message"]["content"]
 
-def query_remote_llm(prompt, model: str = HF_MODEL_DEFAULT, temperature: float = 0.2, max_tokens: int = 512):
+def query_remote_llm(prompt, model: str = HF_MODEL_DEFAULT, temperature: float = 0.2, max_tokens: int = 800):
     if not HF_API_KEY:
         raise RuntimeError("HF_API_KEY is not set in the environment.")
 
@@ -104,7 +116,7 @@ def query_remote_llm(prompt, model: str = HF_MODEL_DEFAULT, temperature: float =
 
 
 
-st.title("E-commerce FAQ RAG Search & Top-3 Finder")
+st.title("E-commerce FAQ RAG Search")
 
 # Language switcher
 language = st.radio("Select language / Choisissez la langue:", ["English", "Français"])
@@ -115,9 +127,21 @@ faq_questions, faq_answers = load_faq_data(faq_data_path)
 answer_embeddings = compute_answer_embeddings(model, faq_answers)
 
 st.write(
-    "Enter your question and see the top 3 answers from the FAQ model." if language == "English" else "Posez votre question et ayez les 3 meilleurs résultats :")
+    "Enter your question and see the top 3 answers from the FAQ model."
+    if language == "English"
+    else "Posez votre question et ayez les 3 meilleurs résultats :"
+)
 
-user_query = st.text_input("Ask your question:" if language == "English" else "Posez votre question :")
+placeholder_text = (
+    "e.g., reset password, change shipping address, refund policy"
+    if language == "English"
+    else "ex. réinitialiser mot de passe, changer adresse de livraison, politique de remboursement"
+)
+
+user_query = st.text_input(
+    "Ask your question:" if language == "English" else "Posez votre question :",
+    placeholder=placeholder_text,
+)
 
 if user_query:
     query_embedding = model.encode(user_query, convert_to_tensor=True)
@@ -134,14 +158,22 @@ if user_query:
         retrieved_faqs = [faq_answers[idx] for idx in top_k_indices]
         retrieved_questions = [faq_questions[idx] for idx in top_k_indices]
         for rank, idx in enumerate(top_k_indices, 1):
-            st.markdown(f"**Rank {rank}:**" if language == "English" else f"**Rang {rank} :**")
-            st.markdown(f"**Question:** {faq_questions[idx]}")
-            st.markdown(f"**Answer:** {faq_answers[idx]}")
-            st.markdown(f"**Similarity:** {similarities[idx].item():.2f}")
-            st.markdown("---")
+            st.markdown(
+                f"""
+                <div class="result-tight">
+                    <p><strong>{'Rank' if language == 'English' else 'Rang'} {rank}:</strong> {faq_questions[idx]}</p>
+                    <p>{faq_answers[idx]}</p>
+                    <p class="sim">Similarity: {similarities[idx].item():.2f}</p>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+            if rank < top_k:
+                st.markdown("<hr>", unsafe_allow_html=True)
 
         # RAG section
-        if st.button("Générer une réponse avec le LLM" if language == "Français" else "Generate answer with LLM"):
+        st.markdown("<div style='margin-top: 8px;'></div>", unsafe_allow_html=True)
+        if st.button("Générer une réponse avec le LLM" if language == "Français" else "Generate answer with LLM", key="llm_button", help=None):
             prompt = build_rag_prompt(user_query, retrieved_faqs, retrieved_questions, language=language)
             with st.spinner("Call of the LLM..."):
                 try:
@@ -152,3 +184,8 @@ if user_query:
             if llm_response:
                 st.markdown("### Réponse générée :" if language == "Français" else "### Generated answer:")
                 st.write(llm_response)
+
+st.markdown(
+    'Made by <a href="https://www.linkedin.com/in/bretonarnaud/" target="_blank">Arnaud BRETON</a>',
+    unsafe_allow_html=True,
+)
