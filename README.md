@@ -2,6 +2,8 @@
 
 # FAQ Retrieval Apps (Base vs Fine-tuned)
 
+![App screenshot](docs/assets/app_basevsfinetuned.png)
+
 Two Streamlit apps to serve and compare an FAQ semantic search workflow:
 - `faq_streamlit.py`: main RAG-style app (top-3 retrieval + optional LLM answer).
 - `faq_compare_streamlit.py`: side-by-side comparison of a base multilingual encoder vs your fine-tuned AutoTrain model.
@@ -70,6 +72,8 @@ Open the local URL printed by TensorBoard to view losses/metrics over time.
   - If both losses decrease smoothly (less noise) across steps/epochs, the model is learning useful structure.
   - If eval loss bottoms out then rises while train keeps dropping toward zero, that signals overfitting.
   - Extremely small losses on train and eval can also indicate overfitting or a trivial task; prefer a modest gap and stable eval loss.
+
+![TensorBoard losses](docs/assets/tensorflow_loss.png)
 
 ## Evaluation Metrics
 
