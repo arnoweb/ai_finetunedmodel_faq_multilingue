@@ -57,7 +57,7 @@ def run_search(
     }
 
 
-st.title("FAQ Retrieval Comparison (Base vs Fine-tuned)")
+st.title("E-commerce FAQ Retrieval Comparison (Base vs Fine-tuned)")
 st.write(
     "Compare a pre-trained multilingual encoder with your fine-tuned AutoTrain model on the same FAQ data."
 )

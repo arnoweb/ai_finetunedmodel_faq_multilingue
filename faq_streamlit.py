@@ -104,7 +104,7 @@ def query_remote_llm(prompt, model: str = HF_MODEL_DEFAULT, temperature: float =
 
 
 
-st.title("FAQ RAG Search & Top-3 Finder")
+st.title("E-commerce FAQ RAG Search & Top-3 Finder")
 
 # Language switcher
 language = st.radio("Select language / Choisissez la langue:", ["English", "Français"])
