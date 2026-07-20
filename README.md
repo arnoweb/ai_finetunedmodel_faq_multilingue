@@ -2,8 +2,6 @@
 
 # FAQ Retrieval Apps (Base vs Fine-tuned)
 
-![App screenshot](docs/assets/app_basevsfinetuned.png)
-
 Two Streamlit apps to serve and compare an FAQ semantic search workflow:
 - `faq_streamlit.py`: main RAG-style app (top-3 retrieval + optional LLM answer).
 - `faq_compare_streamlit.py`: side-by-side comparison of a base multilingual encoder vs your fine-tuned AutoTrain model.
@@ -21,14 +19,21 @@ Data used
 - pip/venv
 - Hugging Face Hub access if the fine-tuned repo is private (`huggingface-cli login` or `HUGGINGFACE_HUB_TOKEN`)
 - Optional: a local LLM server exposing an OpenAI-compatible `/v1/chat/completions` endpoint at `http://localhost:1234` (e.g., LM Studio, llama.cpp, Ollama)
+- Optional: a remote LLM server exposing an OpenAI-compatible `/v1/chat/completions` endpoint
 
 ## Install
+
+#### Connect to HuggingFace
+```bash
+echo 'export HF_USERNAME="your-username"' >> ~/.zshrc && echo 'export HF_TOKEN="hf_key"' >> ~/.zshrc
+```
+
+#### Install python env
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
 pip install --upgrade pip
 pip install -r requirements.txt
-# If needed: huggingface-cli login
 ```
 
 ## Run the main FAQ RAG app
@@ -73,8 +78,6 @@ Open the local URL printed by TensorBoard to view losses/metrics over time.
   - If eval loss bottoms out then rises while train keeps dropping toward zero, that signals overfitting.
   - Extremely small losses on train and eval can also indicate overfitting or a trivial task; prefer a modest gap and stable eval loss.
 
-![TensorBoard losses](docs/assets/tensorflow_loss.png)
-
 ## Evaluation Metrics
 
 ### MRR (Mean Reciprocal Rank)
@@ -107,3 +110,8 @@ Higher scores indicate a better semantic understanding between questions and the
 ## Notes
 - If your fine-tuned HF repo is private, ensure `huggingface-cli login` (or set `HUGGINGFACE_HUB_TOKEN`).
 - To swap models, edit `MODEL_PATHS` in `faq_compare_streamlit.py` and `model_path` in `faq_streamlit.py`.
+
+## Architecture
+See [docs/architecture.html](docs/architecture.html) for the full technical architecture (data pipeline, AutoTrain fine-tuning, model registry, serving apps, and optional LLM generation).
+
+See [docs/business-value.html](docs/business-value.html) (FR) / [docs/business-value-en.html](docs/business-value-en.html) (EN) for the functional overview (use cases, value vs a standard FAQ, target companies).

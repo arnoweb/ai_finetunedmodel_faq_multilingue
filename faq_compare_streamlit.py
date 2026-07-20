@@ -1,8 +1,13 @@
 import json
+import os
 from typing import Dict, List, Tuple
 
 import streamlit as st
+from dotenv import load_dotenv
 from sentence_transformers import SentenceTransformer, util
+
+load_dotenv()
+os.environ.setdefault("HF_TOKEN", os.getenv("HF_API_KEY", ""))
 
 # FAQ sources per language
 FAQ_DATA_PATHS = {
@@ -19,11 +24,33 @@ MODEL_PATHS = {
 st.markdown(
     """
     <style>
+    .hero-blob { position: fixed; z-index: -1; border-radius: 50%; filter: blur(70px); opacity: 0.25; pointer-events: none; }
+    .blob-a { width: 320px; height: 320px; background: #4F46E5; top: -80px; left: -60px; }
+    .blob-b { width: 280px; height: 280px; background: #22D3EE; top: -40px; right: -60px; }
+
+    h1 { color: #4F46E5 !important; font-weight: 800 !important; letter-spacing: -0.02em; }
+
+    .trust-pills { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.4rem 0 1rem; }
+    .trust-pill {
+        display: inline-flex; align-items: center; gap: 0.35rem;
+        background: #F0FDF4; color: #14532D; border: 1px solid #4ADE80;
+        border-radius: 100px; padding: 0.3rem 0.75rem; font-size: 0.82rem; font-weight: 600;
+    }
+
+    .result-tight {
+        background: #FFFFFF; border: 1px solid #DDE1E8; border-radius: 12px;
+        padding: 0.9rem 1.1rem; margin-bottom: 0.6rem; box-shadow: 0 1px 2px rgba(15,23,42,0.06);
+    }
     .result-tight p { margin: 0 0 4px 0; line-height: 1.25; }
-    .result-tight .sim { color: #6b7280; font-size: 0.85rem; margin: 0; }
-    .result-tight hr { margin: 2px 0; }
+    .result-tight .sim {
+        display: inline-block; margin-top: 6px; color: #14532D; background: #F0FDF4;
+        border: 1px solid #4ADE80; border-radius: 100px; padding: 2px 10px;
+        font-size: 0.78rem; font-weight: 600;
+    }
     hr { margin: 2px 0; }
     </style>
+    <div class="hero-blob blob-a"></div>
+    <div class="hero-blob blob-b"></div>
     """,
     unsafe_allow_html=True,
 )
@@ -34,7 +61,7 @@ def load_model(path: str) -> SentenceTransformer:
     return SentenceTransformer(path)
 
 
-@st.cache_data(show_spinner=False)
+@st.cache_data(show_spinner=False, ttl=300)
 def load_faq_data(faq_data_path: str) -> Tuple[List[str], List[str]]:
     faq_items = []
     with open(faq_data_path, "r") as f:
@@ -46,7 +73,7 @@ def load_faq_data(faq_data_path: str) -> Tuple[List[str], List[str]]:
     return faq_questions, faq_answers
 
 
-@st.cache_data(show_spinner=False)
+@st.cache_data(show_spinner=False, ttl=300)
 def compute_embeddings(model_name: str, model_path: str, texts: List[str]):
     # Use model_path to ensure the cache key is hashable; load_model is already cached.
     model = load_model(model_path)
@@ -75,6 +102,17 @@ st.write(
 )
 
 language = st.radio("Language / Langue", ["English", "Français"], horizontal=True)
+
+st.markdown(
+    f"""
+    <div class="trust-pills">
+      <span class="trust-pill">✓ {"No data sent to a third party for search" if language == "English" else "Aucune donnée envoyée à un tiers pour la recherche"}</span>
+      <span class="trust-pill">✓ {"Refuses to answer rather than invent" if language == "English" else "Refuse de répondre plutôt que d'inventer"}</span>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
 top_k = st.slider("Top K", min_value=1, max_value=5, value=3, step=1)
 similarity_threshold = st.slider(
     "Similarity threshold",
@@ -142,8 +180,6 @@ if user_query:
                     """,
                     unsafe_allow_html=True,
                 )
-                if rank < top_k:
-                    st.markdown("<hr>", unsafe_allow_html=True)
 else:
     st.info(
         "Search the FAQ (e.g., “refund shipping”, “change password”) to compare rankings."

@@ -1,0 +1,560 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FAQ Multilingue — Une FAQ qui comprend vos clients</title>
+<style>
+  :root {
+    --bg: #F1F5F9;
+    --surface: #FFFFFF;
+    --surface-2: #F8FAFC;
+    --text: #0F172A;
+    --text-dim: #64748B;
+    --border: #DDE1E8;
+    --accent: #4F46E5;
+    --accent-ink: #4338CA;
+    --code-bg: #E2E8F0;
+    --chip-bg: #E8EBF0;
+    --chip-color: #334155;
+    --shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+    --good-bg: #F0FDF4; --good-border: #4ADE80; --good-text: #14532D;
+    --bad-bg: #FEF2F2; --bad-border: #FCA5A5; --bad-text: #7F1D1D;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0F172A; --surface: #1E293B; --surface-2: #172033;
+      --text: #F1F5F9; --text-dim: #94A3B8; --border: #334155;
+      --accent: #818CF8; --accent-ink: #A5B4FC;
+      --code-bg: #273549; --chip-bg: #273549; --chip-color: #94A3B8;
+      --shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+      --good-bg: #0F2A1A; --good-border: #22C55E; --good-text: #86EFAC;
+      --bad-bg: #2A1414; --bad-border: #EF4444; --bad-text: #FCA5A5;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0F172A; --surface: #1E293B; --surface-2: #172033;
+    --text: #F1F5F9; --text-dim: #94A3B8; --border: #334155;
+    --accent: #818CF8; --accent-ink: #A5B4FC;
+    --code-bg: #273549; --chip-bg: #273549; --chip-color: #94A3B8;
+    --shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    --good-bg: #0F2A1A; --good-border: #22C55E; --good-text: #86EFAC;
+    --bad-bg: #2A1414; --bad-border: #EF4444; --bad-text: #FCA5A5;
+  }
+  :root[data-theme="light"] {
+    --bg: #F1F5F9; --surface: #FFFFFF; --surface-2: #F8FAFC;
+    --text: #0F172A; --text-dim: #64748B; --border: #DDE1E8;
+    --accent: #4F46E5; --accent-ink: #4338CA;
+    --code-bg: #E2E8F0; --chip-bg: #E8EBF0; --chip-color: #334155;
+    --shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+    --good-bg: #F0FDF4; --good-border: #4ADE80; --good-text: #14532D;
+    --bad-bg: #FEF2F2; --bad-border: #FCA5A5; --bad-text: #7F1D1D;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 16px; line-height: 1.55; -webkit-font-smoothing: antialiased;
+  }
+  code, .mono {
+    font-family: ui-monospace, "Cascadia Code", "Fira Code", "SF Mono", Menlo, Consolas, monospace;
+  }
+  code { background: var(--code-bg); padding: 0.1rem 0.35rem; border-radius: 4px; font-size: 0.85em; }
+  a { color: var(--accent); }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+
+  .page { max-width: 1000px; margin: 0 auto; padding: 0 1.5rem 5rem; }
+
+  header.hero { padding: 3.5rem 0 2.2rem; border-bottom: 1px solid var(--border); }
+  .eyebrow {
+    font-family: ui-monospace, "Cascadia Code", monospace; font-size: 0.72rem;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin: 0 0 0.9rem;
+  }
+  h1 {
+    font-size: clamp(1.9rem, 4.2vw, 2.9rem); line-height: 1.12; letter-spacing: -0.015em;
+    margin: 0 0 1rem; text-wrap: balance; max-width: 18ch;
+  }
+  h1 em { font-style: normal; color: var(--accent); }
+  .subtitle { color: var(--text-dim); font-size: 1.12rem; max-width: 60ch; margin: 0 0 1.5rem; }
+  .chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .chip {
+    font-family: ui-monospace, "Cascadia Code", monospace; font-size: 0.76rem;
+    padding: 0.28rem 0.6rem; border-radius: 100px; background: var(--chip-bg); color: var(--chip-color);
+  }
+  .hero-cta { margin-top: 1.5rem; display: flex; gap: 1.2rem; flex-wrap: wrap; font-size: 0.88rem; }
+  .hero-cta a { font-weight: 600; text-decoration: none; }
+  .hero-cta a:hover { text-decoration: underline; }
+  .hero-cta a.secondary { color: var(--text-dim); font-weight: 500; }
+
+  nav.toc {
+    position: sticky; top: 0; z-index: 10;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(6px); border-bottom: 1px solid var(--border);
+    margin: 0 -1.5rem 2.5rem; padding: 0 1.5rem;
+  }
+  nav.toc .inner {
+    max-width: 1000px; margin: 0 auto; display: flex; gap: 1.2rem;
+    overflow-x: auto; padding: 0.75rem 0; font-size: 0.8rem;
+  }
+  nav.toc a { color: var(--text-dim); text-decoration: none; white-space: nowrap; }
+  nav.toc a:hover { color: var(--accent); }
+
+  section.block { padding: 2.8rem 0; border-bottom: 1px solid var(--border); scroll-margin-top: 4rem; }
+  section.block:last-of-type { border-bottom: none; }
+  .block-head { display: flex; align-items: baseline; gap: 0.7rem; margin-bottom: 0.4rem; }
+  .block-num { font-family: ui-monospace, "Cascadia Code", monospace; font-size: 0.8rem; color: var(--text-dim); }
+  h2 { font-size: 1.4rem; margin: 0; letter-spacing: -0.01em; }
+  h3 { font-size: 1rem; margin: 0 0 0.35rem; }
+  .block-desc { color: var(--text-dim); max-width: 66ch; margin: 0.6rem 0 1.6rem; }
+  .block-desc.center { margin-left: auto; margin-right: auto; text-align: center; }
+
+  /* ---------- Problem framing ---------- */
+  .framing { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .framing-card { border-radius: 10px; padding: 1.1rem 1.2rem; border: 1.5px solid; }
+  .framing-card.bad { background: var(--bad-bg); border-color: var(--bad-border); }
+  .framing-card.good { background: var(--good-bg); border-color: var(--good-border); }
+  .framing-card .label {
+    font-family: ui-monospace, "Cascadia Code", monospace; font-size: 0.65rem; font-weight: 800;
+    text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem;
+  }
+  .framing-card.bad .label { color: var(--bad-text); }
+  .framing-card.good .label { color: var(--good-text); }
+  .framing-card ul { margin: 0; padding-left: 1.1rem; font-size: 0.87rem; }
+  .framing-card.bad li { color: var(--bad-text); }
+  .framing-card.good li { color: var(--good-text); }
+  .framing-card li + li { margin-top: 0.4rem; }
+
+  /* ---------- Metrics strip ---------- */
+  .metrics-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.8rem; margin-top: 1.5rem; }
+  .metric { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 0.9rem 1rem; box-shadow: var(--shadow); }
+  .metric .m-label { font-size: 0.68rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; }
+  .metric .m-value { font-family: ui-monospace, "Cascadia Code", monospace; font-size: 1.3rem; font-weight: 700; margin: 0.25rem 0; color: var(--text); font-variant-numeric: tabular-nums; }
+  .metric .m-delta { font-size: 0.76rem; color: var(--good-text); font-weight: 600; }
+  .metric p.m-explain { margin: 0.35rem 0 0; font-size: 0.78rem; color: var(--text-dim); font-family: ui-sans-serif, system-ui, sans-serif; }
+
+  /* ---------- Use case cards ---------- */
+  .usecases { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
+  .usecase { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.2rem 1.3rem; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 0.55rem; }
+  .usecase .uc-tag {
+    font-family: ui-monospace, "Cascadia Code", monospace; font-size: 0.62rem; font-weight: 800;
+    text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-ink); align-self: flex-start;
+    background: var(--chip-bg); padding: 0.2rem 0.55rem; border-radius: 100px;
+  }
+  .usecase h3 { font-size: 1.02rem; margin-top: 0.2rem; }
+  .uc-detail { display: flex; gap: 0.6rem; font-size: 0.82rem; }
+  .uc-detail .uc-k { flex: none; width: 76px; font-weight: 700; color: var(--text-dim); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.06em; padding-top: 0.15rem; }
+  .uc-detail .uc-v { color: var(--text-dim); line-height: 1.4; }
+  .usecase .uc-value { margin-top: auto; padding-top: 0.6rem; border-top: 1px dashed var(--border); font-size: 0.8rem; color: var(--text); }
+  .usecase .uc-value strong { color: var(--accent-ink); }
+
+  /* ---------- Tables ---------- */
+  .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 8px; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.87rem; min-width: 560px; }
+  th, td { text-align: left; padding: 0.65rem 0.9rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+  thead th { font-family: ui-monospace, "Cascadia Code", monospace; font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-dim); background: var(--surface-2); }
+  tbody tr:last-child td { border-bottom: none; }
+  td.dim { color: var(--text-dim); }
+  td.hl { color: var(--accent-ink); font-weight: 600; }
+
+  /* ---------- Fit card ---------- */
+  .fit-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.1rem; box-shadow: var(--shadow); }
+  .fit-card .label { font-family: ui-monospace, "Cascadia Code", monospace; font-size: 0.62rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); margin-bottom: 0.5rem; }
+  .fit-card ul { margin: 0; padding-left: 1.1rem; font-size: 0.86rem; color: var(--text-dim); }
+  .fit-card li + li { margin-top: 0.35rem; }
+
+  /* ---------- Callout ---------- */
+  .callout { background: var(--surface-2); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 8px; padding: 1rem 1.2rem; font-size: 0.88rem; color: var(--text-dim); }
+  .callout strong { color: var(--text); }
+  .callout ul { margin: 0.5rem 0 0; padding-left: 1.1rem; }
+  .callout li + li { margin-top: 0.3rem; }
+
+  /* ---------- Hero blobs ---------- */
+  header.hero { position: relative; overflow: hidden; }
+  header.hero > * { position: relative; z-index: 1; }
+  .hero-blobs { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+  .blob { position: absolute; border-radius: 50%; filter: blur(60px); opacity: 0.28; }
+  .blob-a { width: 340px; height: 340px; background: var(--accent); top: -100px; left: -70px; }
+  .blob-b { width: 300px; height: 300px; background: #22D3EE; top: -60px; right: -60px; }
+  @media (prefers-color-scheme: dark) { .blob { opacity: 0.16; } }
+  :root[data-theme="dark"] .blob { opacity: 0.16; }
+  :root[data-theme="light"] .blob { opacity: 0.28; }
+
+  /* ---------- Trust pills ---------- */
+  .trust-pills { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 0.2rem 0 1.3rem; }
+  .trust-pill {
+    display: inline-flex; align-items: center; gap: 0.4rem; background: var(--good-bg); color: var(--good-text);
+    border: 1px solid var(--good-border); border-radius: 100px; padding: 0.4rem 0.9rem; font-size: 0.82rem; font-weight: 600;
+  }
+  .trust-pill .tp-check { font-weight: 800; }
+
+  /* ---------- Nav brand ---------- */
+  .nav-brand { display: flex; flex-direction: column; line-height: 1.15; margin-right: 0.4rem; flex: none; }
+  .nav-brand .nb-name { font-weight: 800; color: var(--accent); font-size: 0.88rem; white-space: nowrap; }
+  .nav-brand .nb-tag { font-size: 0.64rem; color: var(--text-dim); white-space: nowrap; }
+  .nav-sep { width: 1px; align-self: stretch; background: var(--border); flex: none; margin: 0.3rem 0; }
+
+  /* ---------- Step tracker ---------- */
+  .steps-tracker { display: flex; align-items: flex-start; justify-content: center; gap: 0; flex-wrap: wrap; margin-bottom: 2rem; }
+  .step-item { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; width: 108px; text-align: center; }
+  .step-bubble {
+    position: relative; width: 50px; height: 50px; border-radius: 50%; background: var(--surface);
+    border: 2px solid var(--border); display: flex; align-items: center; justify-content: center;
+    color: var(--text-dim); box-shadow: var(--shadow);
+  }
+  .step-bubble svg { width: 22px; height: 22px; }
+  .step-item.done .step-bubble { border-color: var(--accent); color: var(--accent); }
+  .step-check {
+    position: absolute; bottom: -3px; right: -3px; width: 17px; height: 17px; border-radius: 50%;
+    background: var(--good-border); color: #fff; font-size: 10px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center; border: 2px solid var(--surface);
+  }
+  .step-label { font-size: 0.76rem; font-weight: 600; color: var(--text); line-height: 1.3; }
+  .step-line { flex: 1; height: 2px; background: var(--border); margin-top: 25px; min-width: 20px; }
+
+  /* ---------- Demo sequence ---------- */
+  .demo-flow { display: flex; flex-direction: column; align-items: center; gap: 0; max-width: 480px; margin: 0 auto; }
+  .v-connector { width: 2px; height: 26px; background: var(--border); position: relative; flex: none; }
+  .v-connector::after { content: ""; position: absolute; bottom: -1px; left: 50%; transform: translateX(-50%); border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 6px solid var(--border); }
+  .demo-bubble { align-self: flex-end; background: var(--accent); color: #fff; border-radius: 14px 14px 4px 14px; padding: 0.85rem 1.1rem; font-size: 0.95rem; max-width: 88%; box-shadow: var(--shadow); }
+  .demo-tag { font-family: ui-monospace, "Cascadia Code", monospace; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-dim); background: var(--surface-2); border: 1px solid var(--border); border-radius: 100px; padding: 0.32rem 0.85rem; }
+  .demo-card { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.2rem; box-shadow: var(--shadow); }
+  .demo-card .dc-label { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-ink); font-weight: 800; margin-bottom: 0.45rem; }
+  .demo-card .dc-q { font-weight: 600; margin-bottom: 0.3rem; font-size: 0.92rem; }
+  .demo-card .dc-a { color: var(--text-dim); font-size: 0.86rem; line-height: 1.5; }
+  .demo-score { display: inline-block; margin-top: 0.65rem; font-family: ui-monospace, "Cascadia Code", monospace; font-size: 0.78rem; background: var(--good-bg); color: var(--good-text); border: 1px solid var(--good-border); padding: 0.22rem 0.65rem; border-radius: 100px; }
+  .demo-final { text-align: center; font-size: 0.82rem; color: var(--text-dim); margin-top: 0.4rem; }
+
+  /* ---------- Features ---------- */
+  .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 0.9rem; }
+  .feature-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.1rem; box-shadow: var(--shadow); }
+  .feature-card .f-title { font-weight: 600; font-size: 0.92rem; margin-bottom: 0.35rem; }
+  .feature-card p { margin: 0; font-size: 0.82rem; color: var(--text-dim); line-height: 1.45; }
+
+  /* ---------- Comparison progression ---------- */
+  .compare-steps { display: flex; align-items: center; gap: 0.7rem; flex-wrap: wrap; justify-content: center; margin-bottom: 1.4rem; }
+  .compare-chip { font-family: ui-monospace, "Cascadia Code", monospace; font-size: 0.82rem; font-weight: 700; padding: 0.55rem 1.1rem; border-radius: 100px; border: 1.5px solid var(--border); background: var(--surface); color: var(--text-dim); }
+  .compare-chip.mid { border-color: var(--accent); color: var(--accent-ink); background: var(--surface); box-shadow: var(--shadow); }
+  .compare-arrow { color: var(--text-dim); font-size: 1rem; }
+
+  /* ---------- Evolutions ---------- */
+  .evolutions-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 0.7rem; }
+  .evo-item { display: flex; gap: 0.65rem; align-items: flex-start; font-size: 0.86rem; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 0.7rem 0.9rem; color: var(--text-dim); }
+  .evo-item .evo-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); margin-top: 0.55rem; flex: none; }
+
+  footer { padding-top: 2.5rem; color: var(--text-dim); font-size: 0.85rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; }
+
+  @media (max-width: 700px) {
+    .framing { grid-template-columns: 1fr; }
+  }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <header class="hero">
+    <div class="hero-blobs"><span class="blob blob-a"></span><span class="blob blob-b"></span></div>
+    <p class="eyebrow">FAQ intelligente &amp; bilingue</p>
+    <h1>Une FAQ qui <em>comprend</em> vos clients — pas seulement leurs mots-clés</h1>
+    <p class="subtitle">
+      Moteur de recherche sémantique fine-tuné sur votre propre contenu FAQ : il trouve la bonne réponse
+      même mal formulée, et sait dire « je ne sais pas » plutôt que d'inventer.
+    </p>
+    <div class="trust-pills">
+      <span class="trust-pill"><span class="tp-check">✓</span> Aucune donnée envoyée à un tiers pour la recherche</span>
+      <span class="trust-pill"><span class="tp-check">✓</span> Refuse de répondre plutôt que d'inventer</span>
+    </div>
+    <div class="chips">
+      <span class="chip">Bilingue FR/EN</span>
+      <span class="chip">Fine-tuné sur votre FAQ</span>
+      <span class="chip">Score de confiance visible</span>
+      <span class="chip">Génération optionnelle</span>
+    </div>
+    <div class="hero-cta">
+      <a href="#demo">Voir la démonstration ↓</a>
+    </div>
+  </header>
+
+  <nav class="toc">
+    <div class="inner">
+      <div class="nav-brand"><span class="nb-name">FAQ IA</span><span class="nb-tag">Recherche qui comprend</span></div>
+      <div class="nav-sep"></div>
+      <a href="#demo">Démo</a>
+      <a href="#fonctionnalites">Fonctionnalités</a>
+      <a href="#valeur">Valeur métier</a>
+      <a href="#comparaison">Comparaison</a>
+      <a href="#usages">Cas d'usage</a>
+      <a href="#agent">Fine-tuning vs agent</a>
+      <a href="#performances">Performances</a>
+      <a href="#evolutions">Évolutions</a>
+    </div>
+  </nav>
+
+  <section class="block" id="demo">
+    <div class="block-head"><span class="block-num">01</span><h2>Comment ça marche</h2></div>
+    <p class="block-desc">Un exemple réel, tiré du jeu de données de démonstration inclus dans le projet.</p>
+
+    <div class="steps-tracker">
+      <div class="step-item done">
+        <span class="step-bubble">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M4 5h16v11H8l-4 4V5z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+          <span class="step-check">✓</span>
+        </span>
+        <span class="step-label">Question posée</span>
+      </div>
+      <div class="step-line"></div>
+      <div class="step-item done">
+        <span class="step-bubble">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3z" fill="currentColor"/></svg>
+          <span class="step-check">✓</span>
+        </span>
+        <span class="step-label">Analyse sémantique</span>
+      </div>
+      <div class="step-line"></div>
+      <div class="step-item done">
+        <span class="step-bubble">
+          <svg viewBox="0 0 24 24" fill="none"><rect x="5" y="3" width="14" height="18" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M8 8h8M8 12h8M8 16h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          <span class="step-check">✓</span>
+        </span>
+        <span class="step-label">FAQ retrouvée</span>
+      </div>
+      <div class="step-line"></div>
+      <div class="step-item">
+        <span class="step-bubble">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M4 20l1-4L16 5l3 3L8 19l-4 1z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg>
+        </span>
+        <span class="step-label">Réponse (optionnelle)</span>
+      </div>
+    </div>
+
+    <div class="demo-flow">
+      <div class="demo-bubble">« Je n'ai toujours pas reçu mon colis. »</div>
+      <div class="v-connector"></div>
+      <div class="demo-card">
+        <div class="dc-label">FAQ retrouvée</div>
+        <div class="dc-q">Comment suivre ma commande ?</div>
+        <div class="dc-a">Vous pouvez suivre votre commande en utilisant le numéro de suivi fourni dans l'email de confirmation.</div>
+        <span class="demo-score">Score de similarité : 0.87</span>
+      </div>
+      <div class="v-connector"></div>
+      <div class="demo-card">
+        <div class="dc-label">Réponse rédigée (optionnelle, sur demande)</div>
+        <div class="dc-a">« Il semble que vous cherchiez à suivre votre colis. Vous pouvez le faire grâce au numéro de suivi envoyé dans l'e-mail de confirmation de commande. S'il ne vous est jamais parvenu, vérifiez vos courriers indésirables ou contactez le support avec votre numéro de commande. »</div>
+      </div>
+      <p class="demo-final">Résultat retrouvé en moins de 50 ms — la rédaction ci-dessus n'est déclenchée que si l'utilisateur la demande.</p>
+    </div>
+  </section>
+
+  <section class="block" id="fonctionnalites">
+    <div class="block-head"><span class="block-num">02</span><h2>Fonctionnalités</h2></div>
+    <p class="block-desc">Ce que l'application fait, concrètement.</p>
+    <div class="features-grid">
+      <div class="feature-card"><div class="f-title">Recherche en langage naturel</div><p>L'utilisateur pose sa question normalement — synonymes, reformulations et fautes de frappe n'empêchent pas de trouver la bonne réponse.</p></div>
+      <div class="feature-card"><div class="f-title">Bilingue FR / EN</div><p>Un seul moteur, la langue est choisie à l'exécution — pas deux FAQ à maintenir séparément.</p></div>
+      <div class="feature-card"><div class="f-title">Score de confiance &amp; refus si incertain</div><p>Chaque résultat affiche sa similarité ; sous le seuil de confiance, l'application le dit clairement plutôt que d'inventer.</p></div>
+      <div class="feature-card"><div class="f-title">Génération RAG optionnelle</div><p>Une réponse rédigée, construite uniquement à partir des documents retrouvés, sur simple clic.</p></div>
+      <div class="feature-card"><div class="f-title">Auto-hébergeable</div><p>Tourne sur votre infrastructure, sans dépendance obligatoire à une plateforme fermée.</p></div>
+      <div class="feature-card"><div class="f-title">Fine-tuning sur vos données</div><p>Le modèle apprend le vocabulaire propre à votre FAQ, pas un vocabulaire générique.</p></div>
+    </div>
+  </section>
+
+  <section class="block" id="valeur">
+    <div class="block-head"><span class="block-num">03</span><h2>Valeur métier</h2></div>
+    <p class="block-desc">
+      Une FAQ statique échoue dès que l'utilisateur ne tape pas les mots exacts choisis par l'équipe
+      support — l'exemple ci-dessus le montre : « colis » et « commande » n'ont aucun mot en commun,
+      pourtant c'est bien la bonne réponse.
+    </p>
+    <div class="framing">
+      <div class="framing-card bad">
+        <div class="label">FAQ par mots-clés</div>
+        <ul>
+          <li>« Je n'ai toujours pas reçu mon colis » ne remonte rien si la FAQ dit « suivre ma commande »</li>
+          <li>Aucune tolérance aux fautes, synonymes ou reformulations</li>
+          <li>Pas de mesure de qualité — impossible de savoir si les résultats sont pertinents</li>
+          <li>Même expérience quelle que soit la langue de l'utilisateur</li>
+        </ul>
+      </div>
+      <div class="framing-card good">
+        <div class="label">Retrieval sémantique fine-tuné</div>
+        <ul>
+          <li>Compare le <em>sens</em> de la question, pas les mots exacts</li>
+          <li>Renvoie un score de similarité — et refuse de répondre sous un certain seuil</li>
+          <li>Mesuré objectivement (MRR, Recall@K) sur un set d'évaluation dédié</li>
+          <li>Même moteur pour le français et l'anglais, sans doubler la logique</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3 style="margin-top:2rem;">Ce que ça change concrètement</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Situation</th><th>FAQ statique</th><th>Ce système</th></tr></thead>
+        <tbody>
+          <tr><td>Question reformulée ou avec fautes</td><td class="dim">Aucun résultat</td><td class="dim">Toujours classée par similarité sémantique</td></tr>
+          <tr><td>Question hors périmètre</td><td class="dim">Renvoie souvent un faux résultat « le moins pire »</td><td class="dim">Seuil de confiance → message explicite</td></tr>
+          <tr><td>Besoin d'une réponse rédigée, pas juste un lien</td><td class="dim">Impossible sans rédaction manuelle</td><td class="dim">Réponse générée, strictement basée sur les documents retrouvés</td></tr>
+          <tr><td>Support bilingue FR/EN</td><td class="dim">Deux FAQ à maintenir séparément</td><td class="dim">Un seul modèle, langue choisie à l'exécution</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="block" id="comparaison">
+    <div class="block-head"><span class="block-num">04</span><h2>Comparaison</h2></div>
+    <p class="block-desc">Ce projet se positionne délibérément entre deux extrêmes.</p>
+    <div class="compare-steps">
+      <span class="compare-chip">FAQ classique</span>
+      <span class="compare-arrow">→</span>
+      <span class="compare-chip mid">FAQ IA (ce projet)</span>
+      <span class="compare-arrow">→</span>
+      <span class="compare-chip">Agent IA générique</span>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Dimension</th><th>FAQ classique</th><th>FAQ IA (ce projet)</th><th>Agent IA générique</th></tr></thead>
+        <tbody>
+          <tr><td>Compréhension</td><td class="dim">Mots-clés exacts</td><td class="hl">Sens de la question</td><td class="dim">Sens de la question</td></tr>
+          <tr><td>Coût par recherche</td><td class="dim">Gratuit</td><td class="hl">Gratuit (calcul local)</td><td class="dim">Facturé (appel LLM)</td></tr>
+          <tr><td>Latence</td><td class="dim">Instantané</td><td class="hl">10–50 ms</td><td class="dim">Plusieurs secondes</td></tr>
+          <tr><td>Reproductibilité</td><td class="dim">Totale</td><td class="hl">Totale</td><td class="dim">Variable</td></tr>
+          <tr><td>Confidentialité de la recherche</td><td class="dim">Totale</td><td class="hl">Totale (local)</td><td class="dim">Dépend du fournisseur LLM</td></tr>
+          <tr><td>Réponse rédigée</td><td class="dim">Non</td><td class="hl">Optionnelle</td><td class="dim">Systématique</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="block" id="usages">
+    <div class="block-head"><span class="block-num">05</span><h2>Cas d'usage</h2></div>
+    <p class="block-desc">Trois marchés directement couverts par l'architecture actuelle.</p>
+    <div class="usecases">
+      <div class="usecase">
+        <span class="uc-tag">SAV e-commerce</span>
+        <h3>Livraison, retours, remboursement</h3>
+        <div class="uc-detail"><span class="uc-k">Contexte</span><span class="uc-v">Un service client reçoit des dizaines de questions répétitives par jour, en FR et EN.</span></div>
+        <div class="uc-detail"><span class="uc-k">Problème</span><span class="uc-v">La FAQ existe mais les clients ne la trouvent pas ou ne tombent pas sur les bons mots-clés.</span></div>
+        <div class="uc-detail"><span class="uc-k">Solution</span><span class="uc-v">Recherche sémantique bilingue branchée directement sur la FAQ existante.</span></div>
+        <div class="uc-value">Valeur : <strong>moins de tickets répétitifs</strong>, disponibilité 24/7.</div>
+      </div>
+      <div class="usecase">
+        <span class="uc-tag">Support client SaaS B2B</span>
+        <h3>Aide produit en libre-service</h3>
+        <div class="uc-detail"><span class="uc-k">Contexte</span><span class="uc-v">Des clients internationaux posent des questions produit en langage naturel, en français ou en anglais.</span></div>
+        <div class="uc-detail"><span class="uc-k">Problème</span><span class="uc-v">Le support niveau 1 traite trop de questions déjà documentées.</span></div>
+        <div class="uc-detail"><span class="uc-k">Solution</span><span class="uc-v">Recherche dans la documentation existante avant tout contact humain.</span></div>
+        <div class="uc-value">Valeur : <strong>équipe support recentrée</strong> sur les cas complexes à forte valeur.</div>
+      </div>
+      <div class="usecase">
+        <span class="uc-tag">Tourisme &amp; hôtellerie</span>
+        <h3>FAQ voyageurs multilingue</h3>
+        <div class="uc-detail"><span class="uc-k">Contexte</span><span class="uc-v">Une clientèle internationale pose des questions récurrentes avant ou pendant le séjour.</span></div>
+        <div class="uc-detail"><span class="uc-k">Problème</span><span class="uc-v">Annulation, arrhes, horaires, équipements — souvent posés différemment d'un client à l'autre.</span></div>
+        <div class="uc-detail"><span class="uc-k">Solution</span><span class="uc-v">Réponse immédiate en FR et EN, sans équipe multilingue de permanence.</span></div>
+        <div class="uc-value">Valeur : <strong>expérience client fluide</strong>, sans renfort d'équipe.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="agent">
+    <div class="block-head"><span class="block-num">06</span><h2>Pourquoi un modèle fine-tuné plutôt qu'un agent IA ?</h2></div>
+    <p class="block-desc">
+      Beaucoup de solutions FAQ misent sur un agent IA qui raisonne à chaque question posée. Ce projet fait
+      un choix différent, volontairement : un moteur de recherche spécialisé pour trouver la réponse, un LLM
+      optionnel seulement pour la rédiger.
+    </p>
+    <div class="framing">
+      <div class="framing-card bad">
+        <div class="label">Agent IA pour chaque question</div>
+        <ul>
+          <li>Un appel LLM à chaque recherche — coût et latence de plusieurs secondes</li>
+          <li>Résultat non reproductible : la même question peut donner deux réponses différentes</li>
+          <li>Qualité difficile à mesurer objectivement</li>
+          <li>Le contenu FAQ transite systématiquement par un tiers, à chaque question</li>
+        </ul>
+      </div>
+      <div class="framing-card good">
+        <div class="label">Modèle spécialisé (ce projet)</div>
+        <ul>
+          <li>Recherche en 10–50 ms, en local, sans appel réseau</li>
+          <li>Résultat reproductible et mesurable (MRR, Recall@K)</li>
+          <li>Le LLM n'intervient qu'à la fin, sur demande, pour rédiger la réponse</li>
+          <li>Aucune donnée envoyée à un tiers pour l'étape de recherche elle-même</li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="block-desc" style="margin-top:1.4rem;">
+      <strong style="color:var(--text);">Faut-il refaire un fine-tuning à chaque mise à jour de la FAQ ?</strong><br>
+      Non. Le modèle transforme n'importe quel contenu en vecteurs de recherche, y compris une question
+      tout juste ajoutée — un calcul rapide, recalculé en continu (toutes les 5 minutes maximum). Le
+      fine-tuning répond à un besoin différent : affiner la précision du modèle sur le vocabulaire métier
+      du client, dans la durée.
+    </p>
+    <div class="table-wrap" style="margin-top:1rem;">
+      <table>
+        <thead><tr><th>Mécanisme</th><th>Fréquence</th><th>Rôle</th></tr></thead>
+        <tbody>
+          <tr><td>Rafraîchissement des vecteurs FAQ</td><td class="dim">En continu (≤ 5 min)</td><td class="dim">Rend le nouveau contenu immédiatement trouvable</td></tr>
+          <tr><td>Fine-tuning du modèle</td><td class="dim">Ponctuel — nouveau vocabulaire, volume en hausse, ou métriques en baisse</td><td class="dim">Améliore la compréhension du vocabulaire métier</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout" style="margin-top:1rem; border-left-color: var(--good-border);">
+      <strong>Garantie de fraîcheur :</strong> tout ajout ou modification de contenu FAQ est trouvable dans
+      la recherche en moins de 5 minutes, sans redémarrage ni fine-tuning — à condition que le contenu
+      source (CMS ou autre) soit synchronisé vers les fichiers FAQ consommés par l'application.
+    </div>
+  </section>
+
+  <section class="block" id="performances">
+    <div class="block-head"><span class="block-num">07</span><h2>Performances</h2></div>
+    <p class="block-desc">Trois métriques, mesurées sur un jeu d'évaluation dédié — inutile de les connaître pour comprendre ce qu'elles signifient.</p>
+    <div class="metrics-row">
+      <div class="metric">
+        <div class="m-label">MRR global</div>
+        <div class="m-value">0.844 → 0.883</div>
+        <p class="m-explain">La bonne réponse apparaît plus haut dans les résultats.</p>
+      </div>
+      <div class="metric">
+        <div class="m-label">Recall@1 global</div>
+        <div class="m-value">0.75 → 0.80</div>
+        <p class="m-explain">4 fois sur 5, la bonne réponse est le tout premier résultat.</p>
+      </div>
+      <div class="metric">
+        <div class="m-label">Similarité moyenne</div>
+        <div class="m-value">0.544 → 0.635</div>
+        <p class="m-explain">Le moteur comprend mieux le lien entre la question et la réponse.</p>
+      </div>
+    </div>
+    <p class="block-desc" style="margin-top:1rem; font-size:0.8rem;">
+      Base <code>paraphrase-multilingual-MiniLM-L12-v2</code> vs modèle fine-tuné — méthodologie complète
+      dans <code>evaluate_models_compare.py</code>, détail par langue dans le README.
+    </p>
+  </section>
+
+  <section class="block" id="evolutions">
+    <div class="block-head"><span class="block-num">08</span><h2>Évolutions possibles</h2></div>
+    <p class="block-desc">Le socle actuel est pensé pour grandir dans ces directions.</p>
+    <div class="evolutions-grid">
+      <div class="evo-item"><span class="evo-dot"></span>Indexation automatique depuis un CMS (WordPress, etc.)</div>
+      <div class="evo-item"><span class="evo-dot"></span>Connecteurs SharePoint, Confluence, Notion</div>
+      <div class="evo-item"><span class="evo-dot"></span>Ingestion de PDF et documents Word</div>
+      <div class="evo-item"><span class="evo-dot"></span>API REST pour intégration externe</div>
+      <div class="evo-item"><span class="evo-dot"></span>Tableau de bord des questions posées</div>
+      <div class="evo-item"><span class="evo-dot"></span>Historique &amp; analytics d'usage</div>
+      <div class="evo-item"><span class="evo-dot"></span>Suggestions automatiques de nouvelles FAQ à partir des questions sans réponse satisfaisante</div>
+    </div>
+  </section>
+
+  <footer>
+    <span>FAQ Retrieval Apps — Base vs Fine-tuned</span>
+    <span>Généré le 2026-07-20 · <a href="architecture.html">Architecture technique complète</a></span>
+  </footer>
+
+</div>
+</body>
+</html>

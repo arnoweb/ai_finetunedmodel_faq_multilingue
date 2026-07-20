@@ -1,9 +1,14 @@
 import json
+import os
 import sys
 from collections import defaultdict
 from typing import Dict, List, Sequence
 
+from dotenv import load_dotenv
 from sentence_transformers import SentenceTransformer, util
+
+load_dotenv()
+os.environ.setdefault("HF_TOKEN", os.getenv("HF_API_KEY", ""))
 
 # Models to compare
 MODEL_PATHS = {

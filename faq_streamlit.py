@@ -10,16 +10,46 @@ load_dotenv()
 st.markdown(
     """
     <style>
+    .hero-blob { position: fixed; z-index: -1; border-radius: 50%; filter: blur(70px); opacity: 0.25; pointer-events: none; }
+    .blob-a { width: 320px; height: 320px; background: #4F46E5; top: -80px; left: -60px; }
+    .blob-b { width: 280px; height: 280px; background: #22D3EE; top: -40px; right: -60px; }
+
+    h1 { color: #4F46E5 !important; font-weight: 800 !important; letter-spacing: -0.02em; }
+
+    .trust-pills { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.4rem 0 1rem; }
+    .trust-pill {
+        display: inline-flex; align-items: center; gap: 0.35rem;
+        background: #F0FDF4; color: #14532D; border: 1px solid #4ADE80;
+        border-radius: 100px; padding: 0.3rem 0.75rem; font-size: 0.82rem; font-weight: 600;
+    }
+
+    .stButton > button {
+        background: #4F46E5 !important; color: #fff !important; border: none !important;
+        border-radius: 100px !important; padding: 0.5rem 1.4rem !important; font-weight: 600 !important;
+        transition: opacity 0.15s ease;
+    }
+    .stButton > button:hover { opacity: 0.88; }
+
+    .result-tight {
+        background: #FFFFFF; border: 1px solid #DDE1E8; border-radius: 12px;
+        padding: 0.9rem 1.1rem; margin-bottom: 0.6rem; box-shadow: 0 1px 2px rgba(15,23,42,0.06);
+    }
     .result-tight p { margin: 0 0 4px 0; line-height: 1.25; }
-    .result-tight .sim { color: #6b7280; font-size: 0.85rem; margin: 0; }
-    .result-tight hr { margin: 2px 0; }
+    .result-tight .sim {
+        display: inline-block; margin-top: 6px; color: #14532D; background: #F0FDF4;
+        border: 1px solid #4ADE80; border-radius: 100px; padding: 2px 10px;
+        font-size: 0.78rem; font-weight: 600;
+    }
     hr { margin: 2px 0; }
     </style>
+    <div class="hero-blob blob-a"></div>
+    <div class="hero-blob blob-b"></div>
     """,
     unsafe_allow_html=True,
 )
 
 HF_API_KEY = os.getenv("HF_API_KEY")
+os.environ.setdefault("HF_TOKEN", HF_API_KEY or "")
 HF_API_URL = "https://router.huggingface.co/v1/chat/completions"
 HF_MODEL_DEFAULT = "meta-llama/Llama-3.1-8B-Instruct"
 
@@ -35,7 +65,7 @@ faq_data_paths = {
 def load_model():
     return SentenceTransformer(model_path)
 
-@st.cache_data
+@st.cache_data(ttl=300)
 def load_faq_data(faq_data_path):
     faq_items = []
     with open(faq_data_path, "r") as f:
@@ -46,7 +76,7 @@ def load_faq_data(faq_data_path):
     faq_answers = [item["answer"] for item in faq_items]
     return faq_questions, faq_answers
 
-@st.cache_data
+@st.cache_data(ttl=300)
 def compute_answer_embeddings(_model, faq_answers):
     return _model.encode(faq_answers, convert_to_tensor=True)
 
@@ -121,6 +151,16 @@ st.title("E-commerce FAQ RAG Search")
 # Language switcher
 language = st.radio("Select language / Choisissez la langue:", ["English", "Français"])
 
+st.markdown(
+    f"""
+    <div class="trust-pills">
+      <span class="trust-pill">✓ {"No data sent to a third party for search" if language == "English" else "Aucune donnée envoyée à un tiers pour la recherche"}</span>
+      <span class="trust-pill">✓ {"Refuses to answer rather than invent" if language == "English" else "Refuse de répondre plutôt que d'inventer"}</span>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
 faq_data_path = faq_data_paths[language]
 model = load_model()
 faq_questions, faq_answers = load_faq_data(faq_data_path)
@@ -168,8 +208,6 @@ if user_query:
                 """,
                 unsafe_allow_html=True,
             )
-            if rank < top_k:
-                st.markdown("<hr>", unsafe_allow_html=True)
 
         # RAG section
         st.markdown("<div style='margin-top: 8px;'></div>", unsafe_allow_html=True)

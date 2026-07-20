@@ -1,0 +1,948 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FAQ Retrieval — Technical Architecture</title>
+<style>
+  :root {
+    --bg: #F1F5F9;
+    --surface: #FFFFFF;
+    --surface-2: #F8FAFC;
+    --text: #0F172A;
+    --text-dim: #64748B;
+    --border: #DDE1E8;
+    --accent: #4F46E5;
+    --accent-ink: #4338CA;
+    --code-bg: #E2E8F0;
+    --chip-bg: #E8EBF0;
+    --chip-color: #334155;
+    --shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+    --cat-data: #FB923C;
+    --cat-train: #60A5FA;
+    --cat-model: #A78BFA;
+    --cat-serve: #818CF8;
+    --cat-gen: #4ADE80;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0F172A;
+      --surface: #1E293B;
+      --surface-2: #172033;
+      --text: #F1F5F9;
+      --text-dim: #94A3B8;
+      --border: #334155;
+      --accent: #818CF8;
+      --accent-ink: #A5B4FC;
+      --code-bg: #273549;
+      --chip-bg: #273549;
+      --chip-color: #94A3B8;
+      --shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0F172A;
+    --surface: #1E293B;
+    --surface-2: #172033;
+    --text: #F1F5F9;
+    --text-dim: #94A3B8;
+    --border: #334155;
+    --accent: #818CF8;
+    --accent-ink: #A5B4FC;
+    --code-bg: #273549;
+    --chip-bg: #273549;
+    --chip-color: #94A3B8;
+    --shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  }
+  :root[data-theme="light"] {
+    --bg: #F1F5F9;
+    --surface: #FFFFFF;
+    --surface-2: #F8FAFC;
+    --text: #0F172A;
+    --text-dim: #64748B;
+    --border: #DDE1E8;
+    --accent: #4F46E5;
+    --accent-ink: #4338CA;
+    --code-bg: #E2E8F0;
+    --chip-bg: #E8EBF0;
+    --chip-color: #334155;
+    --shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .mono {
+    font-family: ui-monospace, "Cascadia Code", "Fira Code", "SF Mono", Menlo, Consolas, monospace;
+  }
+
+  a { color: var(--accent); text-decoration-color: color-mix(in srgb, var(--accent) 40%, transparent); }
+  a:hover { text-decoration-thickness: 2px; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+
+  .page {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 1.5rem 5rem;
+  }
+
+  /* ---------- Header ---------- */
+  header.hero {
+    padding: 3.25rem 0 2rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .eyebrow {
+    font-family: ui-monospace, "Cascadia Code", "Fira Code", "SF Mono", Menlo, Consolas, monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 0.9rem;
+  }
+  h1 {
+    font-size: clamp(1.7rem, 3.4vw, 2.5rem);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    margin: 0 0 0.75rem;
+    text-wrap: balance;
+    max-width: 26ch;
+  }
+  h1 em {
+    font-style: normal;
+    color: var(--accent);
+  }
+  .subtitle {
+    color: var(--text-dim);
+    font-size: 1.05rem;
+    max-width: 62ch;
+    margin: 0 0 1.4rem;
+  }
+  .chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .chip {
+    font-family: ui-monospace, "Cascadia Code", "Fira Code", "SF Mono", Menlo, Consolas, monospace;
+    font-size: 0.76rem;
+    padding: 0.28rem 0.6rem;
+    border-radius: 100px;
+    background: var(--chip-bg);
+    color: var(--chip-color);
+  }
+
+  /* ---------- Nav ---------- */
+  nav.toc {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--border);
+    margin: 0 -1.5rem 2.5rem;
+    padding: 0 1.5rem;
+  }
+  nav.toc .inner {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    gap: 1.3rem;
+    overflow-x: auto;
+    padding: 0.75rem 0;
+    font-size: 0.83rem;
+  }
+  nav.toc a {
+    color: var(--text-dim);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  nav.toc a:hover { color: var(--accent); }
+
+  /* ---------- Sections ---------- */
+  section.block { padding: 2.6rem 0; border-bottom: 1px solid var(--border); scroll-margin-top: 4rem; }
+  section.block:last-of-type { border-bottom: none; }
+  .block-head { display: flex; align-items: baseline; gap: 0.7rem; margin-bottom: 0.4rem; }
+  .block-num {
+    font-family: ui-monospace, "Cascadia Code", "Fira Code", "SF Mono", Menlo, Consolas, monospace;
+    font-size: 0.8rem;
+    color: var(--text-dim);
+  }
+  h2 { font-size: 1.35rem; margin: 0; letter-spacing: -0.01em; }
+  .block-desc { color: var(--text-dim); max-width: 66ch; margin: 0.6rem 0 1.6rem; }
+
+  code {
+    font-family: ui-monospace, "Cascadia Code", "Fira Code", "SF Mono", Menlo, Consolas, monospace;
+    background: var(--code-bg);
+    padding: 0.1rem 0.35rem;
+    border-radius: 4px;
+    font-size: 0.85em;
+  }
+
+  /* ==================================================================
+     DIAGRAM CARD (schema)
+     ================================================================== */
+  .diagram-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .diagram-card-head {
+    padding: 1rem 1.4rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .diagram-card-head .legend {
+    display: flex;
+    gap: 0.9rem;
+    flex-wrap: wrap;
+    font-size: 0.72rem;
+    color: var(--text-dim);
+  }
+  .legend-item { display: flex; align-items: center; gap: 0.35rem; }
+  .legend-dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+
+  .diagram {
+    display: grid;
+    grid-template-columns: 170px 34px 1fr 34px 170px;
+    align-items: stretch;
+    padding: 1.4rem 1.2rem;
+    gap: 0;
+    overflow-x: auto;
+  }
+
+  .zone {
+    border-radius: 10px;
+    padding: 0.9rem 0.95rem 0.8rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    border: 1.5px solid;
+  }
+  .zone-eyebrow {
+    font-family: ui-monospace, "Cascadia Code", "Fira Code", monospace;
+    font-size: 0.6rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .zone-title { font-size: 0.88rem; font-weight: 700; line-height: 1.25; }
+  .zone-desc { font-size: 0.74rem; line-height: 1.45; }
+  .zone hr.zdivider { border: none; margin: 0.15rem 0; }
+
+  .zchips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 2px; }
+  .zchip {
+    font-family: ui-monospace, "Cascadia Code", "Fira Code", monospace;
+    font-size: 0.62rem;
+    font-weight: 500;
+    padding: 2px 7px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+  .zone-note {
+    font-size: 0.6rem;
+    font-family: ui-monospace, "Cascadia Code", "Fira Code", monospace;
+    color: var(--text-dim);
+    text-align: center;
+    border-top: 1px dashed var(--border);
+    padding-top: 6px;
+    margin-top: 4px;
+  }
+
+  /* category colorways */
+  .z-data { background: #FFF7ED; border-color: #FB923C; }
+  .z-data .zone-eyebrow { color: #9A3412; }
+  .z-data .zone-title   { color: #7C2D12; }
+  .z-data .zone-desc    { color: #92400E; }
+  .z-data .zchip        { background: #FFEDD5; color: #7C2D12; }
+  .z-data hr.zdivider   { border-top: 1px solid #FED7AA; }
+
+  .z-train { background: #EFF6FF; border-color: #60A5FA; }
+  .z-train .zone-eyebrow { color: #1E40AF; }
+  .z-train .zone-title   { color: #1E3A8A; }
+  .z-train .zone-desc    { color: #1D4ED8; }
+  .z-train .zchip        { background: #DBEAFE; color: #1E3A8A; }
+
+  .z-model { background: #F5F3FF; border-color: #A78BFA; }
+  .z-model .zone-eyebrow { color: #5B21B6; }
+  .z-model .zone-title   { color: #4C1D95; }
+  .z-model .zone-desc    { color: #6D28D9; }
+  .z-model .zchip        { background: #EDE9FE; color: #4C1D95; }
+
+  .z-serve { background: #EEF2FF; border-color: #818CF8; }
+  .z-serve .zone-eyebrow { color: #3730A3; }
+  .z-serve .zone-title   { color: #312E81; }
+  .z-serve .zone-desc    { color: #4338CA; }
+  .z-serve .zchip        { background: #E0E7FF; color: #312E81; }
+
+  .z-gen { background: #F0FDF4; border-color: #4ADE80; }
+  .z-gen .zone-eyebrow { color: #15803D; }
+  .z-gen .zone-title   { color: #14532D; }
+  .z-gen .zone-desc    { color: #166534; }
+  .z-gen .zchip        { background: #DCFCE7; color: #14532D; }
+
+  .z-output { background: var(--surface-2); border-color: #94A3B8; }
+  .z-output .zone-eyebrow { color: var(--text-dim); }
+  .z-output .zone-title   { color: var(--text); }
+  .z-output .zone-desc    { color: var(--text-dim); }
+  .z-output .zchip        { background: var(--code-bg); color: var(--chip-color); }
+
+  /* arrows */
+  .arrow-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 0 2px;
+  }
+  .arrow-label {
+    font-family: ui-monospace, "Cascadia Code", "Fira Code", monospace;
+    font-size: 0.52rem;
+    color: var(--text-dim);
+    text-align: center;
+    writing-mode: vertical-lr;
+    white-space: nowrap;
+    letter-spacing: 0.04em;
+  }
+  .arrow-shaft { flex: 1; width: 1.5px; background: #94A3B8; min-height: 60px; }
+  .arrow-tip {
+    width: 0; height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 7px solid #94A3B8;
+  }
+
+  /* system column */
+  .system-col { display: flex; flex-direction: column; gap: 0.7rem; padding: 0 0.6rem; }
+  .sys-top { display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem; }
+
+  .inspector-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 6px;
+    margin-top: 2px;
+  }
+  .inspector-item {
+    background: rgba(255, 255, 255, 0.65);
+    border: 1px solid #C7D2FE;
+    border-radius: 6px;
+    padding: 8px 9px 7px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .inspector-item-label { font-size: 0.66rem; font-weight: 700; color: #3730A3; }
+  .inspector-item-chips { display: flex; flex-wrap: wrap; gap: 3px; }
+  .inspector-item .zchip { font-size: 0.58rem; padding: 1px 5px; }
+
+  .ai-pipeline { display: flex; align-items: stretch; gap: 0; margin-top: 2px; }
+  .pipeline-step {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid #86EFAC;
+    border-radius: 7px;
+    padding: 8px 9px 7px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .pipeline-step-llm { border-style: dashed; background: rgba(255, 255, 255, 0.35); }
+  .pipeline-step-header { display: flex; align-items: center; gap: 5px; }
+  .pipeline-num {
+    font-size: 0.58rem; font-weight: 800; color: #15803D;
+    background: #fff; width: 16px; height: 16px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; border: 1px solid #86EFAC;
+  }
+  .pipeline-title { font-size: 0.68rem; font-weight: 700; color: #14532D; line-height: 1.2; }
+  .pipeline-sub { font-size: 0.6rem; color: #166534; line-height: 1.35; flex: 1; }
+  .pipeline-step-chips { display: flex; flex-wrap: wrap; gap: 3px; margin-top: auto; padding-top: 3px; }
+  .pipeline-step-chips .zchip { font-size: 0.56rem; padding: 1px 5px; }
+  .pipeline-arrow { display: flex; align-items: center; padding: 0 4px; font-size: 0.7rem; color: #4ADE80; flex-shrink: 0; font-weight: 700; }
+
+  .ai-details { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 2px; }
+  .ai-detail-panel {
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid #86EFAC;
+    border-radius: 7px;
+    padding: 8px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .ai-detail-label { font-size: 0.58rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #15803D; }
+  .ai-detail-schema { font-family: ui-monospace, "Cascadia Code", monospace; font-size: 0.6rem; color: #166534; line-height: 1.5; }
+  .ai-detail-panel .zchips { margin-top: 2px; }
+  .ai-detail-panel .zchip { font-size: 0.56rem; padding: 1px 5px; }
+
+  .compat-grid { display: flex; flex-direction: column; gap: 6px; margin-top: 2px; }
+  .compat-category { display: flex; flex-direction: column; gap: 3px; }
+  .compat-cat-label { font-size: 0.58rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); }
+  .compat-items { display: flex; flex-wrap: wrap; gap: 3px; }
+  .compat-item {
+    font-family: ui-monospace, "Cascadia Code", monospace;
+    font-size: 0.62rem; font-weight: 500; padding: 2px 6px; border-radius: 4px;
+    background: var(--code-bg); color: var(--chip-color); white-space: nowrap;
+  }
+  .compat-universal .compat-item { background: var(--text); color: var(--surface); }
+  .output-note { margin-top: auto; padding-top: 10px; border-top: 1px solid var(--border); font-size: 0.68rem; color: var(--text-dim); line-height: 1.4; }
+  .output-note strong { color: var(--text); }
+
+  .diagram-card-foot {
+    border-top: 1px solid var(--border);
+    padding: 0.75rem 1.4rem;
+    background: var(--surface-2);
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .diagram-card-foot .footer-label {
+    font-size: 0.6rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--text-dim); margin-right: 2px; white-space: nowrap;
+  }
+  .diagram-card-foot .chip { font-size: 0.65rem; }
+
+  @media (max-width: 760px) {
+    .diagram { grid-template-columns: 1fr; }
+    .arrow-col { display: none; }
+    .sys-top { grid-template-columns: 1fr; }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .inspector-item, .pipeline-step, .ai-detail-panel { background: rgba(255, 255, 255, 0.06); }
+    .pipeline-step-llm { background: rgba(255, 255, 255, 0.03); }
+    .pipeline-num { background: #0f172a; }
+  }
+  :root[data-theme="dark"] .inspector-item,
+  :root[data-theme="dark"] .pipeline-step,
+  :root[data-theme="dark"] .ai-detail-panel { background: rgba(255, 255, 255, 0.06); }
+  :root[data-theme="dark"] .pipeline-step-llm { background: rgba(255, 255, 255, 0.03); }
+  :root[data-theme="dark"] .pipeline-num { background: #0f172a; }
+
+  /* ==================================================================
+     Reused components (tables, node cards, flow list, deploy grid)
+     ================================================================== */
+  .node-row { display: flex; gap: 0.75rem; flex-wrap: wrap; overflow-x: auto; padding-bottom: 0.15rem; }
+  .node {
+    flex: 1 1 220px; min-width: 200px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-left: 3px solid var(--cat-color, var(--accent));
+    border-radius: 8px; padding: 0.85rem 1rem; box-shadow: var(--shadow);
+  }
+  .node h4 { margin: 0 0 0.3rem; font-size: 0.86rem; font-family: ui-monospace, "Cascadia Code", monospace; color: var(--text); }
+  .node p { margin: 0; font-size: 0.83rem; color: var(--text-dim); line-height: 1.45; }
+  .node p + p { margin-top: 0.3rem; }
+
+  ol.flow {
+    list-style: none; margin: 0; padding: 0; counter-reset: step;
+    border-left: 1px solid var(--border); margin-left: 0.55rem;
+  }
+  ol.flow li { counter-increment: step; position: relative; padding: 0 0 1.3rem 1.6rem; }
+  ol.flow li:last-child { padding-bottom: 0; }
+  ol.flow li::before {
+    content: counter(step);
+    position: absolute; left: -0.72rem; top: 0;
+    width: 1.4rem; height: 1.4rem; border-radius: 50%;
+    background: var(--surface); border: 1px solid var(--accent); color: var(--accent);
+    font-family: ui-monospace, "Cascadia Code", monospace; font-size: 0.72rem;
+    display: flex; align-items: center; justify-content: center;
+  }
+  ol.flow .step-title { font-weight: 600; margin: 0 0 0.15rem; font-size: 0.95rem; }
+  ol.flow .step-body { color: var(--text-dim); font-size: 0.88rem; margin: 0; max-width: 64ch; }
+
+  .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 8px; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.87rem; min-width: 560px; }
+  th, td { text-align: left; padding: 0.65rem 0.9rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+  thead th {
+    font-family: ui-monospace, "Cascadia Code", monospace; font-size: 0.72rem;
+    letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-dim); background: var(--surface-2);
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  td.dim { color: var(--text-dim); }
+
+  .deploy-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0.9rem; }
+  .deploy-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.1rem; box-shadow: var(--shadow); }
+  .deploy-card h4 { margin: 0 0 0.4rem; font-size: 0.92rem; }
+  .deploy-card p { margin: 0; color: var(--text-dim); font-size: 0.85rem; }
+
+  footer {
+    padding-top: 2.5rem; color: var(--text-dim); font-size: 0.85rem;
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+  html { scroll-behavior: smooth; }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <header class="hero">
+    <p class="eyebrow">Technical Architecture</p>
+    <h1>FAQ <em>Multilingue</em> — Fine-Tuning &amp; Retrieval</h1>
+    <p class="subtitle">
+      How the raw FAQ JSONL files become a fine-tuned sentence-transformer model on the Hugging Face Hub,
+      and how <code>faq_streamlit.py</code>, <code>faq_compare_streamlit.py</code> and
+      <code>evaluate_models_compare.py</code> each consume it.
+    </p>
+    <div class="chips">
+      <span class="chip">Python 3.11</span>
+      <span class="chip">Streamlit 1.51</span>
+      <span class="chip">sentence-transformers 3.3</span>
+      <span class="chip">autotrain-advanced</span>
+      <span class="chip">Hugging Face Hub</span>
+    </div>
+  </header>
+
+  <nav class="toc">
+    <div class="inner">
+      <a href="#overview">Schéma</a>
+      <a href="#data">Data</a>
+      <a href="#training">Fine-tuning</a>
+      <a href="#registry">Model registry</a>
+      <a href="#serving">Serving</a>
+      <a href="#generation">Generation</a>
+      <a href="#flow">Request flow</a>
+      <a href="#stack">Stack</a>
+      <a href="#deploy">Deployment</a>
+    </div>
+  </nav>
+
+  <section class="block" id="overview">
+    <div class="block-head"><span class="block-num">00</span><h2>Schéma d'architecture</h2></div>
+    <p class="block-desc">
+      Trois temps, de gauche à droite : les données FAQ sont préparées, un pipeline interne les
+      entraîne et les sert, puis une réponse est renvoyée à l'utilisateur — la génération par LLM
+      n'intervient qu'en bout de chaîne, sur demande.
+    </p>
+
+    <div class="diagram-card">
+      <div class="diagram-card-head">
+        <div class="legend">
+          <span class="legend-item"><span class="legend-dot" style="background:#FB923C"></span>Data</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#60A5FA"></span>Fine-tuning</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#A78BFA"></span>Model registry</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#818CF8"></span>Serving</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#4ADE80"></span>Generation (RAG)</span>
+        </div>
+      </div>
+
+      <div class="diagram">
+
+        <!-- ── Data (input) ── -->
+        <div class="zone z-data">
+          <div class="zone-eyebrow">Données · data/</div>
+          <div class="zone-title">Sources FAQ JSONL</div>
+          <div class="zone-desc">Paires question/réponse, séparées par langue</div>
+          <div class="zchips">
+            <span class="zchip">faq_source_fr.jsonl</span>
+            <span class="zchip">faq_source_en.jsonl</span>
+            <span class="zchip">faq_evaluation.jsonl</span>
+          </div>
+          <hr class="zdivider">
+          <div class="zone-title" style="font-size:.78rem;">file_fusion.py</div>
+          <div class="zone-desc" style="font-size:.68rem;">Fusionne fr+en, retire "language", écrit le split train/validation</div>
+          <div class="zchips">
+            <span class="zchip">data_autotrain/</span>
+            <span class="zchip">train · validation</span>
+          </div>
+        </div>
+
+        <!-- Arrow 1 -->
+        <div class="arrow-col">
+          <div class="arrow-label">merge + split</div>
+          <div class="arrow-shaft"></div>
+          <div class="arrow-tip"></div>
+        </div>
+
+        <!-- ── System ── -->
+        <div class="system-col">
+
+          <div class="sys-top">
+            <div class="zone z-train">
+              <div class="zone-eyebrow">Entraînement · AutoTrain</div>
+              <div class="zone-title">Pipeline de fine-tuning</div>
+              <div class="zone-desc">autotrain-advanced, backend local, piloté par models/config/config.yml</div>
+              <div class="zchips">
+                <span class="zchip">mpnet-base-v2</span>
+                <span class="zchip">2 epochs</span>
+                <span class="zchip">lr 2e-5</span>
+                <span class="zchip">bf16</span>
+                <span class="zchip">TensorBoard</span>
+              </div>
+              <div class="zone-note">→ push_to_hub</div>
+            </div>
+
+            <div class="zone z-model">
+              <div class="zone-eyebrow">Registre · Hugging Face Hub</div>
+              <div class="zone-title">Modèles versionnés</div>
+              <div class="zone-desc">Chargés via SentenceTransformer(path) à chaque démarrage d'app</div>
+              <div class="zchips">
+                <span class="zchip">MiniLM-L12-v2 (base)</span>
+                <span class="zchip">arnoweb/model-faq-sentence-autotrain</span>
+              </div>
+              <div class="zone-note">↓ pull par les 3 consommateurs</div>
+            </div>
+          </div>
+
+          <div class="zone z-serve">
+            <div class="zone-eyebrow">Service · 3 consommateurs</div>
+            <div class="zone-title">Applications qui interrogent les modèles</div>
+            <div class="inspector-grid">
+              <div class="inspector-item">
+                <div class="inspector-item-label">faq_streamlit.py · :8501</div>
+                <div class="inspector-item-chips">
+                  <span class="zchip">fine-tuné seul</span>
+                  <span class="zchip">top-3</span>
+                  <span class="zchip">génération LLM</span>
+                </div>
+              </div>
+              <div class="inspector-item">
+                <div class="inspector-item-label">faq_compare_streamlit.py · :8502</div>
+                <div class="inspector-item-chips">
+                  <span class="zchip">base + fine-tuné</span>
+                  <span class="zchip">top-K réglable</span>
+                  <span class="zchip">seuil réglable</span>
+                </div>
+              </div>
+              <div class="inspector-item">
+                <div class="inspector-item-label">evaluate_models_compare.py</div>
+                <div class="inspector-item-chips">
+                  <span class="zchip">MRR</span>
+                  <span class="zchip">Recall@1/3/5</span>
+                  <span class="zchip">similarité moyenne</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="zone z-gen">
+            <div class="zone-eyebrow">Génération · RAG optionnel, uniquement depuis faq_streamlit.py</div>
+            <div class="zone-title">De la question à la réponse — le LLM en dernier recours</div>
+
+            <div class="ai-pipeline">
+              <div class="pipeline-step">
+                <div class="pipeline-step-header">
+                  <div class="pipeline-num">1</div>
+                  <div class="pipeline-title">Retrieval sémantique</div>
+                </div>
+                <div class="pipeline-sub">Embedding de la question, cosine similarity contre les réponses encodées</div>
+                <div class="pipeline-step-chips">
+                  <span class="zchip">pytorch_cos_sim</span>
+                  <span class="zchip">top-3</span>
+                </div>
+              </div>
+              <div class="pipeline-arrow">→</div>
+              <div class="pipeline-step">
+                <div class="pipeline-step-header">
+                  <div class="pipeline-num">2</div>
+                  <div class="pipeline-title">Seuil de confiance</div>
+                </div>
+                <div class="pipeline-sub">Score &lt; seuil → message "aucune réponse pertinente" au lieu de résultats</div>
+                <div class="pipeline-step-chips">
+                  <span class="zchip">threshold 0.1</span>
+                </div>
+              </div>
+              <div class="pipeline-arrow">→</div>
+              <div class="pipeline-step">
+                <div class="pipeline-step-header">
+                  <div class="pipeline-num">3</div>
+                  <div class="pipeline-title">Prompt RAG</div>
+                </div>
+                <div class="pipeline-sub">build_rag_prompt() assemble les 3 documents + la question, dans la langue choisie</div>
+                <div class="pipeline-step-chips">
+                  <span class="zchip">FR</span>
+                  <span class="zchip">EN</span>
+                </div>
+              </div>
+              <div class="pipeline-arrow">→</div>
+              <div class="pipeline-step pipeline-step-llm">
+                <div class="pipeline-step-header">
+                  <div class="pipeline-num">4</div>
+                  <div class="pipeline-title">LLM (sur demande)</div>
+                </div>
+                <div class="pipeline-sub">Répond seulement à partir des documents fournis, sinon renvoie "je ne sais pas"</div>
+                <div class="pipeline-step-chips">
+                  <span class="zchip">local :1234</span>
+                  <span class="zchip">HF router</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="ai-details">
+              <div class="ai-detail-panel">
+                <div class="ai-detail-label">Génération locale</div>
+                <div class="ai-detail-schema">query_local_llm() →<br><strong>localhost:1234/v1/chat/completions</strong></div>
+                <div class="zchips">
+                  <span class="zchip">LM Studio</span>
+                  <span class="zchip">Ollama</span>
+                  <span class="zchip">llama.cpp</span>
+                </div>
+              </div>
+              <div class="ai-detail-panel">
+                <div class="ai-detail-label">Génération distante</div>
+                <div class="ai-detail-schema">query_remote_llm() →<br><strong>router.huggingface.co</strong></div>
+                <div class="zchips">
+                  <span class="zchip">Bearer HF_API_KEY</span>
+                  <span class="zchip">Llama-3.1-8B-Instruct</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Arrow 2 -->
+        <div class="arrow-col">
+          <div class="arrow-label">requête → réponse</div>
+          <div class="arrow-shaft"></div>
+          <div class="arrow-tip"></div>
+        </div>
+
+        <!-- ── Output ── -->
+        <div class="zone z-output">
+          <div class="zone-eyebrow">Résultat</div>
+          <div class="zone-title">Réponse affichée à l'utilisateur</div>
+
+          <div class="compat-grid">
+            <div class="compat-category">
+              <div class="compat-cat-label">Retrieval</div>
+              <div class="compat-items">
+                <span class="compat-item">top-3 Q/R classées</span>
+                <span class="compat-item">score de similarité affiché</span>
+              </div>
+            </div>
+            <div class="compat-category">
+              <div class="compat-cat-label">Génération (optionnelle)</div>
+              <div class="compat-items">
+                <span class="compat-item">réponse rédigée 3–5 phrases</span>
+                <span class="compat-item">refus explicite si hors-sujet</span>
+              </div>
+            </div>
+            <div class="compat-category compat-universal">
+              <div class="compat-cat-label">Langues</div>
+              <div class="compat-items">
+                <span class="compat-item">Français</span>
+                <span class="compat-item">English</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="output-note">Aucune réponse générée sans documents source —<br><strong>jamais d'invention</strong>.</div>
+        </div>
+
+      </div>
+
+      <div class="diagram-card-foot">
+        <span class="footer-label">Stack</span>
+        <span class="chip">sentence-transformers</span>
+        <span class="chip">PyTorch</span>
+        <span class="chip">autotrain-advanced</span>
+        <span class="chip">Streamlit</span>
+        <span class="chip">Hugging Face Hub</span>
+        <span class="chip">python-dotenv</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="data">
+    <div class="block-head"><span class="block-num">01</span><h2>Data layer</h2></div>
+    <p class="block-desc">
+      The FAQ content is plain JSONL, one <code>{"query", "answer"}</code> object per line, kept separately
+      per language so the apps can filter without a language field.
+    </p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>File</th><th>Role</th><th>Consumed by</th></tr></thead>
+        <tbody>
+          <tr><td><code>data/faq_source_fr.jsonl</code></td><td class="dim">French retrieval corpus</td><td class="dim">both Streamlit apps, evaluator</td></tr>
+          <tr><td><code>data/faq_source_en.jsonl</code></td><td class="dim">English retrieval corpus</td><td class="dim">both Streamlit apps, evaluator</td></tr>
+          <tr><td><code>data/faq_evaluation.jsonl</code></td><td class="dim">Held-out queries with the expected true answer + lang</td><td class="dim">evaluate_models_compare.py only</td></tr>
+          <tr><td><code>data/file_fusion.py</code></td><td class="dim">Merges fr + en into one file, strips the "language" key</td><td class="dim">run manually before an AutoTrain job</td></tr>
+          <tr><td><code>data_autotrain/faq_train.jsonl</code><br><code>data_autotrain/faq_validation.jsonl</code></td><td class="dim">Train/validation split for fine-tuning</td><td class="dim">AutoTrain job</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="block" id="training">
+    <div class="block-head"><span class="block-num">02</span><h2>Fine-tuning pipeline</h2></div>
+    <p class="block-desc">
+      Driven entirely by <code>models/config/config.yml</code> and run through <code>autotrain-advanced</code>
+      on the local backend — no external training service involved.
+    </p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Setting</th><th>Value</th></tr></thead>
+        <tbody>
+          <tr><td class="dim">task</td><td><code>sentence-transformers:qa</code></td></tr>
+          <tr><td class="dim">base_model</td><td><code>sentence-transformers/paraphrase-multilingual-mpnet-base-v2</code></td></tr>
+          <tr><td class="dim">column mapping</td><td><code>query → sentence1</code>, <code>answer → sentence2</code></td></tr>
+          <tr><td class="dim">epochs / batch / lr</td><td>2 · 16 · 2e-5, AdamW, linear scheduler, bf16</td></tr>
+          <tr><td class="dim">logging</td><td>TensorBoard → <code>model-faq-sentence-autotrain/runs/</code></td></tr>
+          <tr><td class="dim">hub</td><td>push_to_hub: true, via <code>HF_USERNAME</code> / <code>HF_TOKEN</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="block" id="registry">
+    <div class="block-head"><span class="block-num">03</span><h2>Model registry</h2></div>
+    <p class="block-desc">
+      There is no local model server — every app calls <code>SentenceTransformer(path)</code> directly,
+      which resolves either to a public Hub id or the fine-tuned repo, and caches the loaded model
+      in-process (<code>@st.cache_resource</code>) for the life of the Streamlit session.
+    </p>
+    <div class="node-row">
+      <div class="node" style="--cat-color:#A78BFA">
+        <h4>sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2</h4>
+        <p>Public baseline. Used as the "before fine-tuning" reference.</p>
+      </div>
+      <div class="node" style="--cat-color:#A78BFA">
+        <h4>arnoweb/model-faq-sentence-autotrain</h4>
+        <p>Private-or-public fine-tuned repo. Requires <code>huggingface-cli login</code> if private.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="serving">
+    <div class="block-head"><span class="block-num">04</span><h2>Serving layer</h2></div>
+    <p class="block-desc">
+      Two Streamlit apps share the same retrieval mechanics — encode the FAQ answers once, encode the
+      query, rank by cosine similarity — but differ in scope.
+    </p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>App</th><th>Models loaded</th><th>Output</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><code>faq_streamlit.py</code></td>
+            <td class="dim">fine-tuned only</td>
+            <td class="dim">top-3 answers, similarity threshold 0.1, optional LLM-generated answer</td>
+          </tr>
+          <tr>
+            <td><code>faq_compare_streamlit.py</code></td>
+            <td class="dim">base + fine-tuned</td>
+            <td class="dim">side-by-side top-K (user-adjustable), no generation step</td>
+          </tr>
+          <tr>
+            <td><code>evaluate_models_compare.py</code></td>
+            <td class="dim">base + fine-tuned</td>
+            <td class="dim">MRR, Recall@1/3/5, mean true similarity — printed to stdout, overall &amp; per language</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="block" id="generation">
+    <div class="block-head"><span class="block-num">05</span><h2>Generation (optional)</h2></div>
+    <p class="block-desc">
+      Only <code>faq_streamlit.py</code> generates prose. <code>build_rag_prompt()</code> assembles the
+      top-3 retrieved Q/A pairs plus the user's question, in the selected UI language, with an explicit
+      instruction to answer "I don't know" / "Je ne sais pas" rather than invent an answer — the app then
+      catches that phrase and shows a warning instead of the raw text.
+    </p>
+    <div class="node-row">
+      <div class="node" style="--cat-color:#4ADE80">
+        <h4>query_local_llm(prompt, model)</h4>
+        <p>POSTs to <code>localhost:1234/v1/chat/completions</code>. Default model <code>qwen/qwen3-vl-4b</code>. No API key required.</p>
+      </div>
+      <div class="node" style="--cat-color:#4ADE80">
+        <h4>query_remote_llm(prompt, model)</h4>
+        <p>POSTs to the HF router with <code>Bearer HF_API_KEY</code> (from <code>.env</code>). Raises if the key is missing.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="flow">
+    <div class="block-head"><span class="block-num">06</span><h2>Request flow — faq_streamlit.py</h2></div>
+    <p class="block-desc">What happens between a keystroke and an answer on screen.</p>
+    <ol class="flow">
+      <li>
+        <p class="step-title">Language &amp; query</p>
+        <p class="step-body">User picks English/Français and types a question; this selects <code>faq_data_paths[language]</code>.</p>
+      </li>
+      <li>
+        <p class="step-title">Model &amp; corpus load (cached)</p>
+        <p class="step-body"><code>load_model()</code> loads the fine-tuned <code>SentenceTransformer</code> once; <code>load_faq_data()</code> and <code>compute_answer_embeddings()</code> cache per language so repeat queries skip re-encoding.</p>
+      </li>
+      <li>
+        <p class="step-title">Similarity search</p>
+        <p class="step-body">The query is embedded and compared to all answer embeddings with <code>util.pytorch_cos_sim</code>; the top 3 indices are taken.</p>
+      </li>
+      <li>
+        <p class="step-title">Confidence gate</p>
+        <p class="step-body">If the best score is below <code>SIMILARITY_THRESHOLD = 0.1</code>, the app shows a "no relevant answer" message instead of results.</p>
+      </li>
+      <li>
+        <p class="step-title">Results rendered</p>
+        <p class="step-body">The 3 matched Q/A pairs are shown ranked, each with its similarity score.</p>
+      </li>
+      <li>
+        <p class="step-title">Optional generation</p>
+        <p class="step-body">On button click, <code>build_rag_prompt()</code> packages the 3 results + question; <code>query_remote_llm()</code> returns prose grounded in them, or a caught refusal is shown as a warning.</p>
+      </li>
+    </ol>
+  </section>
+
+  <section class="block" id="stack">
+    <div class="block-head"><span class="block-num">07</span><h2>Technology stack</h2></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Layer</th><th>Technology</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>Retrieval</td><td class="dim">sentence-transformers 3.3.1, PyTorch 2.9</td><td class="dim">cosine similarity via <code>util.pytorch_cos_sim</code></td></tr>
+          <tr><td>Fine-tuning</td><td class="dim">autotrain-advanced 0.8.36</td><td class="dim">local backend, TensorBoard logging, HF Hub push</td></tr>
+          <tr><td>UI</td><td class="dim">Streamlit 1.51</td><td class="dim">two independent apps, shared "tight result card" CSS</td></tr>
+          <tr><td>Generation</td><td class="dim">HF router API or local OpenAI-compatible server</td><td class="dim">optional, grounded with an explicit refusal path</td></tr>
+          <tr><td>Config &amp; secrets</td><td class="dim">python-dotenv, <code>.env</code></td><td class="dim"><code>HF_API_KEY</code>, <code>HF_USERNAME</code>, <code>HF_TOKEN</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="block" id="deploy">
+    <div class="block-head"><span class="block-num">08</span><h2>Environments &amp; deployment</h2></div>
+    <div class="deploy-grid">
+      <div class="deploy-card">
+        <h4>Dev container</h4>
+        <p><code>.devcontainer/devcontainer.json</code> — Python 3.11 image, installs <code>requirements.txt</code> on create, auto-runs <code>faq_streamlit.py</code> on attach, forwards port 8501.</p>
+      </div>
+      <div class="deploy-card">
+        <h4>Local ports</h4>
+        <p>Main RAG app on <code>:8501</code>, comparison app on <code>:8502</code> — run side by side for A/B testing.</p>
+      </div>
+      <div class="deploy-card">
+        <h4>Streamlit runtime</h4>
+        <p><code>.streamlit/config.toml</code> holds server/runtime settings shared by both apps.</p>
+      </div>
+      <div class="deploy-card">
+        <h4>Training vs serving split</h4>
+        <p>Fine-tuning runs locally against <code>models/config/config.yml</code>; only the resulting model is pushed to the Hub, so serving never needs the training environment.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>FAQ Retrieval Apps — Base vs Fine-tuned</span>
+    <span>Architecture reference · generated 2026-07-20</span>
+  </footer>
+
+</div>
+</body>
+</html>
