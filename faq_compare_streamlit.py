@@ -102,7 +102,13 @@ def run_search(
 
 st.title("E-commerce FAQ Retrieval Comparison (Base vs Fine-tuned)")
 st.write(
-    "Compare a pre-trained multilingual encoder with your fine-tuned AutoTrain model on the same FAQ data."
+    "**Left:** a generic, off-the-shelf multilingual encoder, never trained on this FAQ. "
+    "**Right:** that same encoder after fine-tuning on this FAQ's own questions and answers."
+)
+st.write(
+    "Type one question below and compare both sides: which one ranks the correct answer higher, "
+    "and with a stronger similarity score. This is the measurable effect of fine-tuning on retrieval "
+    "quality — not a claim, something you can test yourself."
 )
 
 language = st.radio("Language / Langue", ["English", "Français"], horizontal=True)
