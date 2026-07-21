@@ -186,8 +186,3 @@ else:
         if language == "English"
         else "Cherchez dans la FAQ (ex. « frais de retour », « changer le mot de passe ») pour comparer les résultats."
     )
-
-st.markdown(
-    'Made by <a href="https://www.linkedin.com/in/bretonarnaud/" target="_blank">Arnaud BRETON</a>',
-    unsafe_allow_html=True,
-)

@@ -230,8 +230,3 @@ if user_query:
                 else:
                     st.markdown("### Réponse générée :" if language == "Français" else "### Generated answer:")
                     st.write(llm_response)
-
-st.markdown(
-    'Made by <a href="https://www.linkedin.com/in/bretonarnaud/" target="_blank">Arnaud BRETON</a>',
-    unsafe_allow_html=True,
-)
