@@ -11,7 +11,8 @@ try:
     _secret_hf_key = st.secrets.get("HF_API_KEY", "")
 except Exception:
     _secret_hf_key = ""
-os.environ.setdefault("HF_TOKEN", os.getenv("HF_API_KEY") or _secret_hf_key)
+HF_API_KEY = os.getenv("HF_API_KEY") or _secret_hf_key
+os.environ.setdefault("HF_TOKEN", HF_API_KEY or "")
 
 # FAQ sources per language
 FAQ_DATA_PATHS = {
@@ -135,6 +136,14 @@ similarity_threshold = st.slider(
 
 faq_data_path = FAQ_DATA_PATHS[language]
 faq_questions, faq_answers = load_faq_data(faq_data_path)
+
+if not HF_API_KEY:
+    st.error(
+        "Missing HF_API_KEY: the fine-tuned model repo is private and no Hugging Face "
+        "token was found (checked env var HF_API_KEY and Streamlit secrets). On Streamlit "
+        "Cloud, add HF_API_KEY under this app's Settings → Secrets, then save to trigger a reboot."
+    )
+    st.stop()
 
 # Prepare models and embeddings
 models = {name: load_model(path) for name, path in MODEL_PATHS.items()}

@@ -166,6 +166,13 @@ st.markdown(
 )
 
 faq_data_path = faq_data_paths[language]
+if not HF_API_KEY:
+    st.error(
+        "Missing HF_API_KEY: the fine-tuned model repo is private and no Hugging Face "
+        "token was found (checked env var HF_API_KEY and Streamlit secrets). On Streamlit "
+        "Cloud, add HF_API_KEY under this app's Settings → Secrets, then save to trigger a reboot."
+    )
+    st.stop()
 model = load_model()
 faq_questions, faq_answers = load_faq_data(faq_data_path)
 answer_embeddings = compute_answer_embeddings(model, faq_answers)
