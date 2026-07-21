@@ -112,6 +112,21 @@ st.write(
     "quality — not a claim, something you can test yourself."
 )
 
+with st.expander("What do Top K and Similarity threshold control?"):
+    st.markdown(
+        "**Top K** — how many ranked results are shown per model.\n"
+        "- Higher → a more forgiving test: checks whether the correct answer appears *anywhere* in the list, even if not ranked first.\n"
+        "- Lower → a stricter test, closer to real usage: most users only read the first result or two.\n\n"
+        "**Similarity threshold** — the minimum score required before a result is trusted.\n"
+        "- Higher → fewer answers shown, but each is more likely to be genuinely relevant (more refusals, less risk of a wrong match).\n"
+        "- Lower → more answers shown, but some may be weak or irrelevant matches (fewer refusals, higher risk of a bad match slipping through).\n\n"
+        "**Combining both**\n\n"
+        "| | High threshold | Low threshold |\n"
+        "|---|---|---|\n"
+        "| **High Top K** | Strict but thorough: reveals whether the correct answer exists among many candidates, but only shows it if confidently ranked | Most permissive: shows many candidates even when uncertain — good for auditing near-misses and noise |\n"
+        "| **Low Top K** | Strictest setup, closest to a production chatbot that only answers when sure — expect more refusals | Always shows its single best guess, right or wrong — reveals raw ranking quality with no safety net |\n"
+    )
+
 language = st.radio("Language / Langue", ["English", "Français"], horizontal=True)
 
 st.markdown(
@@ -140,16 +155,6 @@ similarity_threshold = st.slider(
     step=0.01,
     help="The minimum similarity score required before a result is trusted. Below it, the model reports no confident match instead of guessing.",
 )
-
-with st.expander("What do Top K and Similarity threshold control?"):
-    st.markdown(
-        "**Top K** — how many ranked results are shown per model.\n"
-        "- Higher → a more forgiving test: checks whether the correct answer appears *anywhere* in the list, even if not ranked first.\n"
-        "- Lower → a stricter test, closer to real usage: most users only read the first result or two.\n\n"
-        "**Similarity threshold** — the minimum score required before a result is trusted.\n"
-        "- Higher → fewer answers shown, but each is more likely to be genuinely relevant (more refusals, less risk of a wrong match).\n"
-        "- Lower → more answers shown, but some may be weak or irrelevant matches (fewer refusals, higher risk of a bad match slipping through)."
-    )
 
 faq_data_path = FAQ_DATA_PATHS[language]
 faq_questions, faq_answers = load_faq_data(faq_data_path)
