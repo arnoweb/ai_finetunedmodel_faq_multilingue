@@ -102,8 +102,8 @@ def run_search(
 
 
 st.title("E-commerce FAQ Retrieval Comparison (Base vs Fine-tuned)")
-st.write(
-    "**Left:** a generic, off-the-shelf multilingual encoder, never trained on this FAQ. "
+st.markdown(
+    "**Left:** a generic, off-the-shelf multilingual encoder, never trained on this FAQ.  \n"
     "**Right:** that same encoder after fine-tuning on this FAQ's own questions and answers."
 )
 st.write(
@@ -124,15 +124,32 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-top_k = st.slider("Top K", min_value=1, max_value=5, value=3, step=1)
+top_k = st.slider(
+    "Top K",
+    min_value=1,
+    max_value=5,
+    value=3,
+    step=1,
+    help="How many ranked results to show per model.",
+)
 similarity_threshold = st.slider(
     "Similarity threshold",
     min_value=0.0,
     max_value=1.0,
     value=0.1,
     step=0.01,
-    help="If the best match is below this value, the model is considered uncertain.",
+    help="The minimum similarity score required before a result is trusted. Below it, the model reports no confident match instead of guessing.",
 )
+
+with st.expander("What do Top K and Similarity threshold control?"):
+    st.markdown(
+        "**Top K** — how many ranked results are shown per model.\n"
+        "- Higher → a more forgiving test: checks whether the correct answer appears *anywhere* in the list, even if not ranked first.\n"
+        "- Lower → a stricter test, closer to real usage: most users only read the first result or two.\n\n"
+        "**Similarity threshold** — the minimum score required before a result is trusted.\n"
+        "- Higher → fewer answers shown, but each is more likely to be genuinely relevant (more refusals, less risk of a wrong match).\n"
+        "- Lower → more answers shown, but some may be weak or irrelevant matches (fewer refusals, higher risk of a bad match slipping through)."
+    )
 
 faq_data_path = FAQ_DATA_PATHS[language]
 faq_questions, faq_answers = load_faq_data(faq_data_path)
