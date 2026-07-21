@@ -1,4 +1,4 @@
-[tags: python-3.11, streamlit-1.51, autotrain, huggingface-hub, local-llm]
+[tags: python-3.13, streamlit-1.51, autotrain, huggingface-hub, local-llm]
 
 # FAQ Retrieval Apps (Base vs Fine-tuned)
 
@@ -30,7 +30,7 @@ Data used
 - Eval set: `data/faq_evaluation.jsonl`
 
 ## Prerequisites
-- Python 3.11 (recommended)
+- Python 3.13 to run the apps (`requirements.txt`). Fine-tuning a new model locally requires Python 3.11 instead (`requirements-train.txt`) — `autotrain-advanced` pins `sentencepiece==0.2.0`, which has no Python 3.13 wheel.
 - pip/venv
 - Hugging Face Hub access if the fine-tuned repo is private (`huggingface-cli login` or `HUGGINGFACE_HUB_TOKEN`)
 - Optional: a local LLM server exposing an OpenAI-compatible `/v1/chat/completions` endpoint at `http://localhost:1234` (e.g., LM Studio, llama.cpp, Ollama)
@@ -43,12 +43,20 @@ Data used
 echo 'export HF_USERNAME="your-username"' >> ~/.zshrc && echo 'export HF_TOKEN="hf_key"' >> ~/.zshrc
 ```
 
-#### Install python env
+#### Install python env (to run the apps)
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
 pip install --upgrade pip
 pip install -r requirements.txt
+```
+
+#### Install python env (to fine-tune a new model — needs Python 3.11)
+```bash
+python3.11 -m venv .venv-train
+source .venv-train/bin/activate
+pip install --upgrade pip
+pip install -r requirements-train.txt
 ```
 
 ## Run the main FAQ RAG app
@@ -81,8 +89,9 @@ python evaluate_models_compare.py
 - Warns if any eval answers are missing from the FAQ files.
 
 ### Visualize training metrics with TensorBoard
-If you have training logs in `model-faq-sentence-autotrain/runs`, you can inspect them with:
+If you have training logs in `model-faq-sentence-autotrain/runs`, you can inspect them with (from the training env, `.venv-train`, which includes `tensorboard`):
 ```bash
+source .venv-train/bin/activate
 tensorboard --logdir model-faq-sentence-autotrain/runs
 ```
 Open the local URL printed by TensorBoard to view losses/metrics over time.
