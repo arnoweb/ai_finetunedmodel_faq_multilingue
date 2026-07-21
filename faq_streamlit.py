@@ -48,7 +48,11 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-HF_API_KEY = os.getenv("HF_API_KEY")
+try:
+    _secret_hf_key = st.secrets.get("HF_API_KEY", "")
+except Exception:
+    _secret_hf_key = ""
+HF_API_KEY = os.getenv("HF_API_KEY") or _secret_hf_key
 os.environ.setdefault("HF_TOKEN", HF_API_KEY or "")
 HF_API_URL = "https://router.huggingface.co/v1/chat/completions"
 HF_MODEL_DEFAULT = "meta-llama/Llama-3.1-8B-Instruct"

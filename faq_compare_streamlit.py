@@ -7,7 +7,11 @@ from dotenv import load_dotenv
 from sentence_transformers import SentenceTransformer, util
 
 load_dotenv()
-os.environ.setdefault("HF_TOKEN", os.getenv("HF_API_KEY", ""))
+try:
+    _secret_hf_key = st.secrets.get("HF_API_KEY", "")
+except Exception:
+    _secret_hf_key = ""
+os.environ.setdefault("HF_TOKEN", os.getenv("HF_API_KEY") or _secret_hf_key)
 
 # FAQ sources per language
 FAQ_DATA_PATHS = {

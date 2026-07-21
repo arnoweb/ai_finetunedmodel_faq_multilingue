@@ -6,6 +6,15 @@ Two Streamlit apps to serve and compare an FAQ semantic search workflow:
 - `faq_streamlit.py`: main RAG-style app (top-3 retrieval + optional LLM answer).  
 => https://arnoweb-rag-llm-faq-finetuned-huggingface.streamlit.app/
 
+<div>
+    <a href="https://www.loom.com/share/1bf5e89c54e24e29840d1a3067461c83">
+      <p>FAQ IA Demo - Watch Video</p>
+    </a>
+    <a href="https://www.loom.com/share/1bf5e89c54e24e29840d1a3067461c83">
+      <img style="max-width:300px;" src="https://cdn.loom.com/sessions/thumbnails/1bf5e89c54e24e29840d1a3067461c83-a80d465410217950-full-play.gif#t=0.1">
+    </a>
+  </div>
+
 - `faq_compare_streamlit.py`: side-by-side comparison of a base multilingual encoder vs your fine-tuned AutoTrain model.  
 => https://arnoweb-rag-faq-compare-basevsfinetuned-huggingface.streamlit.app/
 
