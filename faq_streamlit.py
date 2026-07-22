@@ -241,3 +241,27 @@ if user_query:
                 else:
                     st.markdown("### Réponse générée :" if language == "Français" else "### Generated answer:")
                     st.write(llm_response)
+
+st.divider()
+st.markdown(
+    "Curious how much fine-tuning actually improves results? "
+    "[Compare base vs fine-tuned side by side](https://arnoweb-rag-faq-compare-basevsfinetuned-huggingface.streamlit.app/)."
+)
+
+with st.expander("About this project"):
+    st.markdown(
+        "**Who this is for:** e-commerce and SaaS teams with a bilingual (FR/EN) customer base "
+        "who want FAQ search that understands real questions, not just keywords — without adding "
+        "a recurring per-query AI bill.\n\n"
+        "**Value:** fine-tuned semantic retrieval that finds the right answer even when the "
+        "question is phrased differently, with a visible confidence score and an explicit "
+        "\"I don't know\" instead of a guess. The search itself runs locally, at no ongoing cost.\n\n"
+        "**Next steps:** connecting live FAQ content from a CMS (WordPress, Contentful, Strapi) "
+        "instead of static files, a lightweight embeddable widget for any website, and a hosted "
+        "API/SDK for teams who want to build their own UI."
+    )
+
+st.markdown(
+    'Made by <a href="https://www.linkedin.com/in/bretonarnaud/" target="_blank">Arnaud BRETON</a>',
+    unsafe_allow_html=True,
+)

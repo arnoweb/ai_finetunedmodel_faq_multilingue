@@ -103,8 +103,10 @@ def run_search(
 
 st.title("E-commerce FAQ Retrieval Comparison (Base vs Fine-tuned)")
 st.markdown(
-    "**Left:** a generic, off-the-shelf multilingual encoder, never trained on this FAQ.  \n"
-    "**Right:** that same encoder after fine-tuning on this FAQ's own questions and answers."
+    "**Left — Base:** `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2` — a general-purpose "
+    "multilingual encoder, used off the shelf, never trained on this FAQ.  \n"
+    "**Right — Fine-tuned:** `arnoweb/model-faq-sentence-autotrain` — a multilingual encoder "
+    "(`paraphrase-multilingual-mpnet-base-v2`) fine-tuned specifically on this FAQ's own questions and answers."
 )
 st.write(
     "Type one question below and compare both sides: which one ranks the correct answer higher, "
@@ -227,3 +229,9 @@ else:
         if language == "English"
         else "Cherchez dans la FAQ (ex. « frais de retour », « changer le mot de passe ») pour comparer les résultats."
     )
+
+st.divider()
+st.markdown(
+    "Want the full search + generated-answer experience? "
+    "[Try the main FAQ RAG search app](https://arnoweb-rag-llm-faq-finetuned-huggingface.streamlit.app/)."
+)
