@@ -57,6 +57,18 @@ st.markdown(
         border: 1px solid #4ADE80; border-radius: 100px; padding: 2px 10px;
         font-size: 0.78rem; font-weight: 600;
     }
+
+    div[data-testid="stTextInput"] input {
+        border: 2px solid #4F46E5 !important;
+        border-radius: 12px !important;
+        padding: 0.75rem 1rem !important;
+        font-size: 1.05rem !important;
+        box-shadow: 0 1px 3px rgba(15,23,42,0.08);
+    }
+    div[data-testid="stTextInput"] input:focus {
+        box-shadow: 0 0 0 3px rgba(79,70,229,0.18) !important;
+    }
+    div[data-testid="stTextInput"] label { font-weight: 600 !important; }
     hr { margin: 2px 0; }
     </style>
     <div class="hero-blob blob-a"></div>
