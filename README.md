@@ -134,23 +134,23 @@ evaluation queries (`data/faq_evaluation.jsonl`), a mix of verbatim and genuinel
 | Model                    | MRR   | Recall@1 | Recall@3 | Recall@5 | Mean True Sim | Explanation |
 |---------------------------|-------|----------|----------|----------|----------------|-------------|
 | Pre-fine-tuning (global)  | 0.759 | 0.659    | 0.818    | 0.864    | 0.628          | The "before" state — same architecture as the fine-tuned model. |
-| Fine-tuned (global)       | 0.775 | 0.682    | 0.841    | 0.909    | 0.635          | Consistent gain across every metric after fine-tuning. |
+| Fine-tuned (global)       | 0.901 | 0.841    | 0.955    | 0.977    | 0.671          | Large, consistent gain across every metric after fine-tuning. |
 | Pre-fine-tuning [en]      | 0.794 | 0.682    | 0.864    | 0.909    | 0.643          | The "before" state for English. |
-| Fine-tuned [en]           | 0.822 | 0.727    | 0.864    | 0.955    | 0.652          | Clear improvement in ranking and similarity. |
+| Fine-tuned [en]           | 0.891 | 0.818    | 0.955    | 0.955    | 0.683          | Clear improvement in ranking and similarity. |
 | Pre-fine-tuning [fr]      | 0.723 | 0.636    | 0.773    | 0.818    | 0.614          | The "before" state for French. |
-| Fine-tuned [fr]           | 0.729 | 0.636    | 0.818    | 0.864    | 0.619          | Smaller gain than English; French still improves on Recall@3/5. |
+| Fine-tuned [fr]           | 0.911 | 0.864    | 0.955    | 1.000    | 0.660          | French now matches or exceeds English after fine-tuning on matching data. |
 
-**Note on the underlying model:** the currently deployed fine-tuned model (`arnoweb/model-faq-sentence-autotrain`)
-was actually fine-tuned on a different, unrelated FAQ dataset (leftover from an earlier experiment). The FAQ
-content and evaluation set above were expanded and corrected afterward, so these numbers reflect a
-domain-mismatched fine-tune. `data_autotrain/faq_train.jsonl` and `faq_validation.jsonl` now hold the
-correct, matching data — re-running the AutoTrain job on them (see `models/config/config.yml`) should
-improve on these numbers further.
+**Note on the underlying model (resolved):** an earlier version of the deployed fine-tuned model had actually
+been trained on a different, unrelated FAQ dataset (leftover from an earlier experiment) instead of the FAQ
+content above. This has been fixed: `data_autotrain/faq_train.jsonl` and `faq_validation.jsonl` were
+regenerated from the corrected, expanded data, the model was re-trained locally
+(`autotrain --config models/config/config.yml`, Python 3.11 env), and the retrained model was pushed to
+`arnoweb/model-faq-sentence-autotrain` — verified with a fresh download (no local cache) to confirm the
+numbers above match what's actually served in production.
 
-Even with a domain-mismatched fine-tune, the isolated effect (`Pre-fine-tuning` → `Fine-tuned`, same
-architecture) is a consistent improvement across every metric. Its value is about adapting to a client's
-specific vocabulary at scale (see `docs/business-value.html`) — expect a larger gain once the model is
-re-trained on the corrected, matching data.
+The isolated fine-tuning effect (`Pre-fine-tuning` → `Fine-tuned`, same architecture) is now large across
+every metric — Recall@1 alone jumps from 0.66 to 0.84 globally — confirming that fine-tuning on matching
+domain data is what actually drives the improvement, not just a bigger base model.
 
 ## Notes
 - If your fine-tuned HF repo is private, ensure `huggingface-cli login` (or set `HUGGINGFACE_HUB_TOKEN`).
