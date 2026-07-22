@@ -5,6 +5,7 @@ from typing import Dict, List, Tuple
 
 import streamlit as st
 import streamlit.components.v1 as components
+from streamlit_searchbox import st_searchbox
 from dotenv import load_dotenv
 from sentence_transformers import SentenceTransformer, util
 
@@ -24,10 +25,9 @@ FAQ_DATA_PATHS = {
     "Français": "data/faq_source_fr.jsonl",
 }
 
-# Models to compare
+# Models to compare — same base encoder, before and after fine-tuning.
 MODEL_PATHS = {
-    "Lightweight baseline": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
-    "Pre-fine-tuning (same base)": "sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
+    "Pre-fine-tuning": "sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
     "Fine-tuned (AutoTrain)": "arnoweb/model-faq-sentence-autotrain",
 }
 
@@ -121,17 +121,14 @@ def run_search(
 st.title("E-commerce FAQ Retrieval Comparison (Base vs Fine-tuned)")
 st.caption("Comparez concrètement l'effet du fine-tuning sur la qualité de la recherche FAQ.")
 st.markdown(
-    "**Lightweight baseline:** `paraphrase-multilingual-MiniLM-L12-v2` — a smaller, generic multilingual "
-    "encoder, never trained on this FAQ. Shown for scale, not as the true \"before fine-tuning\" reference.  \n"
-    "**Pre-fine-tuning (same base):** `paraphrase-multilingual-mpnet-base-v2`, unmodified — the exact "
-    "checkpoint the fine-tuned model started from. This is the real baseline for measuring fine-tuning's effect.  \n"
+    "**Pre-fine-tuning:** `paraphrase-multilingual-mpnet-base-v2`, unmodified — the exact checkpoint "
+    "the fine-tuned model started from, never trained on this FAQ.  \n"
     "**Fine-tuned:** `arnoweb/model-faq-sentence-autotrain` — that same checkpoint, fine-tuned on this "
     "FAQ's own questions and answers."
 )
 st.write(
-    "Type a question and compare all three: the isolated effect of fine-tuning is the difference between "
-    "**Pre-fine-tuning** and **Fine-tuned** — not between Lightweight baseline and Fine-tuned, which also "
-    "includes the effect of using a larger base model."
+    "Type a question and compare both sides: same encoder, before and after fine-tuning. Any difference "
+    "you see is the isolated effect of fine-tuning itself — not a confound from a different base model."
 )
 
 with st.expander("What do Top K and Similarity threshold control?"):
@@ -196,14 +193,23 @@ embeddings_by_model = {
     for name in models
 }
 
-user_query = st.text_input(
-    "Search the FAQ (e.g., “track my order”):"
-    if language == "English"
-    else "Recherchez dans la FAQ (ex. « suivre ma commande ») :",
+def _capture_query(searchterm: str):
+    st.session_state["compare_last_query"] = searchterm
+    return []  # live-typing capture only; results are shown as columns below, not a dropdown
+
+
+st_searchbox(
+    _capture_query,
     placeholder="Refund policy, shipping cost, change email…"
     if language == "English"
     else "Politique de remboursement, frais de livraison, changer d'email…",
+    label="Search the FAQ (e.g., “track my order”):"
+    if language == "English"
+    else "Recherchez dans la FAQ (ex. « suivre ma commande ») :",
+    key=f"compare_searchbox_{language}",
 )
+
+user_query = st.session_state.get("compare_last_query", "")
 
 if user_query:
     cols = st.columns(len(models))

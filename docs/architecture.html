@@ -592,7 +592,7 @@
               <div class="zone-title">Modèles versionnés</div>
               <div class="zone-desc">Chargés via SentenceTransformer(path) à chaque démarrage d'app</div>
               <div class="zchips">
-                <span class="zchip">MiniLM-L12-v2 (base)</span>
+                <span class="zchip">mpnet-base-v2 (avant fine-tuning)</span>
                 <span class="zchip">arnoweb/model-faq-sentence-autotrain</span>
               </div>
               <div class="zone-note">↓ pull par les 3 consommateurs</div>
@@ -607,14 +607,14 @@
                 <div class="inspector-item-label">faq_streamlit.py · :8501</div>
                 <div class="inspector-item-chips">
                   <span class="zchip">fine-tuné seul</span>
-                  <span class="zchip">top-3</span>
+                  <span class="zchip">recherche live (searchbox)</span>
                   <span class="zchip">génération LLM</span>
                 </div>
               </div>
               <div class="inspector-item">
                 <div class="inspector-item-label">faq_compare_streamlit.py · :8502</div>
                 <div class="inspector-item-chips">
-                  <span class="zchip">base + fine-tuné</span>
+                  <span class="zchip">avant/après fine-tuning</span>
                   <span class="zchip">top-K réglable</span>
                   <span class="zchip">seuil réglable</span>
                 </div>
@@ -809,12 +809,12 @@
     </p>
     <div class="node-row">
       <div class="node" style="--cat-color:#A78BFA">
-        <h4>sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2</h4>
-        <p>Public baseline. Used as the "before fine-tuning" reference.</p>
+        <h4>sentence-transformers/paraphrase-multilingual-mpnet-base-v2</h4>
+        <p>Public, unmodified — the exact checkpoint the fine-tuned model started from. The only fair "before fine-tuning" reference (verified same architecture: XLMRobertaModel, hidden_size 768, 12 layers).</p>
       </div>
       <div class="node" style="--cat-color:#A78BFA">
         <h4>arnoweb/model-faq-sentence-autotrain</h4>
-        <p>Private-or-public fine-tuned repo. Requires <code>huggingface-cli login</code> if private.</p>
+        <p>Private fine-tuned repo. Requires a Hugging Face token (env var or Streamlit secret).</p>
       </div>
     </div>
   </section>
@@ -832,16 +832,16 @@
           <tr>
             <td><code>faq_streamlit.py</code></td>
             <td class="dim">fine-tuned only</td>
-            <td class="dim">top-3 answers, similarity threshold 0.1, optional LLM-generated answer</td>
+            <td class="dim">live search-as-you-type (streamlit-searchbox), similarity threshold 0.1, optional LLM-generated answer</td>
           </tr>
           <tr>
             <td><code>faq_compare_streamlit.py</code></td>
-            <td class="dim">base + fine-tuned</td>
+            <td class="dim">pre-fine-tuning + fine-tuned</td>
             <td class="dim">side-by-side top-K (user-adjustable), no generation step</td>
           </tr>
           <tr>
             <td><code>evaluate_models_compare.py</code></td>
-            <td class="dim">base + fine-tuned</td>
+            <td class="dim">pre-fine-tuning + fine-tuned</td>
             <td class="dim">MRR, Recall@1/3/5, mean true similarity — printed to stdout, overall &amp; per language</td>
           </tr>
         </tbody>
@@ -908,7 +908,7 @@
         <tbody>
           <tr><td>Retrieval</td><td class="dim">sentence-transformers 3.3.1, PyTorch 2.9</td><td class="dim">cosine similarity via <code>util.pytorch_cos_sim</code></td></tr>
           <tr><td>Fine-tuning</td><td class="dim">autotrain-advanced 0.8.36</td><td class="dim">local backend, TensorBoard logging, HF Hub push</td></tr>
-          <tr><td>UI</td><td class="dim">Streamlit 1.51</td><td class="dim">two independent apps, shared "tight result card" CSS</td></tr>
+          <tr><td>UI</td><td class="dim">Streamlit 1.51, streamlit-searchbox</td><td class="dim">two independent apps, shared "tight result card" CSS, live search-as-you-type</td></tr>
           <tr><td>Generation</td><td class="dim">HF router API or local OpenAI-compatible server</td><td class="dim">optional, grounded with an explicit refusal path</td></tr>
           <tr><td>Config &amp; secrets</td><td class="dim">python-dotenv, <code>.env</code></td><td class="dim"><code>HF_API_KEY</code>, <code>HF_USERNAME</code>, <code>HF_TOKEN</code></td></tr>
         </tbody>

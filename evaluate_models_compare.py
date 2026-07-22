@@ -10,14 +10,11 @@ from sentence_transformers import SentenceTransformer, util
 load_dotenv()
 os.environ.setdefault("HF_TOKEN", os.getenv("HF_API_KEY", ""))
 
-# Models to compare. "Pre-fine-tuning" is the exact checkpoint the fine-tuned
-# model started from — the only fair baseline for isolating the fine-tuning
-# effect. "Lightweight baseline" is a different, smaller architecture: useful
-# for scale, but comparing it directly to "Fine-tuned" also captures the
-# effect of switching base models, not fine-tuning alone.
+# Models to compare — same base encoder, before and after fine-tuning. This is
+# the only fair comparison for isolating the fine-tuning effect: both are
+# XLMRobertaModel, hidden_size 768, 12 layers (verified against the Hub).
 MODEL_PATHS = {
-    "Lightweight baseline": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
-    "Pre-fine-tuning (same base)": "sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
+    "Pre-fine-tuning": "sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
     "Fine-tuned (AutoTrain)": "arnoweb/model-faq-sentence-autotrain",
 }
 

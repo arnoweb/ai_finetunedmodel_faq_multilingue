@@ -1,5 +1,6 @@
 import streamlit as st
 import streamlit.components.v1 as components
+from streamlit_searchbox import st_searchbox
 import json
 from pathlib import Path
 from sentence_transformers import SentenceTransformer, util
@@ -195,9 +196,9 @@ faq_questions, faq_answers = load_faq_data(faq_data_path)
 answer_embeddings = compute_answer_embeddings(model, faq_answers)
 
 st.write(
-    "Enter your question and see the top 3 answers from the FAQ model."
+    "Start typing your question — matching FAQ entries appear as you type."
     if language == "English"
-    else "Posez votre question et ayez les 3 meilleurs résultats :"
+    else "Commencez à taper votre question — les résultats apparaissent au fil de la frappe."
 )
 
 placeholder_text = (
@@ -206,58 +207,80 @@ placeholder_text = (
     else "ex. réinitialiser mot de passe, changer adresse de livraison, politique de remboursement"
 )
 
-user_query = st.text_input(
-    "Ask your question:" if language == "English" else "Posez votre question :",
+TOP_K = 3
+SIMILARITY_THRESHOLD = 0.1  # You can adjust this value
+
+
+def retrieve_top_k(query, k=TOP_K):
+    query_embedding = model.encode(query, convert_to_tensor=True)
+    similarities = util.pytorch_cos_sim(query_embedding, answer_embeddings)[0]
+    k = min(k, len(faq_questions))
+    indices = similarities.topk(k).indices.tolist()
+    return indices, similarities
+
+
+def search_faq(searchterm: str):
+    st.session_state["faq_last_query"] = searchterm
+    if not searchterm:
+        return []
+    indices, similarities = retrieve_top_k(searchterm)
+    return [
+        (f"{similarities[idx].item():.2f} · {faq_questions[idx]}", idx)
+        for idx in indices
+        if similarities[idx].item() >= SIMILARITY_THRESHOLD
+    ]
+
+
+selected_idx = st_searchbox(
+    search_faq,
     placeholder=placeholder_text,
+    label="Ask your question:" if language == "English" else "Posez votre question :",
+    key=f"faq_searchbox_{language}",
 )
 
-if user_query:
-    query_embedding = model.encode(user_query, convert_to_tensor=True)
-    similarities = util.pytorch_cos_sim(query_embedding, answer_embeddings)[0]
-    top_k = 3
-    top_k_indices = similarities.topk(top_k).indices.tolist()
-    top_score = similarities[top_k_indices[0]].item()
-    SIMILARITY_THRESHOLD = 0.1  # You can adjust this value
+if selected_idx is None:
+    st.info(
+        "No selection yet — pick a matching question above, or keep typing to refine the results."
+        if language == "English"
+        else "Aucune sélection — choisissez une question ci-dessus, ou affinez votre recherche."
+    )
+else:
+    st.markdown(
+        f"""
+        <div class="result-tight">
+            <p><strong>{'Q' if language == 'English' else 'Q'}:</strong> {faq_questions[selected_idx]}</p>
+            <p>{faq_answers[selected_idx]}</p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
-    if top_score < SIMILARITY_THRESHOLD:
-        st.warning("No relevant answer found. Please try rephrasing your question." if language == "English" else "Aucune réponse pertinente trouvée. Veuillez reformuler votre question.")
-    else:
-        st.subheader("Top 3 Answers:" if language == "English" else "Top 3 réponses :")
-        retrieved_faqs = [faq_answers[idx] for idx in top_k_indices]
-        retrieved_questions = [faq_questions[idx] for idx in top_k_indices]
-        for rank, idx in enumerate(top_k_indices, 1):
-            st.markdown(
-                f"""
-                <div class="result-tight">
-                    <p><strong>{'Rank' if language == 'English' else 'Rang'} {rank}:</strong> {faq_questions[idx]}</p>
-                    <p>{faq_answers[idx]}</p>
-                    <p class="sim">Similarity: {similarities[idx].item():.2f}</p>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
+    last_query = st.session_state.get("faq_last_query") or faq_questions[selected_idx]
+    context_indices, _ = retrieve_top_k(last_query)
+    retrieved_faqs = [faq_answers[idx] for idx in context_indices]
+    retrieved_questions = [faq_questions[idx] for idx in context_indices]
 
-        # RAG section
-        st.markdown("<div style='margin-top: 8px;'></div>", unsafe_allow_html=True)
-        if st.button("Générer une réponse avec le LLM" if language == "Français" else "Generate answer with LLM", key="llm_button", help=None):
-            prompt = build_rag_prompt(user_query, retrieved_faqs, retrieved_questions, language=language)
-            with st.spinner("Call of the LLM..."):
-                try:
-                    llm_response = query_remote_llm(prompt)
-                except Exception as exc:
-                    st.error(f"LLM call failed: {exc}")
-                    llm_response = None
-            if llm_response:
-                low_conf = llm_response.strip().lower()
-                if ("i don't know" in low_conf) or ("je ne sais pas" in low_conf):
-                    st.warning(
-                        "Aucune réponse trouvée. Réessayez en reformulant votre question."
-                        if language == "Français"
-                        else "No answer found. Try rephrasing your question."
-                    )
-                else:
-                    st.markdown("### Réponse générée :" if language == "Français" else "### Generated answer:")
-                    st.write(llm_response)
+    # RAG section
+    st.markdown("<div style='margin-top: 8px;'></div>", unsafe_allow_html=True)
+    if st.button("Générer une réponse avec le LLM" if language == "Français" else "Generate answer with LLM", key="llm_button", help=None):
+        prompt = build_rag_prompt(last_query, retrieved_faqs, retrieved_questions, language=language)
+        with st.spinner("Call of the LLM..."):
+            try:
+                llm_response = query_remote_llm(prompt)
+            except Exception as exc:
+                st.error(f"LLM call failed: {exc}")
+                llm_response = None
+        if llm_response:
+            low_conf = llm_response.strip().lower()
+            if ("i don't know" in low_conf) or ("je ne sais pas" in low_conf):
+                st.warning(
+                    "Aucune réponse trouvée. Réessayez en reformulant votre question."
+                    if language == "Français"
+                    else "No answer found. Try rephrasing your question."
+                )
+            else:
+                st.markdown("### Réponse générée :" if language == "Français" else "### Generated answer:")
+                st.write(llm_response)
 
 st.divider()
 st.markdown(
