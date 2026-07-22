@@ -252,7 +252,7 @@ def search_faq(searchterm: str):
         return []
     indices, similarities = retrieve_top_k(searchterm)
     return [
-        (f"{similarities[idx].item():.2f} · {faq_questions[idx]}", idx)
+        (f"{faq_questions[idx]}  ·  {similarities[idx].item():.2f}", idx)
         for idx in indices
         if similarities[idx].item() >= SIMILARITY_THRESHOLD
     ]
@@ -272,20 +272,21 @@ if selected_idx is None:
         else "Aucune sélection — choisissez une question ci-dessus, ou affinez votre recherche."
     )
 else:
+    last_query = st.session_state.get("faq_last_query") or faq_questions[selected_idx]
+    context_indices, similarities = retrieve_top_k(last_query)
+    selected_score = similarities[selected_idx].item()
+    retrieved_faqs = [faq_answers[idx] for idx in context_indices]
+    retrieved_questions = [faq_questions[idx] for idx in context_indices]
+
     st.markdown(
         f"""
         <div class="result-tight">
-            <p><strong>{'Q' if language == 'English' else 'Q'}:</strong> {faq_questions[selected_idx]}</p>
+            <p><strong>Q:</strong> {faq_questions[selected_idx]} <span class="sim">{selected_score:.2f}</span></p>
             <p>{faq_answers[selected_idx]}</p>
         </div>
         """,
         unsafe_allow_html=True,
     )
-
-    last_query = st.session_state.get("faq_last_query") or faq_questions[selected_idx]
-    context_indices, _ = retrieve_top_k(last_query)
-    retrieved_faqs = [faq_answers[idx] for idx in context_indices]
-    retrieved_questions = [faq_questions[idx] for idx in context_indices]
 
     # RAG section
     st.markdown("<div style='margin-top: 8px;'></div>", unsafe_allow_html=True)
