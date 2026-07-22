@@ -4,6 +4,7 @@ from streamlit_searchbox import st_searchbox
 import json
 from pathlib import Path
 from sentence_transformers import SentenceTransformer, util
+import torch
 import os
 import requests
 from dotenv import load_dotenv
@@ -101,6 +102,10 @@ def load_faq_data(faq_data_path):
 def compute_answer_embeddings(_model, faq_answers):
     return _model.encode(faq_answers, convert_to_tensor=True)
 
+@st.cache_data(ttl=300)
+def compute_question_embeddings(_model, faq_questions):
+    return _model.encode(faq_questions, convert_to_tensor=True)
+
 def build_rag_prompt(user_question, retrieved_faqs, retrieved_questions, language="fr"):
     if language == "Français":
         intro = "Voici des extraits de notre FAQ :\n"
@@ -194,6 +199,7 @@ if not HF_API_KEY:
 model = load_model()
 faq_questions, faq_answers = load_faq_data(faq_data_path)
 answer_embeddings = compute_answer_embeddings(model, faq_answers)
+question_embeddings = compute_question_embeddings(model, faq_questions)
 
 st.write(
     "Start typing your question — matching FAQ entries appear as you type."
@@ -208,12 +214,15 @@ placeholder_text = (
 )
 
 TOP_K = 3
-SIMILARITY_THRESHOLD = 0.1  # You can adjust this value
+SIMILARITY_THRESHOLD = 0.3  # You can adjust this value
+MIN_QUERY_WORDS = 3  # avoid matching on ambiguous short fragments (e.g. "je n'ai")
 
 
 def retrieve_top_k(query, k=TOP_K):
     query_embedding = model.encode(query, convert_to_tensor=True)
-    similarities = util.pytorch_cos_sim(query_embedding, answer_embeddings)[0]
+    sim_to_answers = util.pytorch_cos_sim(query_embedding, answer_embeddings)[0]
+    sim_to_questions = util.pytorch_cos_sim(query_embedding, question_embeddings)[0]
+    similarities = torch.maximum(sim_to_answers, sim_to_questions)
     k = min(k, len(faq_questions))
     indices = similarities.topk(k).indices.tolist()
     return indices, similarities
@@ -221,7 +230,7 @@ def retrieve_top_k(query, k=TOP_K):
 
 def search_faq(searchterm: str):
     st.session_state["faq_last_query"] = searchterm
-    if not searchterm:
+    if not searchterm or len(searchterm.split()) < MIN_QUERY_WORDS:
         return []
     indices, similarities = retrieve_top_k(searchterm)
     return [

@@ -29,6 +29,7 @@
 {"query": "Do you ship to PO boxes?", "answer": "Yes, standard shipping supports PO boxes, but expedited and courier services may not."}
 {"query": "Can I ship to multiple addresses in one order?", "answer": "Currently each order can only be shipped to a single address; please place separate orders for multiple destinations."}
 {"query": "What happens if my package is lost?", "answer": "If tracking shows no movement for over 10 business days, contact support and we'll open an investigation with the carrier or send a replacement."}
+{"query": "I still haven't received my package, what should I do?", "answer": "If tracking shows no movement for over 10 business days, contact support and we'll open an investigation with the carrier or send a replacement."}
 {"query": "Can I change my delivery date?", "answer": "Once an order has shipped we can't change the delivery date, but you can contact the carrier directly using your tracking number."}
 {"query": "Do you offer weekend delivery?", "answer": "Weekend delivery is available in some regions as a paid option at checkout."}
 {"query": "What does \"processing\" mean on my order status?", "answer": "\"Processing\" means we've received your order and are preparing it for shipment; it hasn't left our warehouse yet."}

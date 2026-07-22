@@ -128,7 +128,7 @@ Higher scores indicate a better semantic understanding between questions and the
 the Hub (`XLMRobertaModel`, hidden_size 768, 12 layers, identical on both sides). This is the only fair
 comparison for isolating what fine-tuning itself changed.
 
-Measured on 100 FAQ entries per language (`data/faq_source_en.jsonl`, `data/faq_source_fr.jsonl`) and 44
+Measured on 101 FAQ entries per language (`data/faq_source_en.jsonl`, `data/faq_source_fr.jsonl`) and 44
 evaluation queries (`data/faq_evaluation.jsonl`), a mix of verbatim and genuinely reworded questions.
 
 | Model                    | MRR   | Recall@1 | Recall@3 | Recall@5 | Mean True Sim | Explanation |

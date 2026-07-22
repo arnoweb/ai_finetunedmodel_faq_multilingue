@@ -29,6 +29,7 @@
 {"query": "Livrez-vous dans une boîte postale ?", "answer": "Oui, la livraison standard accepte les boîtes postales, mais les services express ou par coursier peuvent ne pas le permettre."}
 {"query": "Puis-je livrer à plusieurs adresses pour une même commande ?", "answer": "Actuellement, chaque commande ne peut être livrée qu'à une seule adresse ; merci de passer des commandes séparées pour plusieurs destinations."}
 {"query": "Que se passe-t-il si mon colis est perdu ?", "answer": "Si le suivi n'indique aucun mouvement depuis plus de 10 jours ouvrés, contactez le support ; nous ouvrirons une enquête auprès du transporteur ou vous enverrons un remplacement."}
+{"query": "Je n'ai toujours pas reçu mon colis, que faire ?", "answer": "Si le suivi n'indique aucun mouvement depuis plus de 10 jours ouvrés, contactez le support ; nous ouvrirons une enquête auprès du transporteur ou vous enverrons un remplacement."}
 {"query": "Puis-je changer la date de livraison ?", "answer": "Une fois la commande expédiée, nous ne pouvons plus modifier la date de livraison, mais vous pouvez contacter directement le transporteur avec votre numéro de suivi."}
 {"query": "Proposez-vous la livraison le week-end ?", "answer": "La livraison le week-end est disponible dans certaines régions en option payante au moment du paiement."}
 {"query": "Que signifie le statut « en cours de traitement » sur ma commande ?", "answer": "« En cours de traitement » signifie que nous avons reçu votre commande et la préparons ; elle n'a pas encore quitté notre entrepôt."}
