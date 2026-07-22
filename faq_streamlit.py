@@ -248,6 +248,12 @@ st.markdown(
     "[Compare base vs fine-tuned side by side](https://arnoweb-rag-faq-compare-basevsfinetuned-huggingface.streamlit.app/)."
 )
 
+link_col1, link_col2 = st.columns(2)
+with link_col1:
+    st.page_link("pages/1_Architecture.py", label="Technical architecture", icon="📐")
+with link_col2:
+    st.page_link("pages/2_Business_Value.py", label="Business value & use cases", icon="💡")
+
 with st.expander("About this project"):
     st.markdown(
         "**Who this is for:** e-commerce and SaaS teams with a bilingual (FR/EN) customer base "

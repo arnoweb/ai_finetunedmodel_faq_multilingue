@@ -235,3 +235,9 @@ st.markdown(
     "Want the full search + generated-answer experience? "
     "[Try the main FAQ RAG search app](https://arnoweb-rag-llm-faq-finetuned-huggingface.streamlit.app/)."
 )
+
+link_col1, link_col2 = st.columns(2)
+with link_col1:
+    st.page_link("pages/1_Architecture.py", label="Technical architecture", icon="📐")
+with link_col2:
+    st.page_link("pages/2_Business_Value.py", label="Business value & use cases", icon="💡")
