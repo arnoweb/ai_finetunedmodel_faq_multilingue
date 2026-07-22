@@ -26,7 +26,8 @@ FAQ_DATA_PATHS = {
 
 # Models to compare
 MODEL_PATHS = {
-    "Base multilingual": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+    "Lightweight baseline": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+    "Pre-fine-tuning (same base)": "sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
     "Fine-tuned (AutoTrain)": "arnoweb/model-faq-sentence-autotrain",
 }
 
@@ -106,16 +107,19 @@ def run_search(
 
 
 st.title("E-commerce FAQ Retrieval Comparison (Base vs Fine-tuned)")
+st.caption("Comparez concrètement l'effet du fine-tuning sur la qualité de la recherche FAQ.")
 st.markdown(
-    "**Left — Base:** `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2` — a general-purpose "
-    "multilingual encoder, used off the shelf, never trained on this FAQ.  \n"
-    "**Right — Fine-tuned:** `arnoweb/model-faq-sentence-autotrain` — a multilingual encoder "
-    "(`paraphrase-multilingual-mpnet-base-v2`) fine-tuned specifically on this FAQ's own questions and answers."
+    "**Lightweight baseline:** `paraphrase-multilingual-MiniLM-L12-v2` — a smaller, generic multilingual "
+    "encoder, never trained on this FAQ. Shown for scale, not as the true \"before fine-tuning\" reference.  \n"
+    "**Pre-fine-tuning (same base):** `paraphrase-multilingual-mpnet-base-v2`, unmodified — the exact "
+    "checkpoint the fine-tuned model started from. This is the real baseline for measuring fine-tuning's effect.  \n"
+    "**Fine-tuned:** `arnoweb/model-faq-sentence-autotrain` — that same checkpoint, fine-tuned on this "
+    "FAQ's own questions and answers."
 )
 st.write(
-    "Type one question below and compare both sides: which one ranks the correct answer higher, "
-    "and with a stronger similarity score. This is the measurable effect of fine-tuning on retrieval "
-    "quality — not a claim, something you can test yourself."
+    "Type a question and compare all three: the isolated effect of fine-tuning is the difference between "
+    "**Pre-fine-tuning** and **Fine-tuned** — not between Lightweight baseline and Fine-tuned, which also "
+    "includes the effect of using a larger base model."
 )
 
 with st.expander("What do Top K and Similarity threshold control?"):
@@ -133,7 +137,7 @@ with st.expander("What do Top K and Similarity threshold control?"):
         "| **Low Top K** | Strictest setup, closest to a production chatbot that only answers when sure — expect more refusals | Always shows its single best guess, right or wrong — reveals raw ranking quality with no safety net |\n"
     )
 
-language = st.radio("Language / Langue", ["English", "Français"], horizontal=True)
+language = st.radio("Language / Langue", ["Français", "English"], horizontal=True)
 
 st.markdown(
     f"""
@@ -240,10 +244,10 @@ st.markdown(
     "[Try the main FAQ RAG search app](https://arnoweb-rag-llm-faq-finetuned-huggingface.streamlit.app/)."
 )
 
-with st.expander("📐 Technical architecture"):
-    components.html((DOCS_DIR / "architecture.html").read_text(encoding="utf-8"), height=6000, scrolling=True)
-
-with st.expander("💡 Business value & use cases"):
-    bv_language = st.radio("Language / Langue", ["English", "Français"], horizontal=True, key="bv_lang_compare")
+with st.expander("Business value & use cases"):
+    bv_language = st.radio("Language / Langue", ["Français", "English"], horizontal=True, key="bv_lang_compare")
     bv_file = "business-value-en.html" if bv_language == "English" else "business-value.html"
     components.html((DOCS_DIR / bv_file).read_text(encoding="utf-8"), height=6000, scrolling=True)
+
+with st.expander("Technical architecture"):
+    components.html((DOCS_DIR / "architecture.html").read_text(encoding="utf-8"), height=6000, scrolling=True)

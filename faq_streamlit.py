@@ -155,9 +155,10 @@ def query_remote_llm(prompt, model: str = HF_MODEL_DEFAULT, temperature: float =
 
 
 st.title("E-commerce FAQ RAG Search")
+st.caption("Un moteur de recherche sémantique qui comprend vraiment vos questions, pas seulement vos mots-clés.")
 
 # Language switcher
-language = st.radio("Select language / Choisissez la langue:", ["English", "Français"])
+language = st.radio("Select language / Choisissez la langue:", ["Français", "English"])
 
 st.markdown(
     f"""
@@ -252,13 +253,13 @@ st.markdown(
     "[Compare base vs fine-tuned side by side](https://arnoweb-rag-faq-compare-basevsfinetuned-huggingface.streamlit.app/)."
 )
 
-with st.expander("📐 Technical architecture"):
-    components.html((DOCS_DIR / "architecture.html").read_text(encoding="utf-8"), height=6000, scrolling=True)
-
-with st.expander("💡 Business value & use cases"):
-    bv_language = st.radio("Language / Langue", ["English", "Français"], horizontal=True, key="bv_lang_main")
+with st.expander("Business value & use cases"):
+    bv_language = st.radio("Language / Langue", ["Français", "English"], horizontal=True, key="bv_lang_main")
     bv_file = "business-value-en.html" if bv_language == "English" else "business-value.html"
     components.html((DOCS_DIR / bv_file).read_text(encoding="utf-8"), height=6000, scrolling=True)
+
+with st.expander("Technical architecture"):
+    components.html((DOCS_DIR / "architecture.html").read_text(encoding="utf-8"), height=6000, scrolling=True)
 
 with st.expander("About this project"):
     st.markdown(
