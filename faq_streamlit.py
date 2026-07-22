@@ -3,7 +3,7 @@ import streamlit.components.v1 as components
 from streamlit_searchbox import st_searchbox
 import json
 from pathlib import Path
-from sentence_transformers import SentenceTransformer, util
+from sentence_transformers import SentenceTransformer, CrossEncoder, util
 import torch
 import os
 import requests
@@ -76,6 +76,7 @@ HF_API_URL = "https://router.huggingface.co/v1/chat/completions"
 HF_MODEL_DEFAULT = "meta-llama/Llama-3.1-8B-Instruct"
 
 model_path = "arnoweb/model-faq-sentence-autotrain"
+reranker_path = "cross-encoder/mmarco-mMiniLMv2-L12-H384-v1"
 
 # File paths for each language
 faq_data_paths = {
@@ -86,6 +87,10 @@ faq_data_paths = {
 @st.cache_resource
 def load_model():
     return SentenceTransformer(model_path)
+
+@st.cache_resource
+def load_reranker():
+    return CrossEncoder(reranker_path)
 
 @st.cache_data(ttl=300)
 def load_faq_data(faq_data_path):
@@ -197,6 +202,7 @@ if not HF_API_KEY:
     )
     st.stop()
 model = load_model()
+reranker = load_reranker()
 faq_questions, faq_answers = load_faq_data(faq_data_path)
 answer_embeddings = compute_answer_embeddings(model, faq_answers)
 question_embeddings = compute_question_embeddings(model, faq_questions)
@@ -214,6 +220,7 @@ placeholder_text = (
 )
 
 TOP_K = 3
+RERANK_POOL = 8  # bi-encoder candidates handed to the cross-encoder for reranking
 SIMILARITY_THRESHOLD = 0.3  # You can adjust this value
 MIN_QUERY_WORDS = 3  # avoid matching on ambiguous short fragments (e.g. "je n'ai")
 
@@ -223,8 +230,19 @@ def retrieve_top_k(query, k=TOP_K):
     sim_to_answers = util.pytorch_cos_sim(query_embedding, answer_embeddings)[0]
     sim_to_questions = util.pytorch_cos_sim(query_embedding, question_embeddings)[0]
     similarities = torch.maximum(sim_to_answers, sim_to_questions)
-    k = min(k, len(faq_questions))
-    indices = similarities.topk(k).indices.tolist()
+
+    pool_size = min(RERANK_POOL, len(faq_questions))
+    pool_indices = similarities.topk(pool_size).indices.tolist()
+
+    # Bi-encoder embeddings alone can be fooled by surface-level overlap (e.g. shared
+    # negation phrasing) between an unrelated FAQ and the real answer. The cross-encoder
+    # attends to both texts jointly, so it separates lexically-similar-but-wrong matches.
+    pairs = [(query, f"{faq_questions[i]} {faq_answers[i]}") for i in pool_indices]
+    rerank_scores = reranker.predict(pairs)
+    reranked = sorted(zip(pool_indices, rerank_scores), key=lambda item: -item[1])
+
+    k = min(k, len(reranked))
+    indices = [idx for idx, _ in reranked[:k]]
     return indices, similarities
 
 

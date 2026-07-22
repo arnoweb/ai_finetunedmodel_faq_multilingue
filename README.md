@@ -64,7 +64,7 @@ pip install -r requirements-train.txt
 source .venv/bin/activate
 streamlit run faq_streamlit.py --server.port 8501 --server.address 0.0.0.0
 ```
-- Retrieval: SentenceTransformer embeddings over the FAQ JSONL for the selected language.
+- Retrieval: SentenceTransformer embeddings over the FAQ JSONL for the selected language (query matched against both questions and answers), then the top candidates are reranked with a cross-encoder (`cross-encoder/mmarco-mMiniLMv2-L12-H384-v1`) to filter out matches that only share surface-level wording (e.g. a common negation phrase) with an unrelated FAQ.
 - Search-as-you-type via [`streamlit-searchbox`](https://github.com/m-wrzr/streamlit-searchbox): matching FAQ entries appear live in a dropdown as you type (debounced), no need to press Enter — select one to see the full answer.
 - Generation (optional): calls `query_local_llm` to your local LLM endpoint.
 
