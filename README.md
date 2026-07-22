@@ -122,14 +122,29 @@ Higher scores indicate a better semantic understanding between questions and the
 
 ## Example Results
 
-| Model                     | MRR   | Recall@1 | Recall@3 | Recall@5 | Mean True Sim | Explanation |
-|---------------------------|-------|----------|----------|----------|----------------|-------------|
-| Base multilingual (global) | 0.844 | 0.750    | 0.950    | 0.950    | 0.544          | Baseline performance before fine-tuning. |
-| Fine-tuned (global)        | 0.883 | 0.800    | 0.950    | 0.950    | 0.635          | Better ranking and stronger semantic similarity after fine-tuning. |
-| Base multilingual [en]    | 0.900 | 0.800    | 1.000    | 1.000    | 0.558          | Solid performance in English before fine-tuning. |
-| Fine-tuned [en]           | 0.950 | 0.900    | 1.000    | 1.000    | 0.656          | Significant improvement in English ranking and similarity. |
-| Base multilingual [fr]    | 0.789 | 0.700    | 0.900    | 0.900    | 0.531          | Lower baseline scores in French compared to English. |
-| Fine-tuned [fr]           | 0.817 | 0.700    | 0.900    | 0.900    | 0.614          | Better semantic similarity, stable ranking; French still improves. |
+**Important:** `Lightweight baseline` (MiniLM-L12-v2) and `Fine-tuned` (mpnet-base-v2 fine-tuned) are
+*different base architectures* — comparing them directly conflates the effect of fine-tuning with the
+effect of using a larger base model. `Pre-fine-tuning` is the same checkpoint (`paraphrase-multilingual-
+mpnet-base-v2`, unmodified) the fine-tuned model actually started from — it's the only fair reference for
+isolating what fine-tuning itself changed.
+
+| Model                              | MRR   | Recall@1 | Recall@3 | Recall@5 | Mean True Sim | Explanation |
+|-------------------------------------|-------|----------|----------|----------|----------------|-------------|
+| Lightweight baseline (global)       | 0.844 | 0.750    | 0.950    | 0.950    | 0.544          | Smaller architecture (MiniLM-L12-v2), shown for scale. |
+| Pre-fine-tuning, same base (global) | 0.874 | 0.800    | 0.950    | 0.950    | 0.629          | The true "before" state — same architecture as the fine-tuned model. |
+| Fine-tuned (global)                 | 0.883 | 0.800    | 0.950    | 0.950    | 0.635          | Isolated fine-tuning effect vs the row above: Recall@1 unchanged, small MRR/similarity gain. |
+| Lightweight baseline [en]           | 0.900 | 0.800    | 1.000    | 1.000    | 0.558          | Smaller architecture, English subset. |
+| Pre-fine-tuning, same base [en]     | 0.950 | 0.900    | 1.000    | 1.000    | 0.647          | Already near-ceiling before fine-tuning on this small English eval set. |
+| Fine-tuned [en]                     | 0.950 | 0.900    | 1.000    | 1.000    | 0.656          | No ranking change vs pre-fine-tuning; marginal similarity gain. |
+| Lightweight baseline [fr]           | 0.789 | 0.700    | 0.900    | 0.900    | 0.531          | Smaller architecture, French subset. |
+| Pre-fine-tuning, same base [fr]     | 0.798 | 0.700    | 0.900    | 0.900    | 0.612          | The true "before" state for French. |
+| Fine-tuned [fr]                     | 0.817 | 0.700    | 0.900    | 0.900    | 0.614          | Same Recall@1/3/5 as pre-fine-tuning; small MRR/similarity gain. |
+
+On this small demo eval set (19 queries), most of the gap between `Lightweight baseline` and `Fine-tuned`
+comes from the base model upgrade (MiniLM → mpnet), not from fine-tuning itself — the isolated fine-tuning
+effect (`Pre-fine-tuning` → `Fine-tuned`) is small. This isn't a reason to skip fine-tuning; it means its
+value is more about adapting to a client's specific vocabulary at scale (see `docs/business-value.html`)
+than about a dramatic jump on this particular small dataset.
 
 ## Notes
 - If your fine-tuned HF repo is private, ensure `huggingface-cli login` (or set `HUGGINGFACE_HUB_TOKEN`).

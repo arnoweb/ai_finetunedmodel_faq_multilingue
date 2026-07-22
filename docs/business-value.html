@@ -512,27 +512,37 @@
 
   <section class="block" id="performances">
     <div class="block-head"><span class="block-num">07</span><h2>Performances</h2></div>
-    <p class="block-desc">Trois métriques, mesurées sur un jeu d'évaluation dédié — inutile de les connaître pour comprendre ce qu'elles signifient.</p>
+    <p class="block-desc">Trois métriques, mesurées sur un jeu d'évaluation dédié — inutile de les connaître pour comprendre ce qu'elles signifient. Trois modèles : une base légère, le point de départ exact avant fine-tuning, et le modèle fine-tuné.</p>
     <div class="metrics-row">
       <div class="metric">
         <div class="m-label">MRR global</div>
-        <div class="m-value">0.844 → 0.883</div>
-        <p class="m-explain">La bonne réponse apparaît plus haut dans les résultats.</p>
+        <div class="m-value">0.844 → 0.874 → 0.883</div>
+        <p class="m-explain">Le principal saut vient du changement de modèle de base, pas du fine-tuning.</p>
       </div>
       <div class="metric">
         <div class="m-label">Recall@1 global</div>
-        <div class="m-value">0.75 → 0.80</div>
-        <p class="m-explain">4 fois sur 5, la bonne réponse est le tout premier résultat.</p>
+        <div class="m-value">0.75 → 0.80 → 0.80</div>
+        <p class="m-explain">Identique avant/après fine-tuning — le gain vient du modèle de base.</p>
       </div>
       <div class="metric">
         <div class="m-label">Similarité moyenne</div>
-        <div class="m-value">0.544 → 0.635</div>
-        <p class="m-explain">Le moteur comprend mieux le lien entre la question et la réponse.</p>
+        <div class="m-value">0.544 → 0.629 → 0.635</div>
+        <p class="m-explain">Petit gain propre au fine-tuning ; l'essentiel vient aussi du modèle de base.</p>
       </div>
     </div>
+    <div class="callout" style="margin-top:1rem;">
+      <strong>Base légère → avant fine-tuning → après fine-tuning.</strong> Les deux premiers chiffres
+      comparent deux architectures différentes (MiniLM-L12-v2 vs mpnet-base-v2) : l'essentiel de cet écart
+      vient du changement de modèle, pas d'un entraînement. L'effet isolé du fine-tuning est la différence
+      entre les deux <em>derniers</em> chiffres (même architecture, avant/après) — plus modeste sur ce petit
+      jeu d'évaluation (19 questions). Ce n'est pas une raison d'écarter le fine-tuning : sa valeur tient
+      surtout à l'adaptation au vocabulaire du client à mesure que la FAQ grandit, pas à un bond spectaculaire
+      sur ce jeu de démonstration.
+    </div>
     <p class="block-desc" style="margin-top:1rem; font-size:0.8rem;">
-      Base <code>paraphrase-multilingual-MiniLM-L12-v2</code> vs modèle fine-tuné — méthodologie complète
-      dans <code>evaluate_models_compare.py</code>, détail par langue dans le README.
+      Base légère <code>paraphrase-multilingual-MiniLM-L12-v2</code>, avant fine-tuning
+      <code>paraphrase-multilingual-mpnet-base-v2</code>, fine-tuné <code>arnoweb/model-faq-sentence-autotrain</code>
+      — méthodologie complète dans <code>evaluate_models_compare.py</code>, détail par langue dans le README.
     </p>
   </section>
 

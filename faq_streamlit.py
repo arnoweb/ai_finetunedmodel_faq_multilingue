@@ -154,7 +154,7 @@ def query_remote_llm(prompt, model: str = HF_MODEL_DEFAULT, temperature: float =
 
 
 
-st.title("E-commerce FAQ RAG Search")
+st.title("Assistant FAQ IA")
 st.caption("Un moteur de recherche sémantique qui comprend vraiment vos questions, pas seulement vos mots-clés.")
 
 # Language switcher
