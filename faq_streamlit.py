@@ -286,17 +286,20 @@ st.divider()
 st.markdown(
     "Curious how much fine-tuning actually improves results? "
     "[Compare base vs fine-tuned side by side](https://arnoweb-rag-faq-compare-basevsfinetuned-huggingface.streamlit.app/)."
+    if language == "English"
+    else "Curieux de savoir ce que le fine-tuning change vraiment ? "
+    "[Comparez avant/après fine-tuning côte à côte](https://arnoweb-rag-faq-compare-basevsfinetuned-huggingface.streamlit.app/)."
 )
 
-with st.expander("Business value & use cases"):
+with st.expander("Business value & use cases" if language == "English" else "Valeur métier & cas d'usage"):
     bv_language = st.radio("Language / Langue", ["Français", "English"], horizontal=True, key="bv_lang_main")
     bv_file = "business-value-en.html" if bv_language == "English" else "business-value.html"
     components.html((DOCS_DIR / bv_file).read_text(encoding="utf-8"), height=6000, scrolling=True)
 
-with st.expander("Technical architecture"):
+with st.expander("Technical architecture" if language == "English" else "Architecture technique"):
     components.html((DOCS_DIR / "architecture.html").read_text(encoding="utf-8"), height=6000, scrolling=True)
 
-with st.expander("About this project"):
+with st.expander("About this project" if language == "English" else "À propos de ce projet"):
     st.markdown(
         "**Who this is for:** e-commerce and SaaS teams with a bilingual (FR/EN) customer base "
         "who want FAQ search that understands real questions, not just keywords — without adding "

@@ -260,12 +260,15 @@ st.divider()
 st.markdown(
     "Want the full search + generated-answer experience? "
     "[Try the main FAQ RAG search app](https://arnoweb-rag-llm-faq-finetuned-huggingface.streamlit.app/)."
+    if language == "English"
+    else "Envie de l'expérience complète (recherche + réponse générée) ? "
+    "[Essayez l'app principale de recherche FAQ](https://arnoweb-rag-llm-faq-finetuned-huggingface.streamlit.app/)."
 )
 
-with st.expander("Business value & use cases"):
+with st.expander("Business value & use cases" if language == "English" else "Valeur métier & cas d'usage"):
     bv_language = st.radio("Language / Langue", ["Français", "English"], horizontal=True, key="bv_lang_compare")
     bv_file = "business-value-en.html" if bv_language == "English" else "business-value.html"
     components.html((DOCS_DIR / bv_file).read_text(encoding="utf-8"), height=6000, scrolling=True)
 
-with st.expander("Technical architecture"):
+with st.expander("Technical architecture" if language == "English" else "Architecture technique"):
     components.html((DOCS_DIR / "architecture.html").read_text(encoding="utf-8"), height=6000, scrolling=True)
