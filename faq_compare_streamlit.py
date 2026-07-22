@@ -200,12 +200,12 @@ def _capture_query(searchterm: str):
 
 st_searchbox(
     _capture_query,
-    placeholder="Refund policy, shipping cost, change email…"
+    placeholder="e.g., I still haven't received my package, what should I do?"
     if language == "English"
-    else "Politique de remboursement, frais de livraison, changer d'email…",
-    label="Search the FAQ (e.g., “track my order”):"
+    else "ex. Je n'ai toujours pas reçu mon colis, que faire ?",
+    label="Search the FAQ — ask a real question, not just keywords:"
     if language == "English"
-    else "Recherchez dans la FAQ (ex. « suivre ma commande ») :",
+    else "Recherchez dans la FAQ — posez une vraie question, pas des mots-clés :",
     key=f"compare_searchbox_{language}",
 )
 

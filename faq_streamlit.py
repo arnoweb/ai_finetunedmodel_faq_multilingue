@@ -202,9 +202,9 @@ st.write(
 )
 
 placeholder_text = (
-    "e.g., reset password, change shipping address, refund policy"
+    "e.g., I still haven't received my package, what should I do?"
     if language == "English"
-    else "ex. réinitialiser mot de passe, changer adresse de livraison, politique de remboursement"
+    else "ex. Je n'ai toujours pas reçu mon colis, que faire ?"
 )
 
 TOP_K = 3

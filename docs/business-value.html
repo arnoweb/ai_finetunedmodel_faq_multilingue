@@ -282,19 +282,65 @@
     <div class="inner">
       <div class="nav-brand"><span class="nb-name">FAQ IA</span><span class="nb-tag">Recherche qui comprend</span></div>
       <div class="nav-sep"></div>
+      <a href="#usages">Cas d'usage</a>
       <a href="#demo">Démo</a>
       <a href="#fonctionnalites">Fonctionnalités</a>
       <a href="#valeur">Valeur métier</a>
       <a href="#comparaison">Comparaison</a>
-      <a href="#usages">Cas d'usage</a>
       <a href="#agent">Fine-tuning vs agent</a>
       <a href="#performances">Performances</a>
       <a href="#evolutions">Évolutions</a>
     </div>
   </nav>
 
+  <section class="block" id="usages">
+    <div class="block-head"><span class="block-num">01</span><h2>Cas d'usage</h2></div>
+    <p class="block-desc">Cinq marchés directement couverts par l'architecture actuelle.</p>
+    <div class="usecases">
+      <div class="usecase">
+        <span class="uc-tag">SAV e-commerce</span>
+        <h3>Livraison, retours, remboursement</h3>
+        <div class="uc-detail"><span class="uc-k">Contexte</span><span class="uc-v">Un service client reçoit des dizaines de questions répétitives par jour, en FR et EN.</span></div>
+        <div class="uc-detail"><span class="uc-k">Problème</span><span class="uc-v">La FAQ existe mais les clients ne la trouvent pas ou ne tombent pas sur les bons mots-clés.</span></div>
+        <div class="uc-detail"><span class="uc-k">Solution</span><span class="uc-v">Recherche sémantique bilingue branchée directement sur la FAQ existante.</span></div>
+        <div class="uc-value">Valeur : <strong>moins de tickets répétitifs</strong>, disponibilité 24/7.</div>
+      </div>
+      <div class="usecase">
+        <span class="uc-tag">Billetterie (spectacles, visites)</span>
+        <h3>Achat, échange et accès aux billets</h3>
+        <div class="uc-detail"><span class="uc-k">Contexte</span><span class="uc-v">Une billetterie de spectacles, musées ou visites guidées reçoit un pic de questions avant et après l'achat.</span></div>
+        <div class="uc-detail"><span class="uc-k">Problème</span><span class="uc-v">Échange de billet, remboursement, horaires de représentation, accès PMR — dispersés sur plusieurs pages, mal trouvés par mot-clé.</span></div>
+        <div class="uc-detail"><span class="uc-k">Solution</span><span class="uc-v">Recherche sémantique branchée sur la FAQ billetterie existante, bilingue FR/EN.</span></div>
+        <div class="uc-value">Valeur : <strong>support allégé pendant les pics de vente</strong>, disponibilité 24/7.</div>
+      </div>
+      <div class="usecase">
+        <span class="uc-tag">Infos pratiques</span>
+        <h3>Horaires, accès, tarifs, conditions</h3>
+        <div class="uc-detail"><span class="uc-k">Contexte</span><span class="uc-v">Mairies, offices de tourisme, musées et lieux recevant du public avec une FAQ « infos pratiques ».</span></div>
+        <div class="uc-detail"><span class="uc-k">Problème</span><span class="uc-v">Horaires saisonniers, tarifs, conditions d'accès changent souvent et sont difficiles à retrouver par mot-clé.</span></div>
+        <div class="uc-detail"><span class="uc-k">Solution</span><span class="uc-v">Recherche sémantique toujours à jour (rafraîchissement continu), sans dépendre du moteur de recherche du site.</span></div>
+        <div class="uc-value">Valeur : <strong>moins de sollicitations à l'accueil</strong>, réponse immédiate même hors horaires.</div>
+      </div>
+      <div class="usecase">
+        <span class="uc-tag">Support client SaaS B2B</span>
+        <h3>Aide produit en libre-service</h3>
+        <div class="uc-detail"><span class="uc-k">Contexte</span><span class="uc-v">Des clients internationaux posent des questions produit en langage naturel, en français ou en anglais.</span></div>
+        <div class="uc-detail"><span class="uc-k">Problème</span><span class="uc-v">Le support niveau 1 traite trop de questions déjà documentées.</span></div>
+        <div class="uc-detail"><span class="uc-k">Solution</span><span class="uc-v">Recherche dans la documentation existante avant tout contact humain.</span></div>
+        <div class="uc-value">Valeur : <strong>équipe support recentrée</strong> sur les cas complexes à forte valeur.</div>
+      </div>
+      <div class="usecase">
+        <span class="uc-tag">Tourisme &amp; hôtellerie</span>
+        <h3>FAQ voyageurs multilingue</h3>
+        <div class="uc-detail"><span class="uc-k">Contexte</span><span class="uc-v">Une clientèle internationale pose des questions récurrentes avant ou pendant le séjour.</span></div>
+        <div class="uc-detail"><span class="uc-k">Problème</span><span class="uc-v">Annulation, arrhes, horaires, équipements — souvent posés différemment d'un client à l'autre.</span></div>
+        <div class="uc-detail"><span class="uc-k">Solution</span><span class="uc-v">Réponse immédiate en FR et EN, sans équipe multilingue de permanence.</span></div>
+        <div class="uc-value">Valeur : <strong>expérience client fluide</strong>, sans renfort d'équipe.</div>
+      </div>
+    </div>
+  </section>
   <section class="block" id="demo">
-    <div class="block-head"><span class="block-num">01</span><h2>Comment ça marche</h2></div>
+    <div class="block-head"><span class="block-num">02</span><h2>Comment ça marche</h2></div>
     <p class="block-desc">Un exemple réel, tiré du jeu de données de démonstration inclus dans le projet.</p>
 
     <div class="steps-tracker">
@@ -349,7 +395,7 @@
   </section>
 
   <section class="block" id="fonctionnalites">
-    <div class="block-head"><span class="block-num">02</span><h2>Fonctionnalités</h2></div>
+    <div class="block-head"><span class="block-num">03</span><h2>Fonctionnalités</h2></div>
     <p class="block-desc">Ce que l'application fait, concrètement.</p>
     <div class="features-grid">
       <div class="feature-card"><div class="f-title">Recherche en langage naturel</div><p>L'utilisateur pose sa question normalement — synonymes, reformulations et fautes de frappe n'empêchent pas de trouver la bonne réponse.</p></div>
@@ -362,7 +408,7 @@
   </section>
 
   <section class="block" id="valeur">
-    <div class="block-head"><span class="block-num">03</span><h2>Valeur métier</h2></div>
+    <div class="block-head"><span class="block-num">04</span><h2>Valeur métier</h2></div>
     <p class="block-desc">
       Une FAQ statique échoue dès que l'utilisateur ne tape pas les mots exacts choisis par l'équipe
       support — l'exemple ci-dessus le montre : « colis » et « commande » n'ont aucun mot en commun,
@@ -404,7 +450,7 @@
   </section>
 
   <section class="block" id="comparaison">
-    <div class="block-head"><span class="block-num">04</span><h2>Comparaison</h2></div>
+    <div class="block-head"><span class="block-num">05</span><h2>Comparaison</h2></div>
     <p class="block-desc">Ce projet se positionne délibérément entre deux extrêmes.</p>
     <div class="compare-steps">
       <span class="compare-chip">FAQ classique</span>
@@ -428,52 +474,6 @@
     </div>
   </section>
 
-  <section class="block" id="usages">
-    <div class="block-head"><span class="block-num">05</span><h2>Cas d'usage</h2></div>
-    <p class="block-desc">Cinq marchés directement couverts par l'architecture actuelle.</p>
-    <div class="usecases">
-      <div class="usecase">
-        <span class="uc-tag">SAV e-commerce</span>
-        <h3>Livraison, retours, remboursement</h3>
-        <div class="uc-detail"><span class="uc-k">Contexte</span><span class="uc-v">Un service client reçoit des dizaines de questions répétitives par jour, en FR et EN.</span></div>
-        <div class="uc-detail"><span class="uc-k">Problème</span><span class="uc-v">La FAQ existe mais les clients ne la trouvent pas ou ne tombent pas sur les bons mots-clés.</span></div>
-        <div class="uc-detail"><span class="uc-k">Solution</span><span class="uc-v">Recherche sémantique bilingue branchée directement sur la FAQ existante.</span></div>
-        <div class="uc-value">Valeur : <strong>moins de tickets répétitifs</strong>, disponibilité 24/7.</div>
-      </div>
-      <div class="usecase">
-        <span class="uc-tag">Billetterie (spectacles, visites)</span>
-        <h3>Achat, échange et accès aux billets</h3>
-        <div class="uc-detail"><span class="uc-k">Contexte</span><span class="uc-v">Une billetterie de spectacles, musées ou visites guidées reçoit un pic de questions avant et après l'achat.</span></div>
-        <div class="uc-detail"><span class="uc-k">Problème</span><span class="uc-v">Échange de billet, remboursement, horaires de représentation, accès PMR — dispersés sur plusieurs pages, mal trouvés par mot-clé.</span></div>
-        <div class="uc-detail"><span class="uc-k">Solution</span><span class="uc-v">Recherche sémantique branchée sur la FAQ billetterie existante, bilingue FR/EN.</span></div>
-        <div class="uc-value">Valeur : <strong>support allégé pendant les pics de vente</strong>, disponibilité 24/7.</div>
-      </div>
-      <div class="usecase">
-        <span class="uc-tag">Infos pratiques</span>
-        <h3>Horaires, accès, tarifs, conditions</h3>
-        <div class="uc-detail"><span class="uc-k">Contexte</span><span class="uc-v">Mairies, offices de tourisme, musées et lieux recevant du public avec une FAQ « infos pratiques ».</span></div>
-        <div class="uc-detail"><span class="uc-k">Problème</span><span class="uc-v">Horaires saisonniers, tarifs, conditions d'accès changent souvent et sont difficiles à retrouver par mot-clé.</span></div>
-        <div class="uc-detail"><span class="uc-k">Solution</span><span class="uc-v">Recherche sémantique toujours à jour (rafraîchissement continu), sans dépendre du moteur de recherche du site.</span></div>
-        <div class="uc-value">Valeur : <strong>moins de sollicitations à l'accueil</strong>, réponse immédiate même hors horaires.</div>
-      </div>
-      <div class="usecase">
-        <span class="uc-tag">Support client SaaS B2B</span>
-        <h3>Aide produit en libre-service</h3>
-        <div class="uc-detail"><span class="uc-k">Contexte</span><span class="uc-v">Des clients internationaux posent des questions produit en langage naturel, en français ou en anglais.</span></div>
-        <div class="uc-detail"><span class="uc-k">Problème</span><span class="uc-v">Le support niveau 1 traite trop de questions déjà documentées.</span></div>
-        <div class="uc-detail"><span class="uc-k">Solution</span><span class="uc-v">Recherche dans la documentation existante avant tout contact humain.</span></div>
-        <div class="uc-value">Valeur : <strong>équipe support recentrée</strong> sur les cas complexes à forte valeur.</div>
-      </div>
-      <div class="usecase">
-        <span class="uc-tag">Tourisme &amp; hôtellerie</span>
-        <h3>FAQ voyageurs multilingue</h3>
-        <div class="uc-detail"><span class="uc-k">Contexte</span><span class="uc-v">Une clientèle internationale pose des questions récurrentes avant ou pendant le séjour.</span></div>
-        <div class="uc-detail"><span class="uc-k">Problème</span><span class="uc-v">Annulation, arrhes, horaires, équipements — souvent posés différemment d'un client à l'autre.</span></div>
-        <div class="uc-detail"><span class="uc-k">Solution</span><span class="uc-v">Réponse immédiate en FR et EN, sans équipe multilingue de permanence.</span></div>
-        <div class="uc-value">Valeur : <strong>expérience client fluide</strong>, sans renfort d'équipe.</div>
-      </div>
-    </div>
-  </section>
 
   <section class="block" id="agent">
     <div class="block-head"><span class="block-num">06</span><h2>Pourquoi un modèle fine-tuné plutôt qu'un agent IA ?</h2></div>
