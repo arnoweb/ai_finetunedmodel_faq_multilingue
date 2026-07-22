@@ -118,35 +118,71 @@ def run_search(
     }
 
 
-st.title("E-commerce FAQ Retrieval Comparison (Base vs Fine-tuned)")
-st.caption("Comparez concrètement l'effet du fine-tuning sur la qualité de la recherche FAQ.")
+language = st.radio("Language / Langue", ["Français", "English"], horizontal=True)
+
+st.title(
+    "E-commerce FAQ Retrieval Comparison (Base vs Fine-tuned)"
+    if language == "English"
+    else "Comparaison de recherche FAQ (avant/après fine-tuning)"
+)
+st.caption(
+    "Compare, concretely, what fine-tuning actually changes in FAQ search quality."
+    if language == "English"
+    else "Comparez concrètement l'effet du fine-tuning sur la qualité de la recherche FAQ."
+)
 st.markdown(
     "**Pre-fine-tuning:** `paraphrase-multilingual-mpnet-base-v2`, unmodified — the exact checkpoint "
     "the fine-tuned model started from, never trained on this FAQ.  \n"
     "**Fine-tuned:** `arnoweb/model-faq-sentence-autotrain` — that same checkpoint, fine-tuned on this "
     "FAQ's own questions and answers."
+    if language == "English"
+    else "**Avant fine-tuning :** `paraphrase-multilingual-mpnet-base-v2`, tel quel — le point de départ "
+    "exact du modèle fine-tuné, jamais entraîné sur cette FAQ.  \n"
+    "**Fine-tuné :** `arnoweb/model-faq-sentence-autotrain` — ce même modèle, fine-tuné sur les questions "
+    "et réponses de cette FAQ."
 )
 st.write(
     "Type a question and compare both sides: same encoder, before and after fine-tuning. Any difference "
     "you see is the isolated effect of fine-tuning itself — not a confound from a different base model."
+    if language == "English"
+    else "Posez une question et comparez les deux côtés : le même encodeur, avant et après fine-tuning. "
+    "Toute différence observée est l'effet isolé du fine-tuning lui-même — pas biaisée par un modèle de "
+    "base différent."
 )
 
-with st.expander("What do Top K and Similarity threshold control?"):
-    st.markdown(
-        "**Top K** — how many ranked results are shown per model.\n"
-        "- Higher → a more forgiving test: checks whether the correct answer appears *anywhere* in the list, even if not ranked first.\n"
-        "- Lower → a stricter test, closer to real usage: most users only read the first result or two.\n\n"
-        "**Similarity threshold** — the minimum score required before a result is trusted.\n"
-        "- Higher → fewer answers shown, but each is more likely to be genuinely relevant (more refusals, less risk of a wrong match).\n"
-        "- Lower → more answers shown, but some may be weak or irrelevant matches (fewer refusals, higher risk of a bad match slipping through).\n\n"
-        "**Combining both**\n\n"
-        "| | High threshold | Low threshold |\n"
-        "|---|---|---|\n"
-        "| **High Top K** | Strict but thorough: reveals whether the correct answer exists among many candidates, but only shows it if confidently ranked | Most permissive: shows many candidates even when uncertain — good for auditing near-misses and noise |\n"
-        "| **Low Top K** | Strictest setup, closest to a production chatbot that only answers when sure — expect more refusals | Always shows its single best guess, right or wrong — reveals raw ranking quality with no safety net |\n"
-    )
-
-language = st.radio("Language / Langue", ["Français", "English"], horizontal=True)
+with st.expander(
+    "What do Top K and Similarity threshold control?"
+    if language == "English"
+    else "À quoi servent Top K et le seuil de similarité ?"
+):
+    if language == "English":
+        st.markdown(
+            "**Top K** — how many ranked results are shown per model.\n"
+            "- Higher → a more forgiving test: checks whether the correct answer appears *anywhere* in the list, even if not ranked first.\n"
+            "- Lower → a stricter test, closer to real usage: most users only read the first result or two.\n\n"
+            "**Similarity threshold** — the minimum score required before a result is trusted.\n"
+            "- Higher → fewer answers shown, but each is more likely to be genuinely relevant (more refusals, less risk of a wrong match).\n"
+            "- Lower → more answers shown, but some may be weak or irrelevant matches (fewer refusals, higher risk of a bad match slipping through).\n\n"
+            "**Combining both**\n\n"
+            "| | High threshold | Low threshold |\n"
+            "|---|---|---|\n"
+            "| **High Top K** | Strict but thorough: reveals whether the correct answer exists among many candidates, but only shows it if confidently ranked | Most permissive: shows many candidates even when uncertain — good for auditing near-misses and noise |\n"
+            "| **Low Top K** | Strictest setup, closest to a production chatbot that only answers when sure — expect more refusals | Always shows its single best guess, right or wrong — reveals raw ranking quality with no safety net |\n"
+        )
+    else:
+        st.markdown(
+            "**Top K** — combien de résultats classés sont affichés par modèle.\n"
+            "- Plus haut → un test plus indulgent : vérifie si la bonne réponse apparaît *n'importe où* dans la liste, même mal classée.\n"
+            "- Plus bas → un test plus strict, proche de l'usage réel : la plupart des utilisateurs ne lisent que le 1ᵉʳ ou 2ᵉ résultat.\n\n"
+            "**Seuil de similarité** — le score minimum requis avant qu'un résultat soit jugé fiable.\n"
+            "- Plus haut → moins de réponses affichées, mais chacune plus probablement pertinente (plus de refus, moins de risque de mauvaise réponse).\n"
+            "- Plus bas → plus de réponses affichées, mais certaines peuvent être peu pertinentes (moins de refus, plus de risque qu'une mauvaise réponse passe).\n\n"
+            "**En combinant les deux**\n\n"
+            "| | Seuil haut | Seuil bas |\n"
+            "|---|---|---|\n"
+            "| **Top K haut** | Strict mais exhaustif : révèle si la bonne réponse existe parmi de nombreux candidats, mais ne l'affiche que si elle est classée avec confiance | Le plus permissif : affiche de nombreux candidats même en cas d'incertitude — utile pour auditer le bruit et les quasi-correspondances |\n"
+            "| **Top K bas** | Configuration la plus stricte, proche d'un chatbot en production qui ne répond que s'il est sûr — attendez-vous à plus de refus | Affiche toujours sa meilleure estimation, juste ou fausse — révèle la qualité brute du classement, sans filet de sécurité |\n"
+        )
 
 st.markdown(
     f"""
@@ -159,20 +195,24 @@ st.markdown(
 )
 
 top_k = st.slider(
-    "Top K",
+    "Top K" if language == "English" else "Top K (nombre de résultats)",
     min_value=1,
     max_value=5,
     value=3,
     step=1,
-    help="How many ranked results to show per model.",
+    help="How many ranked results to show per model."
+    if language == "English"
+    else "Combien de résultats classés afficher par modèle.",
 )
 similarity_threshold = st.slider(
-    "Similarity threshold",
+    "Similarity threshold" if language == "English" else "Seuil de similarité",
     min_value=0.0,
     max_value=1.0,
     value=0.1,
     step=0.01,
-    help="The minimum similarity score required before a result is trusted. Below it, the model reports no confident match instead of guessing.",
+    help="The minimum similarity score required before a result is trusted. Below it, the model reports no confident match instead of guessing."
+    if language == "English"
+    else "Le score de similarité minimum requis avant qu'un résultat soit jugé fiable. En dessous, le modèle signale l'absence de correspondance fiable plutôt que de deviner.",
 )
 
 faq_data_path = FAQ_DATA_PATHS[language]
@@ -183,8 +223,17 @@ if not HF_API_KEY:
         "Missing HF_API_KEY: the fine-tuned model repo is private and no Hugging Face "
         "token was found (checked env var HF_API_KEY and Streamlit secrets). On Streamlit "
         "Cloud, add HF_API_KEY under this app's Settings → Secrets, then save to trigger a reboot."
+        if language == "English"
+        else "HF_API_KEY manquant : le repo du modèle fine-tuné est privé et aucun token Hugging Face "
+        "n'a été trouvé (variable d'environnement HF_API_KEY ou secret Streamlit). Sur Streamlit Cloud, "
+        "ajoutez HF_API_KEY dans Settings → Secrets de cette app, puis enregistrez pour déclencher un redémarrage."
     )
     st.stop()
+
+MODEL_LABELS_FR = {
+    "Pre-fine-tuning": "Avant fine-tuning",
+    "Fine-tuned (AutoTrain)": "Fine-tuné (AutoTrain)",
+}
 
 # Prepare models and embeddings
 models = {name: load_model(path) for name, path in MODEL_PATHS.items()}
@@ -215,7 +264,7 @@ if user_query:
     cols = st.columns(len(models))
     for col, (model_name, model_obj) in zip(cols, models.items()):
         with col:
-            st.subheader(model_name)
+            st.subheader(model_name if language == "English" else MODEL_LABELS_FR.get(model_name, model_name))
             search_results = run_search(
                 model_obj,
                 user_query,
@@ -228,7 +277,7 @@ if user_query:
             similarities = search_results["similarities"]
 
             if not top_indices:
-                st.write("No results.")
+                st.write("No results." if language == "English" else "Aucun résultat.")
                 continue
 
             best_score = similarities[top_indices[0]].item()
@@ -244,7 +293,7 @@ if user_query:
                     <div class="result-tight">
                         <p><strong>{'Rank' if language == 'English' else 'Rang'} {rank}:</strong> {faq_questions[idx]}</p>
                         <p>{faq_answers[idx]}</p>
-                        <p class="sim">Similarity: {similarities[idx].item():.2f}</p>
+                        <p class="sim">{'Similarity' if language == 'English' else 'Similarité'}: {similarities[idx].item():.2f}</p>
                     </div>
                     """,
                     unsafe_allow_html=True,
