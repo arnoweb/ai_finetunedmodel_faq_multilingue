@@ -1,11 +1,15 @@
 import streamlit as st
+import streamlit.components.v1 as components
 import json
+from pathlib import Path
 from sentence_transformers import SentenceTransformer, util
 import os
 import requests
 from dotenv import load_dotenv
 
 load_dotenv()
+
+DOCS_DIR = Path(__file__).resolve().parent / "docs"
 
 st.markdown(
     """
@@ -248,11 +252,13 @@ st.markdown(
     "[Compare base vs fine-tuned side by side](https://arnoweb-rag-faq-compare-basevsfinetuned-huggingface.streamlit.app/)."
 )
 
-link_col1, link_col2 = st.columns(2)
-with link_col1:
-    st.page_link("pages/1_Architecture.py", label="Technical architecture", icon="📐")
-with link_col2:
-    st.page_link("pages/2_Business_Value.py", label="Business value & use cases", icon="💡")
+with st.expander("📐 Technical architecture"):
+    components.html((DOCS_DIR / "architecture.html").read_text(encoding="utf-8"), height=6000, scrolling=True)
+
+with st.expander("💡 Business value & use cases"):
+    bv_language = st.radio("Language / Langue", ["English", "Français"], horizontal=True, key="bv_lang_main")
+    bv_file = "business-value-en.html" if bv_language == "English" else "business-value.html"
+    components.html((DOCS_DIR / bv_file).read_text(encoding="utf-8"), height=6000, scrolling=True)
 
 with st.expander("About this project"):
     st.markdown(
