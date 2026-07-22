@@ -18,3 +18,27 @@
 {"query": "Que faire si je reçois un article endommagé ?", "answer": "Contactez le support immédiatement avec une photo de l'article.", "lang": "fr"}
 {"query": "Do you offer gift cards?", "answer": "Yes, you can purchase digital gift cards from our website.", "lang": "en"}
 {"query": "Proposez-vous des cartes cadeaux ?", "answer": "Oui, vous pouvez acheter des cartes cadeaux numériques sur notre site.", "lang": "fr"}
+{"query": "How much will I pay for shipping?", "answer": "Shipping costs depend on your location and the delivery speed you choose; the exact fee is shown at checkout before you pay.", "lang": "en"}
+{"query": "Combien vais-je payer pour la livraison ?", "answer": "Les frais de livraison dépendent de votre localisation et du mode de livraison choisi ; le montant exact est affiché lors du paiement.", "lang": "fr"}
+{"query": "When will my order arrive?", "answer": "Standard delivery usually takes 3-5 business days; expedited options are available at checkout for faster delivery.", "lang": "en"}
+{"query": "Quand vais-je recevoir ma commande ?", "answer": "La livraison standard prend généralement 3 à 5 jours ouvrés ; des options accélérées sont proposées au moment du paiement.", "lang": "fr"}
+{"query": "My tracking hasn't updated in over a week, is my package lost?", "answer": "If tracking shows no movement for over 10 business days, contact support and we'll open an investigation with the carrier or send a replacement.", "lang": "en"}
+{"query": "Mon suivi n'a pas bougé depuis une semaine, mon colis est-il perdu ?", "answer": "Si le suivi n'indique aucun mouvement depuis plus de 10 jours ouvrés, contactez le support ; nous ouvrirons une enquête auprès du transporteur ou vous enverrons un remplacement.", "lang": "fr"}
+{"query": "How do I see how much is left on my gift card?", "answer": "Enter your gift card number on the \"Gift Cards\" page to see your remaining balance.", "lang": "en"}
+{"query": "Comment voir combien il reste sur ma carte cadeau ?", "answer": "Entrez le numéro de votre carte cadeau sur la page « Cartes cadeaux » pour voir le solde restant.", "lang": "fr"}
+{"query": "Will you match a lower price from another store?", "answer": "We match the price of an identical in-stock item found at a major competitor within 7 days of purchase.", "lang": "en"}
+{"query": "Alignez-vous vos prix sur ceux d'un concurrent moins cher ?", "answer": "Nous alignons le prix d'un article identique en stock trouvé chez un grand concurrent, dans les 7 jours suivant l'achat.", "lang": "fr"}
+{"query": "Do my reward points ever expire?", "answer": "Loyalty points expire after 12 months of account inactivity.", "lang": "en"}
+{"query": "Est-ce que mes points de fidélité ont une date limite ?", "answer": "Les points de fidélité expirent après 12 mois d'inactivité du compte.", "lang": "fr"}
+{"query": "How long until I get my money back after a return?", "answer": "Refunds are processed within 5-7 business days after we receive your returned item.", "lang": "en"}
+{"query": "Combien de temps avant d'être remboursé après un retour ?", "answer": "Les remboursements sont traités sous 5 à 7 jours ouvrés après réception de l'article retourné.", "lang": "fr"}
+{"query": "Can you email me when this item is back in stock?", "answer": "Yes, click \"Notify Me\" on the product page and we'll email you when it's restocked.", "lang": "en"}
+{"query": "Pouvez-vous me prévenir par email quand cet article revient en stock ?", "answer": "Oui, cliquez sur « Me prévenir » sur la fiche produit et nous vous enverrons un email dès le réapprovisionnement.", "lang": "fr"}
+{"query": "How do I add extra security to my login?", "answer": "Enable two-factor authentication under Account Settings > Security for extra login protection.", "lang": "en"}
+{"query": "Comment ajouter une sécurité supplémentaire à ma connexion ?", "answer": "Activez l'authentification à deux facteurs dans Paramètres du compte > Sécurité pour une protection supplémentaire.", "lang": "fr"}
+{"query": "My discount code isn't applying, why?", "answer": "Check the code's expiration date and any minimum purchase or product exclusions; some codes can't be combined with other offers.", "lang": "en"}
+{"query": "Mon code de réduction ne s'applique pas, pourquoi ?", "answer": "Vérifiez la date d'expiration du code et les éventuelles exclusions de montant minimum ou de produits ; certains codes ne se cumulent pas avec d'autres offres.", "lang": "fr"}
+{"query": "Can I get a tax invoice for my purchase?", "answer": "Yes, VAT receipts are included with your invoice and can be downloaded from your account.", "lang": "en"}
+{"query": "Puis-je avoir un justificatif fiscal pour mon achat ?", "answer": "Oui, le justificatif de TVA est inclus dans votre facture, téléchargeable depuis votre compte.", "lang": "fr"}
+{"query": "Can I buy additional warranty coverage?", "answer": "Yes, extended warranty plans are offered at checkout for eligible products.", "lang": "en"}
+{"query": "Puis-je acheter une couverture de garantie supplémentaire ?", "answer": "Oui, des extensions de garantie sont proposées au paiement pour les produits éligibles.", "lang": "fr"}

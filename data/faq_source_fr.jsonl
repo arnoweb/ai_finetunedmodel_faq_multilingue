@@ -23,3 +23,78 @@
 {"query": "Puis-je envoyer un cadeau directement à quelqu'un ?", "answer": "Oui, choisissez l'option 'Cadeau' lors du paiement et entrez les informations du destinataire."}
 {"query": "Que faire si je reçois un article endommagé ?", "answer": "Contactez le support immédiatement avec une photo de l'article."}
 {"query": "Proposez-vous des cartes cadeaux ?", "answer": "Oui, vous pouvez acheter des cartes cadeaux numériques sur notre site."}
+{"query": "Quels sont vos frais de livraison ?", "answer": "Les frais de livraison dépendent de votre localisation et du mode de livraison choisi ; le montant exact est affiché lors du paiement."}
+{"query": "Combien de temps prend la livraison ?", "answer": "La livraison standard prend généralement 3 à 5 jours ouvrés ; des options accélérées sont proposées au moment du paiement."}
+{"query": "Puis-je avoir une livraison le jour même ?", "answer": "La livraison le jour même est disponible dans certaines villes pour les commandes passées avant midi."}
+{"query": "Livrez-vous dans une boîte postale ?", "answer": "Oui, la livraison standard accepte les boîtes postales, mais les services express ou par coursier peuvent ne pas le permettre."}
+{"query": "Puis-je livrer à plusieurs adresses pour une même commande ?", "answer": "Actuellement, chaque commande ne peut être livrée qu'à une seule adresse ; merci de passer des commandes séparées pour plusieurs destinations."}
+{"query": "Que se passe-t-il si mon colis est perdu ?", "answer": "Si le suivi n'indique aucun mouvement depuis plus de 10 jours ouvrés, contactez le support ; nous ouvrirons une enquête auprès du transporteur ou vous enverrons un remplacement."}
+{"query": "Puis-je changer la date de livraison ?", "answer": "Une fois la commande expédiée, nous ne pouvons plus modifier la date de livraison, mais vous pouvez contacter directement le transporteur avec votre numéro de suivi."}
+{"query": "Proposez-vous la livraison le week-end ?", "answer": "La livraison le week-end est disponible dans certaines régions en option payante au moment du paiement."}
+{"query": "Que signifie le statut « en cours de traitement » sur ma commande ?", "answer": "« En cours de traitement » signifie que nous avons reçu votre commande et la préparons ; elle n'a pas encore quitté notre entrepôt."}
+{"query": "Comment savoir que ma commande a été expédiée ?", "answer": "Vous recevrez un email avec un numéro de suivi dès que votre commande quitte notre entrepôt."}
+{"query": "Puis-je retirer ma commande en magasin plutôt que de me faire livrer ?", "answer": "Oui, sélectionnez « Retrait en magasin » lors du paiement si un point de retrait est disponible près de chez vous."}
+{"query": "Quels sont vos horaires du service client ?", "answer": "Notre équipe support est disponible du lundi au vendredi de 9h à 18h, et le samedi matin."}
+{"query": "Proposez-vous un chat en direct ?", "answer": "Oui, le chat en direct est disponible sur notre site pendant les horaires d'ouverture."}
+{"query": "Puis-je vous contacter sur les réseaux sociaux ?", "answer": "Oui, vous pouvez nous écrire sur nos comptes officiels pour des questions rapides."}
+{"query": "Comment consulter le solde de ma carte cadeau ?", "answer": "Entrez le numéro de votre carte cadeau sur la page « Cartes cadeaux » pour voir le solde restant."}
+{"query": "Les cartes cadeaux expirent-elles ?", "answer": "Non, nos cartes cadeaux n'ont pas de date d'expiration."}
+{"query": "Puis-je cumuler une carte cadeau avec un code promo ?", "answer": "Oui, les cartes cadeaux peuvent être combinées avec un code promo par commande."}
+{"query": "Quelle est votre politique de prix ajusté ?", "answer": "Nous alignons le prix d'un article identique en stock trouvé chez un grand concurrent, dans les 7 jours suivant l'achat."}
+{"query": "Proposez-vous une réduction étudiante ?", "answer": "Oui, les étudiants vérifiés bénéficient de 10 % de réduction via notre partenaire de vérification."}
+{"query": "Proposez-vous une réduction pour le personnel soignant ?", "answer": "Oui, le personnel soignant peut vérifier son statut via notre partenaire pour bénéficier d'une réduction spéciale."}
+{"query": "Comment fonctionnent les points de fidélité ?", "answer": "Vous gagnez des points à chaque achat, échangeables contre des réductions dès que vous atteignez le seuil minimum."}
+{"query": "Les points de fidélité expirent-ils ?", "answer": "Les points de fidélité expirent après 12 mois d'inactivité du compte."}
+{"query": "Comment utiliser mes points de fidélité ?", "answer": "Les points de fidélité sont automatiquement disponibles au paiement dès que vous atteignez le seuil minimum d'utilisation."}
+{"query": "Qu'est-ce que votre programme de parrainage ?", "answer": "Parrainez un ami : vous recevrez tous les deux un code de réduction une fois sa première commande expédiée."}
+{"query": "Puis-je être remboursé si le prix baisse après mon achat ?", "answer": "Si le prix baisse dans les 7 jours suivant votre achat, contactez le support pour un ajustement ponctuel du prix."}
+{"query": "Proposez-vous le paiement en plusieurs fois ?", "answer": "Oui, vous pouvez fractionner votre paiement via notre partenaire de paiement au moment du règlement."}
+{"query": "Est-il sûr d'enregistrer ma carte bancaire sur votre site ?", "answer": "Oui, toutes les informations de paiement sont chiffrées et stockées de façon sécurisée par notre prestataire de paiement conforme PCI."}
+{"query": "Que faire si mon paiement est refusé ?", "answer": "Vérifiez les informations de votre carte et votre adresse de facturation, ou essayez un autre moyen de paiement ; contactez votre banque si le problème persiste."}
+{"query": "Puis-je obtenir une facture pour ma commande ?", "answer": "Oui, vous pouvez télécharger une facture depuis les détails de votre commande dans « Historique des commandes »."}
+{"query": "Puis-je obtenir un justificatif de TVA ?", "answer": "Oui, le justificatif de TVA est inclus dans votre facture, téléchargeable depuis votre compte."}
+{"query": "Proposez-vous des comptes professionnels ou entreprise ?", "answer": "Oui, nous proposons des comptes entreprise avec facturation centralisée ; contactez notre service commercial pour en créer un."}
+{"query": "Y a-t-il un montant minimum pour la livraison gratuite ?", "answer": "Les commandes au-dessus d'un certain montant bénéficient de la livraison standard gratuite, indiqué au paiement."}
+{"query": "Facturez-vous des frais de douane ?", "answer": "Les commandes internationales peuvent être soumises à des frais de douane et taxes d'import, à la charge du client."}
+{"query": "Les prix affichés incluent-ils les taxes ?", "answer": "Les prix affichés sont hors taxes ; la taxe applicable est calculée et ajoutée au paiement selon votre localisation."}
+{"query": "Puis-je retourner un article sans son emballage d'origine ?", "answer": "Oui, mais les articles dans leur emballage d'origine sont traités plus rapidement et réduisent le risque de dommage pendant le transport."}
+{"query": "Puis-je retourner un article sans reçu ?", "answer": "Oui, nous pouvons retrouver votre achat grâce à votre email ou votre numéro de commande à la place d'un reçu."}
+{"query": "Qui paie les frais de retour ?", "answer": "Les retours sont gratuits pour les articles défectueux ; pour les autres retours, des frais peuvent être déduits de votre remboursement."}
+{"query": "Combien de temps prend un remboursement ?", "answer": "Les remboursements sont traités sous 5 à 7 jours ouvrés après réception de l'article retourné."}
+{"query": "Puis-je échanger un article contre une autre taille plutôt qu'un remboursement ?", "answer": "Oui, sélectionnez « Échange » plutôt que « Retour » lors de la procédure de retour pour demander une autre taille."}
+{"query": "Y a-t-il des frais de remise en stock pour les retours ?", "answer": "La plupart des articles n'ont pas de frais de remise en stock ; les articles volumineux ou personnalisés peuvent en avoir, indiqué sur la fiche produit."}
+{"query": "Prolongez-vous le délai de retour pendant les fêtes ?", "answer": "Oui, les articles achetés en novembre et décembre peuvent généralement être retournés jusqu'à fin janvier."}
+{"query": "Les articles soldés ou en liquidation sont-ils retournables ?", "answer": "Les articles marqués vente finale ou liquidation ne peuvent être ni retournés ni échangés."}
+{"query": "Comment fonctionne une demande de garantie ?", "answer": "Contactez le support avec votre numéro de commande et une description du problème ; nous vous guiderons dans la démarche de garantie."}
+{"query": "Puis-je acheter une extension de garantie ?", "answer": "Oui, des extensions de garantie sont proposées au paiement pour les produits éligibles."}
+{"query": "Comment enregistrer mon produit pour la garantie ?", "answer": "La plupart des produits sont couverts automatiquement grâce à votre commande comme preuve d'achat ; certaines marques proposent aussi un enregistrement en ligne optionnel pour un support étendu."}
+{"query": "Que faire si un produit fait l'objet d'un rappel ?", "answer": "Nous informons par email tous les clients concernés avec les instructions de rappel ; vous pouvez aussi consulter notre page dédiée aux rappels."}
+{"query": "Vos produits ont-ils des certifications de sécurité ?", "answer": "Oui, nos produits respectent les normes de sécurité applicables, listées dans les caractéristiques du produit."}
+{"query": "Y a-t-il une restriction d'âge sur certains produits ?", "answer": "Certains produits nécessitent de confirmer avoir 18 ans ou plus au moment du paiement."}
+{"query": "Puis-je consulter le guide des tailles avant de commander ?", "answer": "Oui, un guide des tailles est disponible sur chaque fiche produit dans l'onglet « Tailles & Coupe »."}
+{"query": "Que faire si la couleur que je veux est en rupture de stock ?", "answer": "Vous pouvez vous inscrire à une alerte de réapprovisionnement sur la fiche produit pour être averti par email dès son retour."}
+{"query": "Puis-je être notifié quand un article en rupture de stock est de nouveau disponible ?", "answer": "Oui, cliquez sur « Me prévenir » sur la fiche produit et nous vous enverrons un email dès le réapprovisionnement."}
+{"query": "Proposez-vous la précommande ?", "answer": "Oui, les produits à venir disponibles en précommande sont indiqués sur leur fiche avec une date d'expédition estimée."}
+{"query": "Puis-je personnaliser ou graver un produit ?", "answer": "Certains produits proposent des options de personnalisation directement sur la fiche produit avant l'ajout au panier."}
+{"query": "Fournissez-vous des instructions de montage ?", "answer": "Oui, une notice est incluse dans le colis et également téléchargeable depuis la fiche produit."}
+{"query": "Puis-je commander des pièces de rechange ?", "answer": "Oui, les pièces de rechange pour les produits éligibles sont disponibles dans notre rubrique « Pièces & Accessoires »."}
+{"query": "La compatibilité des batteries ou chargeurs est-elle garantie entre les produits ?", "answer": "Les accessoires compatibles sont listés sur chaque fiche produit ; utiliser des accessoires non listés peut annuler la garantie."}
+{"query": "Proposez-vous l'emballage cadeau ?", "answer": "Oui, l'emballage cadeau peut être ajouté en option lors du paiement."}
+{"query": "Puis-je inclure un reçu cadeau sans les prix ?", "answer": "Oui, sélectionnez « Ceci est un cadeau » au paiement pour inclure un reçu cadeau sans les prix."}
+{"query": "Puis-je envoyer une commande directement à quelqu'un d'autre en cadeau ?", "answer": "Oui, indiquez l'adresse du destinataire comme adresse de livraison et ajoutez un message cadeau au paiement."}
+{"query": "Puis-je utiliser le même compte sur le site et l'application ?", "answer": "Oui, votre compte et votre historique de commandes sont automatiquement partagés entre le site et l'application."}
+{"query": "Comment gérer les notifications dans l'application ?", "answer": "Allez dans Paramètres > Notifications dans l'application pour personnaliser les alertes reçues."}
+{"query": "Comment activer l'authentification à deux facteurs ?", "answer": "Activez l'authentification à deux facteurs dans Paramètres du compte > Sécurité pour une protection supplémentaire."}
+{"query": "J'ai oublié mon nom d'utilisateur mais je me souviens de mon email, que faire ?", "answer": "Utilisez le lien « Nom d'utilisateur oublié » sur la page de connexion, nous vous l'enverrons par email."}
+{"query": "Puis-je fusionner deux comptes ?", "answer": "Nous ne pouvons pas fusionner automatiquement les comptes, mais le support peut transférer manuellement l'historique des commandes vers un seul compte."}
+{"query": "Quelle est la différence entre désactiver et supprimer mon compte ?", "answer": "Désactiver masque temporairement votre profil ; supprimer efface définitivement votre compte et vos données après un délai de grâce de 30 jours."}
+{"query": "Puis-je changer la langue préférée du site ?", "answer": "Oui, sélectionnez votre langue dans le menu en haut du site à tout moment."}
+{"query": "Puis-je changer ma devise préférée ?", "answer": "Oui, sélectionnez votre devise dans le menu en haut du site ; les prix se mettent à jour automatiquement."}
+{"query": "Comment me désinscrire des notifications SMS ?", "answer": "Répondez STOP à n'importe quel SMS, ou mettez à jour vos préférences dans Paramètres du compte > Notifications."}
+{"query": "Je me suis désabonné des emails, comment me réabonner ?", "answer": "Réabonnez-vous à tout moment via le lien « Préférences email » en bas de nos emails précédents ou dans Paramètres du compte."}
+{"query": "Pourquoi mon code promo ne fonctionne-t-il pas ?", "answer": "Vérifiez la date d'expiration du code et les éventuelles exclusions de montant minimum ou de produits ; certains codes ne se cumulent pas avec d'autres offres."}
+{"query": "Proposez-vous des tarifs employés ou de gros ?", "answer": "Des tarifs de gros sont disponibles pour les commandes éligibles ; contactez notre service commercial pour plus de détails."}
+{"query": "Puis-je contester un paiement que je ne reconnais pas ?", "answer": "Contactez d'abord notre support pour que nous puissions enquêter avant de faire opposition auprès de votre banque."}
+{"query": "Quelles sont les dimensions et le poids d'un produit ?", "answer": "Les dimensions et le poids complets sont indiqués dans l'onglet « Caractéristiques » de chaque fiche produit."}
+{"query": "Vendez-vous à l'international dans la devise locale ?", "answer": "Oui, les prix s'affichent automatiquement dans votre devise locale selon votre pays de livraison."}
+{"query": "Votre site est-il accessible aux personnes en situation de handicap ?", "answer": "Oui, notre site suit les recommandations d'accessibilité WCAG ; contactez le support si vous rencontrez un obstacle."}

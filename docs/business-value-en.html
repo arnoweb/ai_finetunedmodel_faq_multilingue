@@ -377,20 +377,20 @@
     </div>
 
     <div class="demo-flow">
-      <div class="demo-bubble">"I still haven't received my package."</div>
+      <div class="demo-bubble">"I forgot my password, what do I do?"</div>
       <div class="v-connector"></div>
       <div class="demo-card">
         <div class="dc-label">Matched FAQ</div>
-        <div class="dc-q">How do I track my order?</div>
-        <div class="dc-a">You can track your order using the tracking number provided in the confirmation email.</div>
-        <span class="demo-score">Similarity score: 0.87</span>
+        <div class="dc-q">How can I reset my password?</div>
+        <div class="dc-a">To reset your password, click on 'Forgot Password' on the login page and follow the instructions.</div>
+        <span class="demo-score">Similarity score: 0.82</span>
       </div>
       <div class="v-connector"></div>
       <div class="demo-card">
         <div class="dc-label">Written answer (optional, on request)</div>
-        <div class="dc-a">"It looks like you're trying to track your package. You can do so using the tracking number sent in your order confirmation email. If you never received it, check your spam folder or contact support with your order number."</div>
+        <div class="dc-a">"No worries — on the login page, click 'Forgot Password' and follow the instructions sent to you to choose a new one."</div>
       </div>
-      <p class="demo-final">Result found in under 50 ms — the write-up above only runs if the user asks for it.</p>
+      <p class="demo-final">Result found in under 50 ms — score and answer measured with the actual deployed model, the write-up above only runs if the user asks for it.</p>
     </div>
   </section>
 
@@ -411,13 +411,13 @@
     <div class="block-head"><span class="block-num">04</span><h2>Business value</h2></div>
     <p class="block-desc">
       A static FAQ fails the moment the user doesn't type the exact words the support team chose — the
-      example above proves it: "package" and "order" share no common word, yet it's the right answer.
+      example above proves it: "forgot my password" and "reset" share no common word, yet it's the right answer.
     </p>
     <div class="framing">
       <div class="framing-card bad">
         <div class="label">Keyword-based FAQ</div>
         <ul>
-          <li>"I still haven't received my package" returns nothing if the FAQ says "track my order"</li>
+          <li>"I forgot my password, what do I do?" returns nothing if the FAQ says "reset my password"</li>
           <li>No tolerance for typos, synonyms, or rephrasing</li>
           <li>No quality signal — no way to know if the results are actually relevant</li>
           <li>Same experience regardless of the user's language</li>
@@ -450,9 +450,11 @@
 
   <section class="block" id="comparison">
     <div class="block-head"><span class="block-num">05</span><h2>Comparison</h2></div>
-    <p class="block-desc">This project deliberately sits between two extremes.</p>
+    <p class="block-desc">This project deliberately sits between several extremes.</p>
     <div class="compare-steps">
       <span class="compare-chip">Static FAQ</span>
+      <span class="compare-arrow">→</span>
+      <span class="compare-chip">Scripted bot</span>
       <span class="compare-arrow">→</span>
       <span class="compare-chip mid">AI FAQ (this project)</span>
       <span class="compare-arrow">→</span>
@@ -460,17 +462,23 @@
     </div>
     <div class="table-wrap">
       <table>
-        <thead><tr><th>Dimension</th><th>Static FAQ</th><th>AI FAQ (this project)</th><th>Generic AI agent</th></tr></thead>
+        <thead><tr><th>Dimension</th><th>Static FAQ</th><th>Scripted bot</th><th>AI FAQ (this project)</th><th>Generic AI agent</th></tr></thead>
         <tbody>
-          <tr><td>Understanding</td><td class="dim">Exact keywords</td><td class="hl">Meaning of the question</td><td class="dim">Meaning of the question</td></tr>
-          <tr><td>Cost per search</td><td class="dim">Free</td><td class="hl">Free (local computation)</td><td class="dim">Billed (LLM call)</td></tr>
-          <tr><td>Latency</td><td class="dim">Instant</td><td class="hl">10–50 ms</td><td class="dim">Several seconds</td></tr>
-          <tr><td>Reproducibility</td><td class="dim">Total</td><td class="hl">Total</td><td class="dim">Variable</td></tr>
-          <tr><td>Search privacy</td><td class="dim">Total</td><td class="hl">Total (local)</td><td class="dim">Depends on the LLM provider</td></tr>
-          <tr><td>Written answer</td><td class="dim">No</td><td class="hl">Optional</td><td class="dim">Systematic</td></tr>
+          <tr><td>Understanding</td><td class="dim">Exact keywords</td><td class="dim">Predefined rules / decision tree</td><td class="hl">Meaning of the question</td><td class="dim">Meaning of the question</td></tr>
+          <tr><td>Cost per search</td><td class="dim">Free</td><td class="dim">Free to low (often no AI at all)</td><td class="hl">Free (local computation)</td><td class="dim">Billed (LLM call)</td></tr>
+          <tr><td>Latency</td><td class="dim">Instant</td><td class="dim">Instant</td><td class="hl">10–50 ms</td><td class="dim">Several seconds</td></tr>
+          <tr><td>Reproducibility</td><td class="dim">Total</td><td class="dim">Total</td><td class="hl">Total</td><td class="dim">Variable</td></tr>
+          <tr><td>Search privacy</td><td class="dim">Total</td><td class="dim">Total</td><td class="hl">Total (local)</td><td class="dim">Depends on the LLM provider</td></tr>
+          <tr><td>Written answer</td><td class="dim">No</td><td class="dim">No (canned responses)</td><td class="hl">Optional</td><td class="dim">Systematic</td></tr>
+          <tr><td>Rephrasing, typos</td><td class="dim">Fails</td><td class="dim">Fails outside the script</td><td class="hl">Understood</td><td class="dim">Understood</td></tr>
         </tbody>
       </table>
     </div>
+    <p class="block-desc" style="margin-top:1rem; font-size:0.85rem;">
+      A "scripted bot" is what many companies already call a "chatbot": a chain of rules or buttons, with
+      no real understanding. It looks reassuring behind a chat interface, but breaks the moment a question
+      falls outside the script — no better than a static FAQ underneath, just dressed up differently.
+    </p>
   </section>
 
 
@@ -530,26 +538,26 @@
     <div class="metrics-row">
       <div class="metric">
         <div class="m-label">Overall MRR</div>
-        <div class="m-value">0.874 → 0.883</div>
-        <p class="m-explain">The correct answer ranks slightly higher after fine-tuning.</p>
+        <div class="m-value">0.759 → 0.775</div>
+        <p class="m-explain">The correct answer ranks higher after fine-tuning.</p>
       </div>
       <div class="metric">
         <div class="m-label">Overall Recall@1</div>
-        <div class="m-value">0.80 → 0.80</div>
-        <p class="m-explain">Unchanged — on this small set, ranking order doesn't shift.</p>
+        <div class="m-value">0.66 → 0.68</div>
+        <p class="m-explain">Consistent improvement across every metric after fine-tuning.</p>
       </div>
       <div class="metric">
         <div class="m-label">Mean similarity</div>
-        <div class="m-value">0.629 → 0.635</div>
-        <p class="m-explain">A small gain in semantic understanding after fine-tuning.</p>
+        <div class="m-value">0.628 → 0.635</div>
+        <p class="m-explain">Better semantic understanding after fine-tuning.</p>
       </div>
     </div>
     <div class="callout" style="margin-top:1rem;">
       <strong>Before → after fine-tuning, same architecture.</strong> Both models are verified identical
-      (XLMRobertaModel, 768 dimensions, 12 layers) — fine-tuning is the only difference. The isolated effect
-      is modest on this small evaluation set (19 questions). That's not a reason to skip fine-tuning: its
-      value lies mainly in adapting to a client's vocabulary as the FAQ grows, not in a dramatic jump on
-      this demo dataset.
+      (XLMRobertaModel, 768 dimensions, 12 layers) — fine-tuning is the only difference. Measured on 100
+      FAQ entries per language and 44 evaluation queries, including genuinely reworded questions, not just
+      verbatim copies. The currently deployed model was fine-tuned on a different dataset than this one
+      (since corrected) — re-running fine-tuning on the current data should improve these numbers further.
     </div>
     <p class="block-desc" style="margin-top:1rem; font-size:0.8rem;">
       Pre-fine-tuning <code>paraphrase-multilingual-mpnet-base-v2</code>, fine-tuned

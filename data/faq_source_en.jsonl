@@ -23,3 +23,78 @@
 {"query": "Can I send a gift directly to someone?", "answer": "Yes, choose 'Gift' option during checkout and enter recipient's details."}
 {"query": "What should I do if I receive a damaged item?", "answer": "Contact support immediately with a photo of the item."}
 {"query": "Do you offer gift cards?", "answer": "Yes, you can purchase digital gift cards from our website."}
+{"query": "What are your shipping costs?", "answer": "Shipping costs depend on your location and the delivery speed you choose; the exact fee is shown at checkout before you pay."}
+{"query": "How long does delivery take?", "answer": "Standard delivery usually takes 3-5 business days; expedited options are available at checkout for faster delivery."}
+{"query": "Can I get same-day delivery?", "answer": "Same-day delivery is available in select cities for orders placed before 12 PM local time."}
+{"query": "Do you ship to PO boxes?", "answer": "Yes, standard shipping supports PO boxes, but expedited and courier services may not."}
+{"query": "Can I ship to multiple addresses in one order?", "answer": "Currently each order can only be shipped to a single address; please place separate orders for multiple destinations."}
+{"query": "What happens if my package is lost?", "answer": "If tracking shows no movement for over 10 business days, contact support and we'll open an investigation with the carrier or send a replacement."}
+{"query": "Can I change my delivery date?", "answer": "Once an order has shipped we can't change the delivery date, but you can contact the carrier directly using your tracking number."}
+{"query": "Do you offer weekend delivery?", "answer": "Weekend delivery is available in some regions as a paid option at checkout."}
+{"query": "What does \"processing\" mean on my order status?", "answer": "\"Processing\" means we've received your order and are preparing it for shipment; it hasn't left our warehouse yet."}
+{"query": "How do I know when my order has shipped?", "answer": "You'll receive an email with a tracking number as soon as your order leaves our warehouse."}
+{"query": "Can I pick up my order in-store instead of shipping?", "answer": "Yes, select \"Store Pickup\" at checkout if a participating location is near you."}
+{"query": "What are your customer service hours?", "answer": "Our support team is available Monday to Friday, 9 AM to 6 PM, and Saturday mornings."}
+{"query": "Do you offer live chat support?", "answer": "Yes, live chat is available on our website during business hours."}
+{"query": "Can I contact you on social media?", "answer": "Yes, you can message us on our official social media accounts for quick questions."}
+{"query": "How do I check my gift card balance?", "answer": "Enter your gift card number on the \"Gift Cards\" page to see your remaining balance."}
+{"query": "Do gift cards expire?", "answer": "No, our gift cards do not have an expiration date."}
+{"query": "Can I combine a gift card with a discount code?", "answer": "Yes, gift cards can be combined with one discount code per order."}
+{"query": "What is your price match policy?", "answer": "We match the price of an identical in-stock item found at a major competitor within 7 days of purchase."}
+{"query": "Do you offer student discounts?", "answer": "Yes, verified students get 10% off with a valid student ID through our discount partner."}
+{"query": "Do you offer discounts for healthcare workers?", "answer": "Yes, healthcare workers can verify their status through our partner to receive a special discount."}
+{"query": "How do loyalty points work?", "answer": "You earn points on every purchase, which can be redeemed for discounts on future orders once you reach the minimum threshold."}
+{"query": "Do loyalty points expire?", "answer": "Loyalty points expire after 12 months of account inactivity."}
+{"query": "How do I redeem loyalty points?", "answer": "Loyalty points are automatically available to apply at checkout once you've reached the minimum redemption amount."}
+{"query": "What is your referral program?", "answer": "Refer a friend and you'll both receive a discount code once their first order ships."}
+{"query": "Can I get a discount if the price drops after I buy?", "answer": "If the price drops within 7 days of your purchase, contact support for a one-time price adjustment."}
+{"query": "Do you offer installment or pay-later options?", "answer": "Yes, you can split your payment into installments through our checkout payment partner."}
+{"query": "Is it safe to save my card details on your site?", "answer": "Yes, all payment information is encrypted and stored securely by our PCI-compliant payment provider."}
+{"query": "What should I do if my payment is declined?", "answer": "Double-check your card details and billing address, or try an alternative payment method; contact your bank if the issue persists."}
+{"query": "Can I get an invoice for my order?", "answer": "Yes, you can download an invoice from your order details page in \"Order History.\""}
+{"query": "Can I get a VAT/tax receipt?", "answer": "Yes, VAT receipts are included with your invoice and can be downloaded from your account."}
+{"query": "Do you offer business or corporate accounts?", "answer": "Yes, we offer corporate accounts with centralized billing; contact sales to set one up."}
+{"query": "Is there a minimum order for free shipping?", "answer": "Orders over a set amount qualify for free standard shipping, shown at checkout."}
+{"query": "Do you charge customs or import duties?", "answer": "International orders may be subject to customs fees and import duties, which are the customer's responsibility."}
+{"query": "Do prices include tax?", "answer": "Displayed prices exclude tax; applicable tax is calculated and added at checkout based on your location."}
+{"query": "Can I return an item without the original packaging?", "answer": "Yes, but items in their original packaging are processed faster and reduce the risk of damage in transit."}
+{"query": "Can I return an item without a receipt?", "answer": "Yes, we can look up your purchase using your email address or order number instead of a receipt."}
+{"query": "Who pays for return shipping?", "answer": "Return shipping is free for defective items; for other returns a small fee may be deducted from your refund."}
+{"query": "How long does a refund take to process?", "answer": "Refunds are processed within 5-7 business days after we receive your returned item."}
+{"query": "Can I exchange an item for a different size instead of a refund?", "answer": "Yes, select \"Exchange\" instead of \"Return\" during the return process to request a different size."}
+{"query": "Is there a restocking fee for returns?", "answer": "Most items have no restocking fee; large or custom items may have a fee, shown on the product page."}
+{"query": "Do you extend your return window during the holidays?", "answer": "Yes, items purchased in November and December can typically be returned through the end of January."}
+{"query": "Are clearance or final sale items returnable?", "answer": "Final sale and clearance items marked as such cannot be returned or exchanged."}
+{"query": "What is your warranty claim process?", "answer": "Contact support with your order number and a description of the issue; we'll guide you through the warranty claim."}
+{"query": "Can I purchase extended warranty coverage?", "answer": "Yes, extended warranty plans are offered at checkout for eligible products."}
+{"query": "How do I register my product for warranty?", "answer": "Most products are covered automatically using your order as proof of purchase; some brands also offer optional online registration for extended support."}
+{"query": "What should I do if a product is recalled?", "answer": "We'll email all affected customers with recall instructions; you can also check our recalls page for updates."}
+{"query": "Do your products have safety certifications?", "answer": "Yes, our products meet applicable safety standards, listed in the product specifications."}
+{"query": "Is there an age restriction on certain products?", "answer": "Some products require the buyer to confirm they are 18 or older at checkout."}
+{"query": "Can I see the size guide before ordering?", "answer": "Yes, a size guide is available on every product page under \"Size & Fit.\""}
+{"query": "What if the color I want is out of stock?", "answer": "You can sign up for a restock notification on the product page to be emailed when it's back."}
+{"query": "Can I be notified when an out-of-stock item is available again?", "answer": "Yes, click \"Notify Me\" on the product page and we'll email you when it's restocked."}
+{"query": "Do you offer pre-orders?", "answer": "Yes, upcoming products available for pre-order are marked on the product page with an estimated ship date."}
+{"query": "Can I personalize or engrave a product?", "answer": "Select products offer personalization options on the product page before adding to cart."}
+{"query": "Do you provide assembly instructions?", "answer": "Yes, an instruction manual is included in the box and also available for download on the product page."}
+{"query": "Can I order replacement parts?", "answer": "Yes, replacement parts for eligible products are available in our \"Parts & Accessories\" section."}
+{"query": "Is battery or charger compatibility guaranteed across products?", "answer": "Compatible accessories are listed on each product page; using non-listed accessories may void the warranty."}
+{"query": "Do you sell gift wrapping?", "answer": "Yes, gift wrapping can be added as an option during checkout."}
+{"query": "Can I include a gift receipt without prices?", "answer": "Yes, select \"This is a gift\" at checkout to include a price-free gift receipt."}
+{"query": "Can I send an order directly to someone else as a gift?", "answer": "Yes, enter the recipient's address as the shipping address and add a gift message at checkout."}
+{"query": "Can I use one account for both the website and the app?", "answer": "Yes, your account and order history are automatically shared between the website and the app."}
+{"query": "How do I manage notification settings in the app?", "answer": "Go to Settings > Notifications in the app to customize what alerts you receive."}
+{"query": "How do I turn on two-factor authentication?", "answer": "Enable two-factor authentication under Account Settings > Security for extra login protection."}
+{"query": "What if I forgot my username but remember my email?", "answer": "Use the \"Forgot Username\" link on the login page and we'll email it to your registered address."}
+{"query": "Can I merge two accounts?", "answer": "We can't merge accounts automatically, but support can help transfer order history to one account manually."}
+{"query": "What's the difference between deactivating and deleting my account?", "answer": "Deactivating hides your profile temporarily; deleting permanently erases your account and data after a 30-day grace period."}
+{"query": "Can I change my preferred language on the site?", "answer": "Yes, select your language from the menu in the site header at any time."}
+{"query": "Can I change my preferred currency?", "answer": "Yes, select your currency from the menu in the site header; prices update automatically."}
+{"query": "How do I opt out of SMS notifications?", "answer": "Reply STOP to any SMS message, or update your preferences in Account Settings > Notifications."}
+{"query": "I unsubscribed from emails, how do I opt back in?", "answer": "Resubscribe anytime from the \"Email Preferences\" link at the bottom of any of our past emails or in Account Settings."}
+{"query": "Why isn't my promo code working?", "answer": "Check the code's expiration date and any minimum purchase or product exclusions; some codes can't be combined with other offers."}
+{"query": "Do you offer employee or wholesale pricing?", "answer": "Wholesale and bulk pricing is available for qualifying orders; contact our sales team for details."}
+{"query": "Can I dispute a charge I don't recognize?", "answer": "Contact our support team first so we can investigate before you file a chargeback with your bank."}
+{"query": "What are the dimensions and weight of a product?", "answer": "Full dimensions and weight are listed in the \"Specifications\" tab on each product page."}
+{"query": "Do you sell products internationally in local currency?", "answer": "Yes, prices are shown in your local currency automatically based on your shipping country."}
+{"query": "Is your website accessible for users with disabilities?", "answer": "Yes, our site follows WCAG accessibility guidelines; contact support if you encounter any barriers."}

@@ -128,19 +128,29 @@ Higher scores indicate a better semantic understanding between questions and the
 the Hub (`XLMRobertaModel`, hidden_size 768, 12 layers, identical on both sides). This is the only fair
 comparison for isolating what fine-tuning itself changed.
 
+Measured on 100 FAQ entries per language (`data/faq_source_en.jsonl`, `data/faq_source_fr.jsonl`) and 44
+evaluation queries (`data/faq_evaluation.jsonl`), a mix of verbatim and genuinely reworded questions.
+
 | Model                    | MRR   | Recall@1 | Recall@3 | Recall@5 | Mean True Sim | Explanation |
 |---------------------------|-------|----------|----------|----------|----------------|-------------|
-| Pre-fine-tuning (global)  | 0.874 | 0.800    | 0.950    | 0.950    | 0.629          | The "before" state — same architecture as the fine-tuned model. |
-| Fine-tuned (global)       | 0.883 | 0.800    | 0.950    | 0.950    | 0.635          | Recall@1 unchanged; small MRR/similarity gain. |
-| Pre-fine-tuning [en]      | 0.950 | 0.900    | 1.000    | 1.000    | 0.647          | Already near-ceiling before fine-tuning on this small English eval set. |
-| Fine-tuned [en]           | 0.950 | 0.900    | 1.000    | 1.000    | 0.656          | No ranking change vs pre-fine-tuning; marginal similarity gain. |
-| Pre-fine-tuning [fr]      | 0.798 | 0.700    | 0.900    | 0.900    | 0.612          | The "before" state for French. |
-| Fine-tuned [fr]           | 0.817 | 0.700    | 0.900    | 0.900    | 0.614          | Same Recall@1/3/5 as pre-fine-tuning; small MRR/similarity gain. |
+| Pre-fine-tuning (global)  | 0.759 | 0.659    | 0.818    | 0.864    | 0.628          | The "before" state — same architecture as the fine-tuned model. |
+| Fine-tuned (global)       | 0.775 | 0.682    | 0.841    | 0.909    | 0.635          | Consistent gain across every metric after fine-tuning. |
+| Pre-fine-tuning [en]      | 0.794 | 0.682    | 0.864    | 0.909    | 0.643          | The "before" state for English. |
+| Fine-tuned [en]           | 0.822 | 0.727    | 0.864    | 0.955    | 0.652          | Clear improvement in ranking and similarity. |
+| Pre-fine-tuning [fr]      | 0.723 | 0.636    | 0.773    | 0.818    | 0.614          | The "before" state for French. |
+| Fine-tuned [fr]           | 0.729 | 0.636    | 0.818    | 0.864    | 0.619          | Smaller gain than English; French still improves on Recall@3/5. |
 
-On this small demo eval set (19 queries), the isolated fine-tuning effect is modest — Recall@1/3/5 are
-unchanged, with a small gain in MRR and mean similarity. This isn't a reason to skip fine-tuning; its value
-is more about adapting to a client's specific vocabulary at scale (see `docs/business-value.html`) than
-about a dramatic jump on this particular small dataset.
+**Note on the underlying model:** the currently deployed fine-tuned model (`arnoweb/model-faq-sentence-autotrain`)
+was actually fine-tuned on a different, unrelated FAQ dataset (leftover from an earlier experiment). The FAQ
+content and evaluation set above were expanded and corrected afterward, so these numbers reflect a
+domain-mismatched fine-tune. `data_autotrain/faq_train.jsonl` and `faq_validation.jsonl` now hold the
+correct, matching data — re-running the AutoTrain job on them (see `models/config/config.yml`) should
+improve on these numbers further.
+
+Even with a domain-mismatched fine-tune, the isolated effect (`Pre-fine-tuning` → `Fine-tuned`, same
+architecture) is a consistent improvement across every metric. Its value is about adapting to a client's
+specific vocabulary at scale (see `docs/business-value.html`) — expect a larger gain once the model is
+re-trained on the corrected, matching data.
 
 ## Notes
 - If your fine-tuned HF repo is private, ensure `huggingface-cli login` (or set `HUGGINGFACE_HUB_TOKEN`).

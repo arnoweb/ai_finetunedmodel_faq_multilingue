@@ -377,20 +377,20 @@
     </div>
 
     <div class="demo-flow">
-      <div class="demo-bubble">« Je n'ai toujours pas reçu mon colis. »</div>
+      <div class="demo-bubble">« J'ai oublié mon mot de passe, comment je fais ? »</div>
       <div class="v-connector"></div>
       <div class="demo-card">
         <div class="dc-label">FAQ retrouvée</div>
-        <div class="dc-q">Comment suivre ma commande ?</div>
-        <div class="dc-a">Vous pouvez suivre votre commande en utilisant le numéro de suivi fourni dans l'email de confirmation.</div>
-        <span class="demo-score">Score de similarité : 0.87</span>
+        <div class="dc-q">Comment réinitialiser mon mot de passe ?</div>
+        <div class="dc-a">Pour réinitialiser votre mot de passe, cliquez sur 'Mot de passe oublié' sur la page de connexion et suivez les instructions.</div>
+        <span class="demo-score">Score de similarité : 0.80</span>
       </div>
       <div class="v-connector"></div>
       <div class="demo-card">
         <div class="dc-label">Réponse rédigée (optionnelle, sur demande)</div>
-        <div class="dc-a">« Il semble que vous cherchiez à suivre votre colis. Vous pouvez le faire grâce au numéro de suivi envoyé dans l'e-mail de confirmation de commande. S'il ne vous est jamais parvenu, vérifiez vos courriers indésirables ou contactez le support avec votre numéro de commande. »</div>
+        <div class="dc-a">« Pas de souci : sur la page de connexion, cliquez sur « Mot de passe oublié » puis suivez les instructions envoyées pour en choisir un nouveau. »</div>
       </div>
-      <p class="demo-final">Résultat retrouvé en moins de 50 ms — la rédaction ci-dessus n'est déclenchée que si l'utilisateur la demande.</p>
+      <p class="demo-final">Résultat retrouvé en moins de 50 ms — score et réponse mesurés avec le modèle réellement déployé, la rédaction ci-dessus n'est déclenchée que si l'utilisateur la demande.</p>
     </div>
   </section>
 
@@ -411,14 +411,14 @@
     <div class="block-head"><span class="block-num">04</span><h2>Valeur métier</h2></div>
     <p class="block-desc">
       Une FAQ statique échoue dès que l'utilisateur ne tape pas les mots exacts choisis par l'équipe
-      support — l'exemple ci-dessus le montre : « colis » et « commande » n'ont aucun mot en commun,
-      pourtant c'est bien la bonne réponse.
+      support — l'exemple ci-dessus le montre : « j'ai oublié mon mot de passe » et « réinitialiser »
+      n'ont aucun mot en commun, pourtant c'est bien la bonne réponse.
     </p>
     <div class="framing">
       <div class="framing-card bad">
         <div class="label">FAQ par mots-clés</div>
         <ul>
-          <li>« Je n'ai toujours pas reçu mon colis » ne remonte rien si la FAQ dit « suivre ma commande »</li>
+          <li>« J'ai oublié mon mot de passe, comment je fais ? » ne remonte rien si la FAQ dit « réinitialiser mon mot de passe »</li>
           <li>Aucune tolérance aux fautes, synonymes ou reformulations</li>
           <li>Pas de mesure de qualité — impossible de savoir si les résultats sont pertinents</li>
           <li>Même expérience quelle que soit la langue de l'utilisateur</li>
@@ -451,9 +451,11 @@
 
   <section class="block" id="comparaison">
     <div class="block-head"><span class="block-num">05</span><h2>Comparaison</h2></div>
-    <p class="block-desc">Ce projet se positionne délibérément entre deux extrêmes.</p>
+    <p class="block-desc">Ce projet se positionne délibérément entre plusieurs extrêmes.</p>
     <div class="compare-steps">
       <span class="compare-chip">FAQ classique</span>
+      <span class="compare-arrow">→</span>
+      <span class="compare-chip">Bot scripté</span>
       <span class="compare-arrow">→</span>
       <span class="compare-chip mid">FAQ IA (ce projet)</span>
       <span class="compare-arrow">→</span>
@@ -461,17 +463,24 @@
     </div>
     <div class="table-wrap">
       <table>
-        <thead><tr><th>Dimension</th><th>FAQ classique</th><th>FAQ IA (ce projet)</th><th>Agent IA générique</th></tr></thead>
+        <thead><tr><th>Dimension</th><th>FAQ classique</th><th>Bot scripté</th><th>FAQ IA (ce projet)</th><th>Agent IA générique</th></tr></thead>
         <tbody>
-          <tr><td>Compréhension</td><td class="dim">Mots-clés exacts</td><td class="hl">Sens de la question</td><td class="dim">Sens de la question</td></tr>
-          <tr><td>Coût par recherche</td><td class="dim">Gratuit</td><td class="hl">Gratuit (calcul local)</td><td class="dim">Facturé (appel LLM)</td></tr>
-          <tr><td>Latence</td><td class="dim">Instantané</td><td class="hl">10–50 ms</td><td class="dim">Plusieurs secondes</td></tr>
-          <tr><td>Reproductibilité</td><td class="dim">Totale</td><td class="hl">Totale</td><td class="dim">Variable</td></tr>
-          <tr><td>Confidentialité de la recherche</td><td class="dim">Totale</td><td class="hl">Totale (local)</td><td class="dim">Dépend du fournisseur LLM</td></tr>
-          <tr><td>Réponse rédigée</td><td class="dim">Non</td><td class="hl">Optionnelle</td><td class="dim">Systématique</td></tr>
+          <tr><td>Compréhension</td><td class="dim">Mots-clés exacts</td><td class="dim">Règles / arbre de décision prédéfini</td><td class="hl">Sens de la question</td><td class="dim">Sens de la question</td></tr>
+          <tr><td>Coût par recherche</td><td class="dim">Gratuit</td><td class="dim">Gratuit à faible (souvent sans IA)</td><td class="hl">Gratuit (calcul local)</td><td class="dim">Facturé (appel LLM)</td></tr>
+          <tr><td>Latence</td><td class="dim">Instantané</td><td class="dim">Instantané</td><td class="hl">10–50 ms</td><td class="dim">Plusieurs secondes</td></tr>
+          <tr><td>Reproductibilité</td><td class="dim">Totale</td><td class="dim">Totale</td><td class="hl">Totale</td><td class="dim">Variable</td></tr>
+          <tr><td>Confidentialité de la recherche</td><td class="dim">Totale</td><td class="dim">Totale</td><td class="hl">Totale (local)</td><td class="dim">Dépend du fournisseur LLM</td></tr>
+          <tr><td>Réponse rédigée</td><td class="dim">Non</td><td class="dim">Non (réponses pré-écrites)</td><td class="hl">Optionnelle</td><td class="dim">Systématique</td></tr>
+          <tr><td>Reformulation, faute de frappe</td><td class="dim">Échoue</td><td class="dim">Échoue si hors script</td><td class="hl">Comprise</td><td class="dim">Comprise</td></tr>
         </tbody>
       </table>
     </div>
+    <p class="block-desc" style="margin-top:1rem; font-size:0.85rem;">
+      Un « bot scripté » est ce que beaucoup d'entreprises appellent déjà « chatbot » : un enchaînement de
+      règles ou de boutons, sans réelle compréhension. Il rassure par son interface conversationnelle, mais
+      se bloque dès que la question sort du script prévu — pas mieux qu'une FAQ classique sur le fond, juste
+      habillé différemment.
+    </p>
   </section>
 
 
@@ -532,26 +541,27 @@
     <div class="metrics-row">
       <div class="metric">
         <div class="m-label">MRR global</div>
-        <div class="m-value">0.874 → 0.883</div>
-        <p class="m-explain">La bonne réponse apparaît légèrement plus haut après fine-tuning.</p>
+        <div class="m-value">0.759 → 0.775</div>
+        <p class="m-explain">La bonne réponse apparaît plus haut après fine-tuning.</p>
       </div>
       <div class="metric">
         <div class="m-label">Recall@1 global</div>
-        <div class="m-value">0.80 → 0.80</div>
-        <p class="m-explain">Identique avant/après — sur ce petit jeu, le classement ne change pas.</p>
+        <div class="m-value">0.66 → 0.68</div>
+        <p class="m-explain">Amélioration constante sur toutes les métriques après fine-tuning.</p>
       </div>
       <div class="metric">
         <div class="m-label">Similarité moyenne</div>
-        <div class="m-value">0.629 → 0.635</div>
-        <p class="m-explain">Léger gain de compréhension sémantique après fine-tuning.</p>
+        <div class="m-value">0.628 → 0.635</div>
+        <p class="m-explain">Meilleure compréhension sémantique après fine-tuning.</p>
       </div>
     </div>
     <div class="callout" style="margin-top:1rem;">
       <strong>Avant → après fine-tuning, même architecture.</strong> Ces deux modèles sont vérifiés
       identiques (XLMRobertaModel, 768 dimensions, 12 couches) — la seule différence est le fine-tuning.
-      L'effet isolé est modeste sur ce petit jeu d'évaluation (19 questions). Ce n'est pas une raison
-      d'écarter le fine-tuning : sa valeur tient surtout à l'adaptation au vocabulaire du client à mesure
-      que la FAQ grandit, pas à un bond spectaculaire sur ce jeu de démonstration.
+      Mesuré sur 100 questions/réponses par langue et 44 questions d'évaluation (dont des reformulations
+      réelles, pas seulement du mot pour mot). Le modèle actuellement déployé a été fine-tuné sur un jeu de
+      données différent de celui-ci (corrigé depuis) — un nouveau fine-tuning sur les données actuelles
+      devrait encore améliorer ces chiffres.
     </div>
     <p class="block-desc" style="margin-top:1rem; font-size:0.8rem;">
       Avant fine-tuning <code>paraphrase-multilingual-mpnet-base-v2</code>, fine-tuné
