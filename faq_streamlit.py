@@ -4,7 +4,6 @@ from streamlit_searchbox import st_searchbox
 import json
 from pathlib import Path
 from sentence_transformers import SentenceTransformer, CrossEncoder, util
-import torch
 import os
 import requests
 from dotenv import load_dotenv
@@ -104,10 +103,6 @@ def load_faq_data(faq_data_path):
     return faq_questions, faq_answers
 
 @st.cache_data(ttl=300)
-def compute_answer_embeddings(_model, faq_answers):
-    return _model.encode(faq_answers, convert_to_tensor=True)
-
-@st.cache_data(ttl=300)
 def compute_question_embeddings(_model, faq_questions):
     return _model.encode(faq_questions, convert_to_tensor=True)
 
@@ -204,7 +199,6 @@ if not HF_API_KEY:
 model = load_model()
 reranker = load_reranker()
 faq_questions, faq_answers = load_faq_data(faq_data_path)
-answer_embeddings = compute_answer_embeddings(model, faq_answers)
 question_embeddings = compute_question_embeddings(model, faq_questions)
 
 st.write(
@@ -227,16 +221,17 @@ MIN_QUERY_WORDS = 3  # avoid matching on ambiguous short fragments (e.g. "je n'a
 
 def retrieve_top_k(query, k=TOP_K):
     query_embedding = model.encode(query, convert_to_tensor=True)
-    sim_to_answers = util.pytorch_cos_sim(query_embedding, answer_embeddings)[0]
-    sim_to_questions = util.pytorch_cos_sim(query_embedding, question_embeddings)[0]
-    similarities = torch.maximum(sim_to_answers, sim_to_questions)
+    # Pool selection is keyed on the FAQ questions only. Matching against answers too
+    # (an earlier version did) lets an unrelated FAQ outrank the right one whenever its
+    # answer happens to share a word with the query (e.g. "colis" appearing in an
+    # assembly-instructions answer) even though its question has nothing to do with it.
+    similarities = util.pytorch_cos_sim(query_embedding, question_embeddings)[0]
 
     pool_size = min(RERANK_POOL, len(faq_questions))
     pool_indices = similarities.topk(pool_size).indices.tolist()
 
-    # Bi-encoder embeddings alone can be fooled by surface-level overlap (e.g. shared
-    # negation phrasing) between an unrelated FAQ and the real answer. The cross-encoder
-    # attends to both texts jointly, so it separates lexically-similar-but-wrong matches.
+    # The cross-encoder still sees question+answer for extra context when reranking,
+    # but only among candidates whose question already looked relevant.
     pairs = [(query, f"{faq_questions[i]} {faq_answers[i]}") for i in pool_indices]
     rerank_scores = reranker.predict(pairs)
     reranked = sorted(zip(pool_indices, rerank_scores), key=lambda item: -item[1])
@@ -258,19 +253,46 @@ def search_faq(searchterm: str):
     ]
 
 
+searchbox_key = f"faq_searchbox_{language}"
+
 selected_idx = st_searchbox(
     search_faq,
     placeholder=placeholder_text,
     label="Ask your question:" if language == "English" else "Posez votre question :",
-    key=f"faq_searchbox_{language}",
+    key=searchbox_key,
+    # The library's own "No options" message can't be reworded, only hidden — we show
+    # our own, more specific message below instead.
+    style_overrides={"searchbox": {"optionEmpty": "hidden"}},
 )
 
 if selected_idx is None:
-    st.info(
-        "No selection yet — pick a matching question above, or keep typing to refine the results."
-        if language == "English"
-        else "Aucune sélection — choisissez une question ci-dessus, ou affinez votre recherche."
-    )
+    current_search = st.session_state.get(searchbox_key, {}).get("search", "")
+    has_options = bool(st.session_state.get(searchbox_key, {}).get("options_py"))
+
+    if not current_search:
+        st.info(
+            "Start typing a question above to see matching FAQ entries."
+            if language == "English"
+            else "Commencez à taper une question ci-dessus pour voir les réponses correspondantes."
+        )
+    elif len(current_search.split()) < MIN_QUERY_WORDS:
+        st.info(
+            "Keep typing — a few more words will help find the right match."
+            if language == "English"
+            else "Continuez à taper — quelques mots de plus aideront à trouver la bonne réponse."
+        )
+    elif not has_options:
+        st.info(
+            "No matching question yet — try rephrasing."
+            if language == "English"
+            else "Aucune question ne correspond pour l'instant — essayez de reformuler."
+        )
+    else:
+        st.info(
+            "Pick a matching question above to see the full answer."
+            if language == "English"
+            else "Choisissez une question ci-dessus pour voir la réponse complète."
+        )
 else:
     last_query = st.session_state.get("faq_last_query") or faq_questions[selected_idx]
     context_indices, similarities = retrieve_top_k(last_query)

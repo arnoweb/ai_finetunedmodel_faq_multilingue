@@ -105,7 +105,6 @@ def compute_embeddings(model_name: str, model_path: str, texts: List[str]):
 def run_search(
     model: SentenceTransformer,
     query: str,
-    answers: List[str],
     embeddings,
     top_k: int,
 ) -> Dict:
@@ -237,8 +236,12 @@ MODEL_LABELS_FR = {
 
 # Prepare models and embeddings
 models = {name: load_model(path) for name, path in MODEL_PATHS.items()}
+# Matched against the FAQ questions, not the answers: matching against answers let an
+# unrelated FAQ outrank the right one whenever its answer happened to share a word with
+# the query (e.g. a query about a "colis" matching an unrelated answer that also mentions
+# "colis"), even though its question had nothing to do with the query.
 embeddings_by_model = {
-    name: compute_embeddings(name, MODEL_PATHS[name], faq_answers)
+    name: compute_embeddings(name, MODEL_PATHS[name], faq_questions)
     for name in models
 }
 
@@ -268,7 +271,6 @@ if user_query:
             search_results = run_search(
                 model_obj,
                 user_query,
-                faq_answers,
                 embeddings_by_model[model_name],
                 top_k=top_k,
             )
