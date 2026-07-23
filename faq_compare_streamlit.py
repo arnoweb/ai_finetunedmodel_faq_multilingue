@@ -105,12 +105,19 @@ def compute_embeddings(model_name: str, model_path: str, texts: List[str]):
     return model.encode(texts, convert_to_tensor=True)
 
 
+@st.cache_data(ttl=300, show_spinner=False)
 def run_search(
-    model: SentenceTransformer,
+    model_name: str,
+    faq_data_path: str,
     query: str,
-    embeddings,
     top_k: int,
 ) -> Dict:
+    # A FAQ sees the same questions over and over — caching on (model, dataset, query)
+    # skips re-encoding entirely for a repeat, at essentially no cost to add.
+    model = load_model(MODEL_PATHS[model_name])
+    faq_questions, _ = load_faq_data(faq_data_path)
+    embeddings = compute_embeddings(model_name, MODEL_PATHS[model_name], faq_questions)
+
     query_embedding = model.encode(query, convert_to_tensor=True)
     similarities = util.pytorch_cos_sim(query_embedding, embeddings)[0]
     top_k_indices = similarities.topk(top_k).indices.tolist()
@@ -237,16 +244,14 @@ MODEL_LABELS_FR = {
     "Fine-tuned (AutoTrain)": "Fine-tuné (AutoTrain)",
 }
 
-# Prepare models and embeddings
-models = {name: load_model(path) for name, path in MODEL_PATHS.items()}
-# Matched against the FAQ questions, not the answers: matching against answers let an
-# unrelated FAQ outrank the right one whenever its answer happened to share a word with
+# Warm up both models and their FAQ embeddings so the first search isn't the one paying
+# for it. Matched against the FAQ questions, not the answers: matching against answers let
+# an unrelated FAQ outrank the right one whenever its answer happened to share a word with
 # the query (e.g. a query about a "colis" matching an unrelated answer that also mentions
 # "colis"), even though its question had nothing to do with the query.
-embeddings_by_model = {
-    name: compute_embeddings(name, MODEL_PATHS[name], faq_questions)
-    for name in models
-}
+models = {name: load_model(path) for name, path in MODEL_PATHS.items()}
+for name in models:
+    compute_embeddings(name, MODEL_PATHS[name], faq_questions)
 
 def _capture_query(searchterm: str):
     st.session_state["compare_last_query"] = searchterm
@@ -268,13 +273,13 @@ user_query = st.session_state.get("compare_last_query", "")
 
 if user_query:
     cols = st.columns(len(models))
-    for col, (model_name, model_obj) in zip(cols, models.items()):
+    for col, model_name in zip(cols, models):
         with col:
             st.subheader(model_name if language == "English" else MODEL_LABELS_FR.get(model_name, model_name))
             search_results = run_search(
-                model_obj,
+                model_name,
+                faq_data_path,
                 user_query,
-                embeddings_by_model[model_name],
                 top_k=top_k,
             )
 

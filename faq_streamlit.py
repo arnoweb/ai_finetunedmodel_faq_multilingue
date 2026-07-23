@@ -219,11 +219,19 @@ placeholder_text = (
 
 TOP_K = 3
 RERANK_POOL = 8  # bi-encoder candidates handed to the cross-encoder for reranking
+RERANK_SKIP_THRESHOLD = 0.9  # top bi-encoder score above which reranking is skipped
 SIMILARITY_THRESHOLD = 0.3  # You can adjust this value
 MIN_QUERY_WORDS = 3  # avoid matching on ambiguous short fragments (e.g. "je n'ai")
 
 
-def retrieve_top_k(query, k=TOP_K):
+@st.cache_data(ttl=300)
+def retrieve_top_k(query: str, faq_data_path: str, k: int = TOP_K):
+    # A FAQ sees the same questions over and over — caching on (query, dataset) skips
+    # re-encoding and reranking entirely for a repeat, at essentially no cost to add.
+    model = load_model()
+    faq_questions, faq_answers = load_faq_data(faq_data_path)
+    question_embeddings = compute_question_embeddings(model, faq_questions)
+
     query_embedding = model.encode(query, convert_to_tensor=True)
     # Pool selection is keyed on the FAQ questions only. Matching against answers too
     # (an earlier version did) lets an unrelated FAQ outrank the right one whenever its
@@ -234,14 +242,20 @@ def retrieve_top_k(query, k=TOP_K):
     pool_size = min(RERANK_POOL, len(faq_questions))
     pool_indices = similarities.topk(pool_size).indices.tolist()
 
-    # The cross-encoder still sees question+answer for extra context when reranking,
-    # but only among candidates whose question already looked relevant.
-    pairs = [(query, f"{faq_questions[i]} {faq_answers[i]}") for i in pool_indices]
-    rerank_scores = reranker.predict(pairs)
-    reranked = sorted(zip(pool_indices, rerank_scores), key=lambda item: -item[1])
+    top_score = similarities[pool_indices[0]].item()
+    if top_score >= RERANK_SKIP_THRESHOLD:
+        # Already unambiguous (near-exact match) — the cross-encoder wouldn't change
+        # the ranking, so skip its 8 forward passes.
+        indices = pool_indices[:k]
+    else:
+        # The cross-encoder still sees question+answer for extra context when
+        # reranking, but only among candidates whose question already looked relevant.
+        reranker = load_reranker()
+        pairs = [(query, f"{faq_questions[i]} {faq_answers[i]}") for i in pool_indices]
+        rerank_scores = reranker.predict(pairs)
+        reranked = sorted(zip(pool_indices, rerank_scores), key=lambda item: -item[1])
+        indices = [idx for idx, _ in reranked[:k]]
 
-    k = min(k, len(reranked))
-    indices = [idx for idx, _ in reranked[:k]]
     return indices, similarities
 
 
@@ -249,7 +263,7 @@ def search_faq(searchterm: str):
     st.session_state["faq_last_query"] = searchterm
     if not searchterm or len(searchterm.split()) < MIN_QUERY_WORDS:
         return []
-    indices, similarities = retrieve_top_k(searchterm)
+    indices, similarities = retrieve_top_k(searchterm, faq_data_path)
     return [
         (f"{faq_questions[idx]}  ·  {similarities[idx].item():.2f}", idx)
         for idx in indices
@@ -299,7 +313,7 @@ if selected_idx is None:
         )
 else:
     last_query = st.session_state.get("faq_last_query") or faq_questions[selected_idx]
-    context_indices, similarities = retrieve_top_k(last_query)
+    context_indices, similarities = retrieve_top_k(last_query, faq_data_path)
     selected_score = similarities[selected_idx].item()
     retrieved_faqs = [faq_answers[idx] for idx in context_indices]
     retrieved_questions = [faq_questions[idx] for idx in context_indices]
